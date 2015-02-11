@@ -4,6 +4,7 @@
 \usepackage{graphicx}
 \usepackage{harvard}
 \usepackage{mathtools}
+\usepackage{parskip}
 \usepackage{subcaption}
 \usepackage{lipsum}
 
@@ -22,47 +23,52 @@
 	
 	\chapter{Introduction}
 		\section{Computer Vision: An Intellectual Frontier}
-			\subsection{What is Computer Vision?}
-				\paragraph{}
+			\subsection{What is Computer Vision?}		
+				
+It is very hard for humans to know what their own vision really entails and how difficult it is to reproduce on a computer.
+Information from the eyes is divided into multiple channels, each streaming different kinds of information to the brain.
+The brain then subconsciously groups the identifies what parts of the image to examine and what parts to surpress.
+Computer vision systems are still relatively naive, all they "see" is a grid of numbers.
+The way in which biological vision works is still largely unknown which makes it hard to emulate on computers \cite{cvMultipleViewGeometry}.
+%By default there is no built in pattern recognition, or what some might call, intelligence.
+				
 Computer vision is a vast field and hard to define.
 For the purpose of this report it will be defined as:
 	
 				\begin{quote}
-``The transformation of data from a still or video camera into either a decision or a new representation.
-All transformations are done for achieving some particular goal.''\\\cite{cvDef}
+``\textit{The transformation of data from a still or video camera into either a decision or a new representation.
+All transformations are done for achieving some particular goal.}'' \cite{cvDef}
 				\end{quote}
-		
-				\paragraph{}
-It is very hard for humans to know what their own vision really entails and how difficult it is to reproduce on a computer.
-Information from the eyes is divided into multiple channels, each streaming different kinds of information to the brain.
-The brain then subconsciously groups the identifies what parts of the image to examine and what parts to surpress.
 
 			\subsection{Uses of Computer Vision}
 Computer vision has become much more accessible in recent years, with the availability of devices such as the Microsoft Kinect.
 The computer vision society found that the capabilities of this device could be extended beyond its intentional use for gaming, and at a much lower cost than traditional 3D cameras.
 It has since used in areas such as human activity analysis; where it is able to estimate details about the pose of the human subject in its field of vision \cite{kinect:1}.
 It has also been used to for real time odometry whilst attached to a quadcopter enabling the production of a 3D mapping of a physical space \cite{kinect:2}.
+%Google driverless cars here
 %The line below is dependant on a reference
 A hacking culture has enabled this type of exploitation of technology to take place and is spurring the creators of these technologies to make them more open.
 		
-		\section{The Problem}
-While the Kinect is cheaper now than when it was first released, it is still rather large and would need modification to make it more discrete.
-The Leapmotion Controller is a much smaller and might possibly be used in a similar way.
-Leapmotion have recently released a new version of their SDK, allowing access to more elements of their Leapmotion Controller. 
-Namely, images from the two cameras.
-This allows the calculation of the disparity between the two images. %define disparity
-
-		\section{Product Expectations}
-		
-	\chapter{Background Research}
-		\section{Literature Review}
-			\subsection{Leap Motion}
-			
+		\section{The Leapmotion Controller}
+			\subsection{What is the Leapmotion?}
 %cite leapmotion https://developer.leapmotion.com/articles/intro-to-motion-control
 The Leapmotion Controller is a device aimed at providing a Natural User Interface through hand gestures.
 It is made up of two infra red cameras both with a fisheye lense, set up stereoscopically.
 %Don't really need the price...
 It is discrete in size and has an accessible price of €89.99.
+The Leapmotion Controller is a much smaller and might possibly be used in a similar way.
+Leapmotion have recently released a new version of their SDK, allowing access to more elements of their Leapmotion Controller. 
+Namely, images from the two cameras.
+This allows the calculation of the disparity between the two images. %define disparity
+
+			\subsection{Uses in Computer Vision}
+			
+		\section{Product Expectations}
+		
+	\chapter{Background Research}
+		\section{Literature Review}
+			
+
 
 	\chapter{Requirements}
 	\chapter{Design}
