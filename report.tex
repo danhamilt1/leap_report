@@ -1,0 +1,115 @@
+\documentclass[11pt,oneside]{report}
+\usepackage[a4paper, margin=1.5in]{geometry}
+%\usepackage{fullpage}
+\usepackage{url}
+\usepackage{graphicx}
+\usepackage{harvard}
+\usepackage{mathtools}
+\usepackage{parskip}
+\usepackage{subcaption}
+\usepackage{bashful}
+
+\citationmode{abbr}
+\renewcommand{\baselinestretch}{1.5}
+
+\title{An Open Source Computer Vision Library for Leapmotion}
+\author{Daniel Hamilton 10026535,\\Computer Science,\\University of the West of England.}
+	
+\bash
+texcount -sum -1 report.tex
+\END
+
+\begin{document}
+	\maketitle
+	\tableofcontents
+
+	
+	Word Count: \bashStdout.
+	\begin{abstract}
+	
+	\end{abstract}	
+	%----------------------------------------- Chapter 1 -----------------------------------------%
+	\chapter{Introduction}
+		\section{Computer Vision: An Intellectual Frontier}
+			\subsection{What is Computer Vision?}		
+				
+				It is very hard for humans to know what their own biological vision really entails, and how difficult it is to reproduce on a computer.
+				Information from the eyes is divided into multiple channels, each streaming different kinds of information to the brain.
+				The brain then subconsciously groups and identifies the parts of the image to examine along with what parts to surpress.
+				The way in which biological vision works is still largely unknown which makes it hard to emulate on computers \cite[p. xi]{book:multiViewGeo}.				
+				Computer vision systems are still relatively naive, all they "see" is a grid of numbers.%from def:cv
+				
+				%By default there is no built in pattern recognition, or what some might call, intelligence.
+				
+				Computer vision is a vast field and hard to define.
+				For the purpose of this report it will be defined as:
+	
+				\begin{quote}
+					``\textit{The transformation of data from a still or video camera into either a decision or a new representation.
+						All transformations are done for achieving some particular goal.}'' \cite[p. 2]{definition:cv}
+				\end{quote}
+				
+				Even though computer vision in terms of comparison to biological vision, still remains an unsolved problem, there have still been many excellent achievements in the field to date.
+			\subsection{Uses of Computer Vision}
+				One of the most promenant uses of computer vision currently, is in driverless cars.
+				Which in recent years, have reached a level of sophistication at which they are being approved by governments to be used on public highways \cite{web:driverlessCars}.
+				Complex and expensive equipment with the capability to analyse a three-dimensional scene in real-time is required to achieve this.
+				%Add the http://velodynelidar.com/lidar/hdlproducts/hdl64e.aspx here, try and find a price to reference "expensive" maybe mention google explicitely.
+				Computer vision is also used on manufacturing production lines.
+				\citeasnoun{journal:salmon} set out to try and classify salmon fillets, to see if it was possible to determine whether a salmon fillet had been processed using enzymes.%maybe expand on what they actually did experementally here.
+				However, computer vision isn't only available to big companies with large amounts of money to spend on research.
+				\begin{quote}
+				``\textit{Computer vision is a rapidly growing field, partly as a result of both cheaper and more capable cameras, partly because of affordable processing power, and partly because vision algorithms are starting to mature.}''\cite[p. ix]{definition:cv}
+				\end{quote}
+				One such device that has been made available is the Kinect by Microsoft.
+				The computer vision society found that the capabilities of the Kinect could be extended beyond its intentional use for gaming, and at a much lower cost than traditional three dimensional cameras.
+				It has been used in areas such as human activity analysis, where it is able to estimate details about the pose of the human subject in its field of vision \cite{kinect:1}.
+				It has also been used to for real time odometry whilst attached to a quadcopter, enabling the production of a three dimensional mapping of a physical space \cite{kinect:2}.
+				%The line below is dependant on a reference
+				A hacking culture has enabled this type of exploitation of technology to take place and is spurring the creators of these technologies to make them more open.
+				
+			\subsection{OpenCV}
+			
+			%Introduction to OpenCV here. Overview, not in depth.	
+				OpenCV is an open source computer vision library.
+				It was designed for computational efficiency with a strong focus on real-time applications.
+				One of OpenCV's goals is to provide a simple-to-use computer vision infrastructure that helps people build fairly sophisticated vision applications quickly \cite[p. 1]{definition:cv}.	
+				It aimed to advance computer vision research by providing open and already optimised code.
+				Providing a basic vision infrastucture with no need to reinvent the wheel.
+				It also provided a common infrastructure on which knowledge of computer vision could be shared between developers.
+				Making code more readable and transferable \cite[p. 6]{definition:cv}. 
+				This is an overview for now but more specifics will be covered later in the document.
+				
+		\section{The Leap Motion Controller}
+			\subsection{What is the Leap Motion?}
+				%cite leapmotion https://developer.leapmotion.com/articles/intro-to-motion-control
+				The Leap Motion Controller is a device aimed at providing a Natural User Interface through hand gestures.
+				It is made up of two infra red cameras both with a fisheye lense, set up stereoscopically.
+				It provides functionality out of the box that allows a developer to track movements and gestures made by a hand \cite{web:leapGestures}.
+				%Don't really need the price...
+				It is discrete in size and has an accessible price. %maybe include the price here
+				Leap motion have recently released a new version of their SDK, allowing access to more elements of their Leapmotion Controller. 
+				Namely, images from the two cameras. 
+				This allows the calculation of the disparity between the two images. %define disparity
+
+			\subsection{Uses in Computer Vision}
+		\section{Product Expectations}
+		%define the boundaries of the project		
+		
+	%----------------------------------------- Chapter 2 -----------------------------------------%
+	\chapter{Background Research}
+		\section{Literature Review}
+	%----------------------------------------- Chapter 3 -----------------------------------------%
+	\chapter{Requirements}
+	%----------------------------------------- Chapter 4 -----------------------------------------%
+	\chapter{Design}
+	%----------------------------------------- Chapter 5 -----------------------------------------%
+	\chapter{Implementation and Test}
+	%----------------------------------------- Chapter 6 -----------------------------------------%
+	\chapter{Evaluation}
+	%----------------------------------------- Chapter 7 -----------------------------------------%
+	\chapter{Conclusion}
+
+	\bibliographystyle{dcu}
+	\bibliography{bibfile}
+\end{document}
