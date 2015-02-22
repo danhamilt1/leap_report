@@ -1,3 +1,5 @@
+%\RequirePackage[l2tabu, orthodox]{nag}
+
 \documentclass[11pt,oneside]{report}
 \usepackage[a4paper, margin=1.5in]{geometry}
 %\usepackage{fullpage}
@@ -8,9 +10,15 @@
 \usepackage{parskip}
 \usepackage{subcaption}
 \usepackage{bashful}
+\usepackage{microtype}
+\usepackage{float}
+\usepackage[font={small,it}]{caption}
 
 \citationmode{abbr}
 \renewcommand{\baselinestretch}{1.5}
+%\renewcommand{\familydefault}{\sfdefault}
+
+%\graphicspath{{./images/}}
 
 \title{An Open Source Computer Vision Library for Leapmotion}
 \author{Daniel Hamilton 10026535,\\Computer Science,\\University of the West of England.}
@@ -35,7 +43,7 @@ texcount -sum -1 report.tex
 				
 				It is very hard for humans to know what their own biological vision really entails, and how difficult it is to reproduce on a computer.
 				Information from the eyes is divided into multiple channels, each streaming different kinds of information to the brain.
-				The brain then subconsciously groups and identifies the parts of the image to examine along with what parts to surpress.
+				The brain then subconsciously groups and identifies the parts of the image to examine along with what parts to suppress.
 				The way in which biological vision works is still largely unknown which makes it hard to emulate on computers \cite[p. xi]{book:multiViewGeo}.				
 				Computer vision systems are still relatively naive, all they "see" is a grid of numbers.%from def:cv
 				
@@ -51,12 +59,12 @@ texcount -sum -1 report.tex
 				
 				Even though computer vision in terms of comparison to biological vision, still remains an unsolved problem, there have still been many excellent achievements in the field to date.
 			\subsection{Uses of Computer Vision}
-				One of the most promenant uses of computer vision currently, is in driverless cars.
+				One of the most prominent uses of computer vision currently, is in driver less cars.
 				Which in recent years, have reached a level of sophistication at which they are being approved by governments to be used on public highways \cite{web:driverlessCars}.
 				Complex and expensive equipment with the capability to analyse a three-dimensional scene in real-time is required to achieve this.
 				%Add the http://velodynelidar.com/lidar/hdlproducts/hdl64e.aspx here, try and find a price to reference "expensive" maybe mention google explicitely.
 				Computer vision is also used on manufacturing production lines.
-				\citeasnoun{journal:salmon} set out to try and classify salmon fillets, to see if it was possible to determine whether a salmon fillet had been processed using enzymes.%maybe expand on what they actually did experementally here.
+				\citeasnoun{journal:salmon} set out to try and classify salmon fillets, to see if it was possible to determine whether a salmon fillet had been processed using enzymes. %maybe expand on what they actually did experementally here.
 				However, computer vision isn't only available to big companies with large amounts of money to spend on research.
 				\begin{quote}
 				``\textit{Computer vision is a rapidly growing field, partly as a result of both cheaper and more capable cameras, partly because of affordable processing power, and partly because vision algorithms are starting to mature.}''\cite[p. ix]{definition:cv}
@@ -75,7 +83,7 @@ texcount -sum -1 report.tex
 				It was designed for computational efficiency with a strong focus on real-time applications.
 				One of OpenCV's goals is to provide a simple-to-use computer vision infrastructure that helps people build fairly sophisticated vision applications quickly \cite[p. 1]{definition:cv}.	
 				It aimed to advance computer vision research by providing open and already optimised code.
-				Providing a basic vision infrastucture with no need to reinvent the wheel.
+				Providing a basic vision infrastructure with no need to reinvent the wheel.
 				It also provided a common infrastructure on which knowledge of computer vision could be shared between developers.
 				Making code more readable and transferable \cite[p. 6]{definition:cv}. 
 				This is an overview for now but more specifics will be covered later in the document.
@@ -84,21 +92,104 @@ texcount -sum -1 report.tex
 			\subsection{What is the Leap Motion?}
 				%cite leapmotion https://developer.leapmotion.com/articles/intro-to-motion-control
 				The Leap Motion Controller is a device aimed at providing a Natural User Interface through hand gestures.
-				It is made up of two infra red cameras both with a fisheye lense, set up stereoscopically.
+				It is made up of two infra red cameras both with a fisheye lense, set up stereoscopically. %IMAGES OF CAMERA IN INFRA RED TO SHOW CAMERAS
 				It provides functionality out of the box that allows a developer to track movements and gestures made by a hand \cite{web:leapGestures}.
 				%Don't really need the price...
 				It is discrete in size and has an accessible price. %maybe include the price here
-				Leap motion have recently released a new version of their SDK, allowing access to more elements of their Leapmotion Controller. 
+				Leap motion have recently released a new version of their SDK, allowing access to more elements of their Leap Motion Controller. 
 				Namely, images from the two cameras. 
-				This allows the calculation of the disparity between the two images. %define disparity
+				This allows the library user to generate a three dimensional representation of a scene, using techniques of which are discussed later in this document. %define disparity
+				The source code for the SDK is closed source, therefore it is not known the current methods by which hands and gestures are classified \cite[p. 217]{journal:leapEvaluation}.
+				With the access to the images it allows exploration of other, custom methods for classification.
 
 			\subsection{Uses in Computer Vision}
+				The Leap Motion Controller has already been used in many innovative ways.
+				An example being its use in recognising Australian and Arabic sign language \cite{journal:leapSignLanguage,journal:leapSignLanguage2}.
+				However these solutions only make use of the default detection system in the SDK.
+				While these are useful, raw image access is required to detect other types of object.
+				Now that this capability has been made available however, a whole new future of possibilities have been opened.
+				Having access to the images allows for their use in computer vision.
+				In turn this means that such an accessible and small device can be used in a variety of new ways.
+				By creating an open source computer vision library for the leap motion, it might become of use in the field of robotics.
+				It's size would make it suitable for much smaller robots.
+				%need to talk about its use in areas such as robotic arms to pick up things for packaging etc.
+				
 		\section{Product Expectations}
 		%define the boundaries of the project		
 		
 	%----------------------------------------- Chapter 2 -----------------------------------------%
 	\chapter{Background Research}
 		\section{Literature Review}
+			\subsection{Stereopsis and Calibration}
+			\begin{quote}
+				``\textit{Stereo matching is the process of taking two or more images and estimating a 3D model of the scene by finding matching pixels in the images and converting their 2D positions into 3D depths.}''\cite{book:sam}
+			\end{quote}
+			The idea behind this stems from the way that biological vision works.
+			In humans, depth is perceived from the difference between the images produced by the left and the right eye.
+			%cite some stuff about algorithm performance from the scelzki2002aa paper
+			To emulate this in computer vision, the images of a scene produced by the cameras are taken from two different positions.
+			One of the difficulties then faced with stereo matching is being able to identify the corresponding pixels in each image taken.
+			When using two cameras, as those that are to be provided by the Leap Motion, \citeasnoun[p. 415]{definition:cv} define four steps that are needed to achieve successful correspondence between the images produced by each.
+			
+			\begin{enumerate}
+				%CHECK THESE ARE CORRECT
+				\item Mathematically remove radial and tangential lense distortion; this is called undistortion. The outputs to this step are undistorted images.
+				
+				\item Adjust for the angles and distances between cameras, a process called rectification. The outputs of this step are images that are row-aligned and rectified.
+				
+				\item Find the same features in the left and right camera views, a process known as correspondence. The output of this step is a disparity map, where the disparities are the differences in $x$-coordinates on the image planes of the same feature viewed in the left and right cameras: $x^{l} - x^{r}$.
+				
+				\item If we know the geometric arrangement of the cameras, then we can turn the disparity map into distances by triangulation. This step is called reprojection, and the output is a depth map.
+			\end{enumerate}
+			
+			For the system to make successful use of the images, it needs to know the set up of the cameras (calibration).
+			%epipolar geometry
+			Much research has already been done on this.
+			As a result, computer vision libraries have appeared, such as OpenCV.
+			Libraries like this create a layer of abstraction between the user and the underlying low-level image processing.
+			Allowing the process of calibration to be carried out with ease, not needing to know all of the mathematics behind the process.
+			Although it is good to have a general overview of what is happening.
+			As this is a fundamental element to this project, each stage of calibration will be covered in a little more detail.
+				\subsubsection{Image Correction}
+				%get the fundamental matrix using opencv
+				Images produced by cameras with lenses suffer from aberrations.
+				No lens is perfect.
+				Therefore correction is needed to get a true representation of the objects in the image.
+				There are many different types of aberration, but the only one that will be discussed here is distortion.
+				Distortion is an effect that changes the overall shape of an image (geometric warping) (See Figure \ref{distortion}).
+				\begin{figure}[!h]
+				\begin{center}
+					
+    					\includegraphics[scale=0.5]{./images/distortion_1.pdf}
+    					\caption{Example of radial distortion of a square being corrected \protect\cite{book:multiViewGeo} {\label{distortion}}}
+    				\end{center}
+				\end{figure}				
+				It is caused by the fact that different areas of a lens have slightly different focal lengths \cite[p. 42]{book:modern}.
+				There is a lot of information available on how distortion happens so it will not be covered here, however some reading suggestions are (READING SUGGESTIONS HERE).
+				The fundamental stages of processing images for use in computer vision comes down to geometry.
+				To reliably calculate depth in a scene, the system needs to know the intrinsic %and extrinsic 
+				parameters of a camera.
+				Essentially, the system wants to know if what the camera is producing is a true representation of the scene it is recording.
+				Much like when you make a visit to see an optician. 
+				The optician will carry out a process to try and discover if what you see is a distortion of reality.
+				The parameters will allow the system to take the images and pre process them (undistort) so that it can be confident they are true.
+				This is done by producing both a camera geometry and a lens distortion model through a process of calibration.  
+				The two models will now be discussed in a little more depth.				
+				%more depth here
+				\subsubsection{Camera Model}
+				
+				\subsubsection{Lens Distortion}
+					Most basic camera models assume that cameras produce images in which the straight lines represent the same straight lines that are in the scene.
+					However as discussed earlier a lens is never perfect and so many will create a visible curvature in the projections of straight lines in an image.
+					Unless this distortion is taken into account, it becomes impossible to create highly accurate photorealistic reconstructions \cite{book:sam}.
+				\subsubsection{Image Rectification}
+				
+				
+				
+			\subsection{Machine Learning}%possibly falls under classification
+			\subsection{Classification}
+			\subsection{Vision Libraries}
+				
 	%----------------------------------------- Chapter 3 -----------------------------------------%
 	\chapter{Requirements}
 	%----------------------------------------- Chapter 4 -----------------------------------------%
