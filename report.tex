@@ -18,7 +18,7 @@
 \renewcommand{\baselinestretch}{1.5}
 %\renewcommand{\familydefault}{\sfdefault}
 
-%\graphicspath{{./images/}}
+\graphicspath{{images/}}
 
 \title{An Open Source Computer Vision Library for Leapmotion}
 \author{Daniel Hamilton 10026535,\\Computer Science,\\University of the West of England.}
@@ -160,12 +160,12 @@ texcount -sum -1 report.tex
 				\begin{figure}[!h]
 				\begin{center}
 					
-    					\includegraphics[scale=0.5]{./images/distortion_1.pdf}
+    					\includegraphics[scale=0.5]{distortion_1}
     					\caption{Example of radial distortion of a square being corrected \protect\cite{book:multiViewGeo} {\label{distortion}}}
     				\end{center}
 				\end{figure}				
 				It is caused by the fact that different areas of a lens have slightly different focal lengths \cite[p. 42]{book:modern}.
-				There is a lot of information available on how distortion happens so it will not be covered here, however some reading suggestions are (READING SUGGESTIONS HERE).
+				There is a lot of information available on how distortion happens so only the basics will be covered here, however some reading suggestions are (READING SUGGESTIONS HERE).
 				The fundamental stages of processing images for use in computer vision comes down to geometry.
 				To reliably calculate depth in a scene, the system needs to know the intrinsic %and extrinsic 
 				parameters of a camera.
@@ -178,7 +178,35 @@ texcount -sum -1 report.tex
 				%more depth here
 				\subsubsection{Camera Model}
 				Most of the information available on camera models are focused around a pinhole camera.
-				The pinhole camera model is the most basic type of camera, that still holds the fundamental mathematics on how the more modern digital cameras work today.
+				The following description and figures of this model is taken from \citeasnoun[p. 371-373]{description:cv}, If more depth is needed I advise you read the cited material.
+				The pinhole camera model is the most basic type of camera, that still holds the fundamental mathematics on how most modern digital cameras work today.
+				\begin{figure}[!ht]
+				\begin{center}
+					\includegraphics[scale=0.5]{pinhole}
+					\caption{Pinhole camera model as shown in in \protect\citeasnoun[p. 372]{definition:cv} {\label{pinhole}}}
+				\end{center}
+				\end{figure}
+				In a pinhole camera (See Figure \ref{pinhole}) light reflected from the scene/object travels through a pinhole that is made in the pinhole plane.
+				This light then gets projected onto the image plane.
+				The size of this projected image is proportional to the focal length $f$.
+				Where $Z$ is the distance from the pinhole plane to the object, $X$ is the length of the object and $x$ is the objects image on the image plane.
+				Therefore we can work out the size of the object using the equation $-x=f\dfrac{X}{Z}$.
+				For mathematical simplification \citeasnoun{definition:cv} states that the negative value can be ommited leaving $x=f\dfrac{X}{Z}$.
+				This is done by moving the image plane in front of the pinhole plane, and then treating the pinhole as a center of projection (See Figure \ref{pinhole2}).
+				This gives us with an image that is the correct way up, although it would be impossible to make this camera physically.
+				\begin{figure}[!ht]
+				\begin{center}
+					\includegraphics[scale=0.5]{pinhole2}
+					\caption{Pinhole camera model with image plane in front, as shown in in \protect\citeasnoun[p. 372]{definition:cv} {\label{pinhole2}}}
+				\end{center}
+				\end{figure}
+				%THIS ASSUMES KNOWLEDGE ON HOW A CAMERA WORKS
+				In the real world, the center of projection will not be precisely in the middle of the imaging sensor of a camera.
+				Therefore displacement values need to be considered, $c_{x}$ and $c_{y}$.
+				The resulting model allows us to pinpoint the point $Q$ with coordinates $(X,Y,Z)$ as a pixel location given as $(x_{screen}, y_{screen})$.
+				With the resulting mathematical model of $x_{screen}=f_{x}\left(\dfrac{X}{Z}\right)+c_{x}$, $y_{screen}=f_{y}\left(\dfrac{Y}{Z}\right)+c_{y}$.
+				Having an accurate model like this allows us to define the parameters of the camera so that false transformations of light being collected from the physical world can be corrected.
+				This is important for methods of feature extraction and disparity mapping which will be discussed later.
 				\subsubsection{Lens Distortion}
 					The camera models discussed assume that cameras produce images in which the straight lines represent the same straight lines that are in the scene.
 					However as discussed earlier a lens is never perfect and so many will create a visible curvature in the projections of straight lines in an image.
