@@ -177,11 +177,17 @@ texcount -sum -1 report.tex
 				The two models will now be discussed in a little more depth.				
 				%more depth here
 				\subsubsection{Camera Model}
-				
+				Most of the information available on camera models are focused around a pinhole camera.
+				The pinhole camera model is the most basic type of camera, that still holds the fundamental mathematics on how the more modern digital cameras work today.
 				\subsubsection{Lens Distortion}
-					Most basic camera models assume that cameras produce images in which the straight lines represent the same straight lines that are in the scene.
+					The camera models discussed assume that cameras produce images in which the straight lines represent the same straight lines that are in the scene.
 					However as discussed earlier a lens is never perfect and so many will create a visible curvature in the projections of straight lines in an image.
-					Unless this distortion is taken into account, it becomes impossible to create highly accurate photorealistic reconstructions \cite{book:sam}.
+					Unless this distortion is taken into account, it becomes impossible to create highly accurate photorealistic reconstructions.
+					A phenomenon known as radial distortion produces a visible curvature on the straight lines that appear in the image.
+					This is where pixels in the image are displaced away or towards the image centre by an amount proportional to their radial distance.
+					These types of distortion are known as barrel and pincushion respectively.
+					The Leap Motion has a radial distortion, more specifically it is known as a fisheye.
+					The fisheye is a distortion where the image that is produced provides an near 180(degree) span side-to-side \cite{book:sam}.
 				\subsubsection{Image Rectification}
 				
 				
@@ -189,6 +195,8 @@ texcount -sum -1 report.tex
 			\subsection{Machine Learning}%possibly falls under classification
 			\subsection{Classification}
 			\subsection{Vision Libraries}
+				\subsubsection{OpenCV}
+				\subsubsection{Point Cloud Library}
 				
 	%----------------------------------------- Chapter 3 -----------------------------------------%
 	\chapter{Requirements}
