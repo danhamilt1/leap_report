@@ -178,7 +178,7 @@ texcount -sum -1 report.tex
 				%more depth here
 				\subsubsection{Camera Model}
 				Most of the information available on camera models are focused around a pinhole camera.
-				The following description and figures of this model is taken from \citeasnoun[p. 371-373]{description:cv}, If more depth is needed I advise you read the cited material.
+				The following description and figures of this model is taken from \citeasnoun[p. 371-373]{definition:cv}, If more depth is needed I advise you read the cited material.
 				The pinhole camera model is the most basic type of camera, that still holds the fundamental mathematics on how most modern digital cameras work today.
 				\begin{figure}[!ht]
 				\begin{center}
@@ -206,7 +206,7 @@ texcount -sum -1 report.tex
 				The resulting model allows us to pinpoint the point $Q$ with coordinates $(X,Y,Z)$ as a pixel location given as $(x_{screen}, y_{screen})$.
 				With the resulting mathematical model of $x_{screen}=f_{x}\left(\dfrac{X}{Z}\right)+c_{x}$, $y_{screen}=f_{y}\left(\dfrac{Y}{Z}\right)+c_{y}$.
 				Having an accurate model like this allows us to define the parameters of the camera so that false transformations of light being collected from the physical world can be corrected.
-				This is important for methods of feature extraction and disparity mapping which will be discussed later.
+				This is important for methods of image rectification which will be discussed later.
 				\subsubsection{Lens Distortion}
 					The camera models discussed assume that cameras produce images in which the straight lines represent the same straight lines that are in the scene.
 					However as discussed earlier a lens is never perfect and so many will create a visible curvature in the projections of straight lines in an image.
