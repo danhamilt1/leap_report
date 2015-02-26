@@ -12,7 +12,15 @@
 \usepackage{bashful}
 \usepackage{microtype}
 \usepackage{float}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
 \usepackage[font={small,it}]{caption}
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\thepage}
+\lhead{\leftmark}
+\cfoot{}
 
 \citationmode{abbr}
 \renewcommand{\baselinestretch}{1.5}
@@ -37,7 +45,7 @@ texcount -sum -1 report.tex
 	
 	\end{abstract}	
 	%----------------------------------------- Chapter 1 -----------------------------------------%
-	\chapter{Introduction}
+	\chapter{Introduction}\label{chap:introduction}
 		\section{Computer Vision: An Intellectual Frontier}
 			\subsection{What is Computer Vision?}		
 				
@@ -118,7 +126,7 @@ texcount -sum -1 report.tex
 		%define the boundaries of the project		
 		
 	%----------------------------------------- Chapter 2 -----------------------------------------%
-	\chapter{Background Research}
+	\chapter{Background Research}\label{chap:background}
 		\section{Literature Review}
 			\subsection{Stereopsis and Calibration}
 			\begin{quote}
@@ -216,6 +224,7 @@ texcount -sum -1 report.tex
 					These types of distortion are known as barrel and pincushion respectively.
 					The Leap Motion has a radial distortion, more specifically it is known as a fisheye.
 					The fisheye is a distortion where the image that is produced provides an near 180(degree) span side-to-side \cite{book:sam}.
+					
 				\subsubsection{Image Rectification}
 				
 				
@@ -227,15 +236,34 @@ texcount -sum -1 report.tex
 				\subsubsection{Point Cloud Library}
 				
 	%----------------------------------------- Chapter 3 -----------------------------------------%
-	\chapter{Requirements}
+	\chapter{Requirements Analysis}\label{chap:req}
+	This chapter attempts to lay out a set of requirements for the Library, from the point of view of the users.
+	They will set out a contract between the users and the library developer as a means to show what the library is going to be and how the library developer is going to build it.
+	They provide goals upon which a realistic scope for the project may be set and will also be the backbone of the tests that are to be written for \autoref{chap:test}.
+	\begin{itemize}
+		\item \textbf{Stakeholder identification}
+		\item \textbf{Use case analysis}
+		\item \textbf{Functional requirements}
+		\item \textbf{Non-functional requirements}
+		\item \textbf{Prioritisation}
+	\end{itemize}
+		\subsection{Stakeholder identification}
+		\subsection{Use case analysis}
+		\subsection{Functional requirements}
+		\subsection{Non-functional requirements}
+		\subsection{Prioritisation}
+	
 	%----------------------------------------- Chapter 4 -----------------------------------------%
-	\chapter{Design}
+	\chapter{Design}\label{chap:des}
 	%----------------------------------------- Chapter 5 -----------------------------------------%
-	\chapter{Implementation and Test}
+	\chapter{Implementation}\label{chap:imp}
+	
 	%----------------------------------------- Chapter 6 -----------------------------------------%
-	\chapter{Evaluation}
+	\chapter{Test}\label{chap:test}
+		%----------------------------------------- Chapter 7 -----------------------------------------%
+	\chapter{Evaluation}\label{chap:eval}
 	%----------------------------------------- Chapter 7 -----------------------------------------%
-	\chapter{Conclusion}
+	\chapter{Conclusion}\label{chap:concl}
 
 	\bibliographystyle{dcu}
 	\bibliography{bibfile}
