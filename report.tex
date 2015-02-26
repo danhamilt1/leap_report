@@ -191,7 +191,7 @@ texcount -sum -1 report.tex
 				\begin{figure}[!ht]
 				\begin{center}
 					\includegraphics[scale=0.5]{pinhole}
-					\caption{Pinhole camera model as shown in in \protect\citeasnoun[p. 372]{definition:cv} {\label{pinhole}}}
+					\caption{Pinhole camera model as shown in \protect\citeasnoun[p. 372]{definition:cv} {\label{pinhole}}}
 				\end{center}
 				\end{figure}
 				In a pinhole camera (See Figure \ref{pinhole}) light reflected from the scene/object travels through a pinhole that is made in the pinhole plane.
@@ -205,7 +205,7 @@ texcount -sum -1 report.tex
 				\begin{figure}[!ht]
 				\begin{center}
 					\includegraphics[scale=0.5]{pinhole2}
-					\caption{Pinhole camera model with image plane in front, as shown in in \protect\citeasnoun[p. 372]{definition:cv} {\label{pinhole2}}}
+					\caption{Pinhole camera model with image plane in front, as shown in \protect\citeasnoun[p. 372]{definition:cv} {\label{pinhole2}}}
 				\end{center}
 				\end{figure}
 				%THIS ASSUMES KNOWLEDGE ON HOW A CAMERA WORKS
@@ -238,8 +238,9 @@ texcount -sum -1 report.tex
 	%----------------------------------------- Chapter 3 -----------------------------------------%
 	\chapter{Requirements Analysis}\label{chap:req}
 	This chapter attempts to lay out a set of requirements for the Library, from the point of view of the users.
-	They will set out a contract between the users and the library developer as a means to show what the library is going to be and how the library developer is going to build it.
+	They will set out a contract between the users and the library developer as a means to show what the library is going to be. It should \textbf{not} show how it will be done - that is the purpose of design \cite{book:dawson}.
 	They provide goals upon which a realistic scope for the project may be set and will also be the backbone of the tests that are to be written for \autoref{chap:test}.
+	The elements needed to produce a good requirements analysis are as follows.
 	\begin{itemize}
 		\item \textbf{Stakeholder identification}
 		\item \textbf{Use case analysis}
@@ -247,11 +248,39 @@ texcount -sum -1 report.tex
 		\item \textbf{Non-functional requirements}
 		\item \textbf{Prioritisation}
 	\end{itemize}
-		\subsection{Stakeholder identification}
-		\subsection{Use case analysis}
-		\subsection{Functional requirements}
-		\subsection{Non-functional requirements}
-		\subsection{Prioritisation}
+	The next few sections will elaborate on these and show the documentation produced. 
+		\section{Stakeholder identification}
+			Identifying the stakeholder of a system is important so that 
+			This project is aimed at producing an open source library that will suit a variety of users.
+			With the main focus being on the \textit{application developer}.
+			Through the analysis of existing libraries and solutions that work with other imaging systems, it is possible to identify what would be suitable to provide as a simpler solution for the leap motion.
+			The stakeholder also plays a major role in discovering and keeping a project, within a defined scope.
+			As the \textit{application developer} will be the main user of the system, they will	have most of the interactions.
+			This library is being designed to be applied toward other applications and not an end user.	
+		\section{Use case analysis}
+			This section has been produced by following the methods outlined by \citeasnoun{book:uml} in ``\textit{Learning UML 2.0}''.
+			They state that a use case diagram can be used to document:
+			\begin{quote}
+				``\textit{Interactions between your system and users or other external systems. Also helpful in mapping requirements to your systems}''
+			\end{quote}
+			A use case diagram is used to capture pieces of functionality that a system will provide to the stakeholder and other users.
+			Figure~\ref{use_case_1} is an example of a UML use case diagram.
+			The stick figures represent actors on the system, the ovals represent use cases and the box enclosing the use cases show the overall system. 
+			The actors are acting upon the system through the means of a use case.
+			Each connecting line shows the use case upon which the actor should be able to interact.
+			In the case of a line between use cases that shows the ``\textit{extend}'' relationship, it shows that the use case might want to completely reuse the connected use cases behaviour.
+			However in \textit{UML 2.0} this reuse is optional and depandent on a runtime or system implementation decision.
+			Remember at this stage we should not be stating \textbf{how} it should be implemented.
+		
+			\begin{figure}[!h]
+			\begin{center}
+    			\includegraphics[scale=0.5]{use_case_1}
+    			\caption{UML use case diagram \protect {\label{use_case_1}}}
+    		\end{center}
+			\end{figure}		
+		\section{Functional requirements}
+		\section{Non-functional requirements}
+		\section{Prioritisation}
 	
 	%----------------------------------------- Chapter 4 -----------------------------------------%
 	\chapter{Design}\label{chap:des}
