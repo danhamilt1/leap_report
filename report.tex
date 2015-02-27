@@ -254,8 +254,20 @@ texcount -sum -1 report.tex
 		\item \textbf{Prioritisation}
 	\end{itemize}
 	The next few sections will elaborate on these and show the documentation produced. 
-		\section{Aims} TODO
-		\section{Objectives} TODO
+		\section{Aims} 
+		\begin{itemize}
+			\item To develop an open source Computer Vision library usable by the leap motion community.
+			\item Enable the leap motion to recognise simple three dimensional shapes using Artificial Intelligence.
+		\end{itemize}
+		\section{Objectives} 
+		\begin{itemize}
+			\item Research Artificial Intelligence methods for stereoscopic image object recognition.
+			\item Research stereoscopic image processing methods.
+			\item Design and develop a library that allows for the training and recognition of simple 3D shapes.
+			\item Evaluate the accuracy of the recognition algorithm.
+			\item Release an open source library.
+			\item Produce a report that communicates my findings
+		\end{itemize}
 		\section{Stakeholder identification}
 			This project is aimed at producing an open source library that will suit a variety of users.
 			With the main focus being on the \textit{application developer}.
@@ -268,6 +280,12 @@ texcount -sum -1 report.tex
 			As the \textit{application developer} will be the main user of the system, they will	have most of the interactions.
 		
 		\section{Use case analysis}
+			\begin{figure}[ht]
+			\begin{center}
+    			\includegraphics[scale=0.45]{use_case_1}
+    			\caption{UML use case diagram \protect {\label{fig:use_case_1}}}
+    		\end{center}
+			\end{figure}	
 			This section has been produced by following the methods outlined by \citeasnoun{book:uml} in ``\textit{Learning UML 2.0}''.
 			A use case diagram is used to capture pieces of functionality that a system will provide to the stakeholder and other users.
 			Figure~\ref{fig:use_case_1} is an example of a UML use case diagram.
@@ -276,14 +294,7 @@ texcount -sum -1 report.tex
 			Each connecting line shows the use case upon which the actor should be able to interact.
 			In the case of a line between use cases that shows the ``\textit{extend}'' relationship, it shows that the use case might want to completely reuse the connected use cases behaviour.
 			However in \textit{UML 2.0} this reuse is optional and dependent on a runtime or system implementation decision.
-			Remember at this stage we should not be stating \textbf{how} it should be implemented.
-		
-			\begin{figure}[!h]
-			\begin{center}
-    			\includegraphics[scale=0.45]{use_case_1}
-    			\caption{UML use case diagram \protect {\label{fig:use_case_1}}}
-    		\end{center}
-			\end{figure}		
+			Remember at this stage we should not be stating \textbf{how} it should be implemented.	
 		\section{Functional requirements}
 			
 			As this is a library, user interface requirements do not need to be considered.
