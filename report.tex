@@ -14,6 +14,7 @@
 \usepackage{float}
 \usepackage{hyperref}
 \usepackage{fancyhdr}
+\usepackage{multirow}
 \usepackage[font={small,it}]{caption}
 
 \pagestyle{fancy}
@@ -111,7 +112,7 @@ texcount -sum -1 report.tex
 				With the access to the images it allows exploration of other, custom methods for classification.
 
 			\subsection{Uses in Computer Vision}
-				The Leap Motion Controller has already been used in many innovative ways.
+			The Leap Motion Controller has already been used in many innovative ways.
 				An example being its use in recognising Australian and Arabic sign language \cite{journal:leapSignLanguage,journal:leapSignLanguage2}.
 				However these solutions only make use of the default detection system in the SDK.
 				While these are useful, raw image access is required to detect other types of object.
@@ -121,7 +122,9 @@ texcount -sum -1 report.tex
 				By creating an open source computer vision library for the leap motion, it might become of use in the field of robotics.
 				It's size would make it suitable for much smaller robots.
 				%need to talk about its use in areas such as robotic arms to pick up things for packaging etc.
-				
+			\subsection{Why use the Leap Motion?}
+			
+		\section{Current State-of-the-Art}
 		\section{Product Expectations}
 		%define the boundaries of the project		
 		
@@ -164,12 +167,12 @@ texcount -sum -1 report.tex
 				No lens is perfect.
 				Therefore correction is needed to get a true representation of the objects in the image.
 				There are many different types of aberration, but the only one that will be discussed here is distortion.
-				Distortion is an effect that changes the overall shape of an image (geometric warping) (See Figure \ref{distortion}).
+				Distortion is an effect that changes the overall shape of an image (geometric warping) (See Figure \ref{fig:distortion}).
 				\begin{figure}[!h]
 				\begin{center}
 					
     					\includegraphics[scale=0.5]{distortion_1}
-    					\caption{Example of radial distortion of a square being corrected \protect\cite{book:multiViewGeo} {\label{distortion}}}
+    					\caption{Example of radial distortion of a square being corrected \protect\cite{book:multiViewGeo} {\label{fig:distortion}}}
     				\end{center}
 				\end{figure}				
 				It is caused by the fact that different areas of a lens have slightly different focal lengths \cite[p. 42]{book:modern}.
@@ -191,21 +194,21 @@ texcount -sum -1 report.tex
 				\begin{figure}[!ht]
 				\begin{center}
 					\includegraphics[scale=0.5]{pinhole}
-					\caption{Pinhole camera model as shown in \protect\citeasnoun[p. 372]{definition:cv} {\label{pinhole}}}
+					\caption{Pinhole camera model as shown in \protect\citeasnoun[p. 372]{definition:cv} {\label{fig:pinhole}}}
 				\end{center}
 				\end{figure}
-				In a pinhole camera (See Figure \ref{pinhole}) light reflected from the scene/object travels through a pinhole that is made in the pinhole plane.
+				In a pinhole camera (See Figure \ref{fig:pinhole}) light reflected from the scene/object travels through a pinhole that is made in the pinhole plane.
 				This light then gets projected onto the image plane.
 				The size of this projected image is proportional to the focal length $f$.
 				Where $Z$ is the distance from the pinhole plane to the object, $X$ is the length of the object and $x$ is the objects image on the image plane.
 				Therefore we can work out the size of the object using the equation $-x=f\dfrac{X}{Z}$.
 				For mathematical simplification \citeasnoun{definition:cv} states that the negative value can be ommited leaving $x=f\dfrac{X}{Z}$.
-				This is done by moving the image plane in front of the pinhole plane, and then treating the pinhole as a center of projection (See Figure \ref{pinhole2}).
+				This is done by moving the image plane in front of the pinhole plane, and then treating the pinhole as a center of projection (See Figure \ref{fig:pinhole2}).
 				This gives us with an image that is the correct way up, although it would be impossible to make this camera physically.
 				\begin{figure}[!ht]
 				\begin{center}
 					\includegraphics[scale=0.5]{pinhole2}
-					\caption{Pinhole camera model with image plane in front, as shown in \protect\citeasnoun[p. 372]{definition:cv} {\label{pinhole2}}}
+					\caption{Pinhole camera model with image plane in front, as shown in \protect\citeasnoun[p. 372]{definition:cv} {\label{fig:pinhole2}}}
 				\end{center}
 				\end{figure}
 				%THIS ASSUMES KNOWLEDGE ON HOW A CAMERA WORKS
@@ -243,55 +246,87 @@ texcount -sum -1 report.tex
 	The elements needed to produce a good requirements analysis are as follows.
 	\begin{itemize}
 		\item \textbf{Stakeholder identification}
-		\item \textbf{Use case analysis}
-		\item \textbf{Functional requirements}
-		\item \textbf{Non-functional requirements}
+		\item \textbf{Use case analysis} identifies interactions between your system and users or other external systems. Also helpful in mapping requirements to your systems \cite{book:uml}.
+		\item \textbf{Functional requirements} of a system define the system, the data and the user interface \cite{book:dawson}.
+		\item \textbf{Non-functional requirements} should lay out constraints, standards, limitations, performance requirements, verification requirements and validation criteria~\cite{book:dawson}.
 		\item \textbf{Prioritisation}
 	\end{itemize}
 	The next few sections will elaborate on these and show the documentation produced. 
+		\section{Aims} TODO
+		\section{Objectives} TODO
 		\section{Stakeholder identification}
-			Identifying the stakeholder of a system is important so that 
 			This project is aimed at producing an open source library that will suit a variety of users.
 			With the main focus being on the \textit{application developer}.
+			Where the \textit{application developer} will use the library to develop other applications.
+			The library being developed here will not be an application that can be used as an end user.
+			It will be designed to be a simple to use interface that saves the \textit{application developer} a large amount of time when applying it to their own application.
+			However, it is possible that other applications might need access to information that is produced by the library, therefore another actor of \textit{user} needs to be considered.
 			Through the analysis of existing libraries and solutions that work with other imaging systems, it is possible to identify what would be suitable to provide as a simpler solution for the leap motion.
 			The stakeholder also plays a major role in discovering and keeping a project, within a defined scope.
 			As the \textit{application developer} will be the main user of the system, they will	have most of the interactions.
-			This library is being designed to be applied toward other applications and not an end user.	
+		
 		\section{Use case analysis}
 			This section has been produced by following the methods outlined by \citeasnoun{book:uml} in ``\textit{Learning UML 2.0}''.
-			They state that a use case diagram can be used to document:
-			\begin{quote}
-				``\textit{Interactions between your system and users or other external systems. Also helpful in mapping requirements to your systems}''
-			\end{quote}
 			A use case diagram is used to capture pieces of functionality that a system will provide to the stakeholder and other users.
-			Figure~\ref{use_case_1} is an example of a UML use case diagram.
+			Figure~\ref{fig:use_case_1} is an example of a UML use case diagram.
 			The stick figures represent actors on the system, the ovals represent use cases and the box enclosing the use cases show the overall system. 
 			The actors are acting upon the system through the means of a use case.
 			Each connecting line shows the use case upon which the actor should be able to interact.
 			In the case of a line between use cases that shows the ``\textit{extend}'' relationship, it shows that the use case might want to completely reuse the connected use cases behaviour.
-			However in \textit{UML 2.0} this reuse is optional and depandent on a runtime or system implementation decision.
+			However in \textit{UML 2.0} this reuse is optional and dependent on a runtime or system implementation decision.
 			Remember at this stage we should not be stating \textbf{how} it should be implemented.
 		
 			\begin{figure}[!h]
 			\begin{center}
-    			\includegraphics[scale=0.5]{use_case_1}
-    			\caption{UML use case diagram \protect {\label{use_case_1}}}
+    			\includegraphics[scale=0.45]{use_case_1}
+    			\caption{UML use case diagram \protect {\label{fig:use_case_1}}}
     		\end{center}
 			\end{figure}		
 		\section{Functional requirements}
+			
+			As this is a library, user interface requirements do not need to be considered.
+			\begin{description}
+				\item[Automatic camera configuration.] The library should abstract the leap motion configuration away from the application developer and should not require any explicit calibration.
+			\end{description}
+			
 		\section{Non-functional requirements}
-		\section{Prioritisation}
+			\begin{description}
+				\item[Speed.] The library needs to be able to process images and return a useful classification output in near real-time.
+				\item[Accuracy.] The library should have equal to or greater than 90\% accuracy in its classification ability.
+				\item[Multi-platform.] The library should be usable on all of the platforms that the leap motion is currently supported on.
+				\item[Java standards] The library should conform to Java standards and have a well documented interface.
+				\item[Semantics.] The library should not stray too far from terminologies and semantics used within existing computer vision libraries, unless it is essential. Ensuring users with prior experience of computer vision can use it with ease.
+				\item[Extensibility.] As the project will be made open source, the library needs to be designed with extensibility in mind.
+			\end{description}
+			
+		\section{MoSCoW prioritisation}
+			MoSCoW is a recognised method for prioritising requirements by their importance. \citeasnoun{book:moscow} defines the categories in order of highest to lowest importance as
+			\begin{description}
+				\item[Must have. ] All features categorised in this group must me implemented for the system to work.
+				\item[Should have. ] Features categorised in this group are of high importance but are not essential to the system working.
+				\item[Could have. ] These features will enhance the system by giving it greater functionality, but they do not have to be delivered as a priority.
+				\item[Want to have. ] These features only apply to a small group of users and have limited business value.
+			\end{description}
+			The terminology here has a business system feel.
+			Where the term \textit{business value} is used above, in terms of this project it will just mean a limited value to the libraries end result.
+			Table~\ref{tab:moscow_table} shows the user stories with their recognised priority.
+			\input{moscow_table}
+
+    		
 	
 	%----------------------------------------- Chapter 4 -----------------------------------------%
 	\chapter{Design}\label{chap:des}
 	%----------------------------------------- Chapter 5 -----------------------------------------%
+	
 	\chapter{Implementation}\label{chap:imp}
 	
 	%----------------------------------------- Chapter 6 -----------------------------------------%
 	\chapter{Test}\label{chap:test}
 		%----------------------------------------- Chapter 7 -----------------------------------------%
+	
 	\chapter{Evaluation}\label{chap:eval}
 	%----------------------------------------- Chapter 7 -----------------------------------------%
+	
 	\chapter{Conclusion}\label{chap:concl}
 
 	\bibliographystyle{dcu}
