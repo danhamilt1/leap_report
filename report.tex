@@ -294,13 +294,14 @@ texcount -sum -1 report.tex
 			Each connecting line shows the use case upon which the actor should be able to interact.
 			In the case of a line between use cases that shows the ``\textit{extend}'' relationship, it shows that the use case might want to completely reuse the connected use cases behaviour.
 			However in \textit{UML 2.0} this reuse is optional and dependent on a runtime or system implementation decision.
-			Remember at this stage we should not be stating \textbf{how} it should be implemented.	
+			Remember at this stage we should not be stating \textbf{how} it should be implemented.
 		\section{Functional requirements}
 			
 			As this is a library, user interface requirements do not need to be considered.
 			\begin{description}
 				\item[Automatic camera configuration.] The library should abstract the leap motion configuration away from the application developer and should not require any explicit calibration.
 			\end{description}
+				\item[Default configuration.] The library should have a default configuration for training and classifying three dimensional shapes.
 			
 		\section{Non-functional requirements}
 			\begin{description}
