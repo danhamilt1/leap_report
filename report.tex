@@ -14,6 +14,7 @@
 \usepackage{float}
 \usepackage{hyperref}
 \usepackage{fancyhdr}
+\usepackage{gensymb}
 \usepackage{multirow}
 \usepackage[font={small,it}]{caption}
 
@@ -101,7 +102,7 @@ texcount -sum -1 report.tex
 			\subsection{What is the Leap Motion?}
 				%cite leapmotion https://developer.leapmotion.com/articles/intro-to-motion-control
 				The Leap Motion Controller is a device aimed at providing a Natural User Interface through hand gestures.
-				It is made up of two infra red cameras both with a fisheye lense, set up stereoscopically. %IMAGES OF CAMERA IN INFRA RED TO SHOW CAMERAS
+				It is made up of two infra red cameras both with a fisheye lense, set up stereoscopically. %INCLUDE IMAGE OF LEAPMOTION HERE
 				It provides functionality out of the box that allows a developer to track movements and gestures made by a hand \cite{web:leapGestures}.
 				%Don't really need the price...
 				It is discrete in size and has an accessible price. %maybe include the price here
@@ -204,7 +205,7 @@ texcount -sum -1 report.tex
 				Therefore we can work out the size of the object using the equation $-x=f\dfrac{X}{Z}$.
 				For mathematical simplification \citeasnoun{definition:cv} states that the negative value can be ommited leaving $x=f\dfrac{X}{Z}$.
 				This is done by moving the image plane in front of the pinhole plane, and then treating the pinhole as a center of projection (See Figure \ref{fig:pinhole2}).
-				This gives us with an image that is the correct way up, although it would be impossible to make this camera physically.
+				This results in an image that is the correct way up. However it would be impossible to make this camera physically, it is simply to make the mathematics less complicated.
 				\begin{figure}[!ht]
 				\begin{center}
 					\includegraphics[scale=0.5]{pinhole2}
@@ -216,7 +217,8 @@ texcount -sum -1 report.tex
 				Therefore displacement values need to be considered, $c_{x}$ and $c_{y}$.
 				The resulting model allows us to pinpoint the point $Q$ with coordinates $(X,Y,Z)$ as a pixel location given as $(x_{screen}, y_{screen})$.
 				With the resulting mathematical model of $x_{screen}=f_{x}\left(\dfrac{X}{Z}\right)+c_{x}$, $y_{screen}=f_{y}\left(\dfrac{Y}{Z}\right)+c_{y}$.
-				Having an accurate model like this allows us to define the parameters of the camera so that false transformations of light being collected from the physical world can be corrected.
+				Having a model like this allows us to define the parameters of the camera so that false transformations of light being collected from the physical world can be corrected.
+				%MAYBE ADD SOME MORE STUFF ABOUT PIXEL MATCHING HERE
 				This is important for methods of image rectification which will be discussed later.
 				\subsubsection{Lens Distortion}
 					The camera models discussed assume that cameras produce images in which the straight lines represent the same straight lines that are in the scene.
@@ -226,7 +228,7 @@ texcount -sum -1 report.tex
 					This is where pixels in the image are displaced away or towards the image centre by an amount proportional to their radial distance.
 					These types of distortion are known as barrel and pincushion respectively.
 					The Leap Motion has a radial distortion, more specifically it is known as a fisheye.
-					The fisheye is a distortion where the image that is produced provides an near 180(degree) span side-to-side \cite{book:sam}.
+					The fisheye is a distortion where the image that is produced provides an near 180\degree span side-to-side \cite{book:sam}.
 					
 				\subsubsection{Image Rectification}
 				
