@@ -26,7 +26,17 @@
 
 \citationmode{abbr}
 \renewcommand{\baselinestretch}{1.5}
+
+\newcommand{\varusecase}{\textbf{Use case}}
+\newcommand{\vardescription}{Description}
+\newcommand{\varactor}{Actor}
+\newcommand{\varentry}{Entry Condition}
+\newcommand{\varflow}{Flow of Events}
+\newcommand{\varaltflow}{Alternative Flow}
+\newcommand{\varexit}{Exit Condition}
+
 %\renewcommand{\familydefault}{\sfdefault}
+
 
 \graphicspath{{images/}}
 
@@ -34,7 +44,7 @@
 \author{Daniel Hamilton 10026535,\\Computer Science,\\University of the West of England.}
 	
 \bash
-texcount -sum -1 report.tex
+texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 \END
 
 \begin{document}
@@ -233,25 +243,24 @@ texcount -sum -1 report.tex
 				\subsubsection{Image Rectification}
 				
 				
-				
-			\subsection{Machine Learning}%possibly falls under classification
 			\subsection{Classification}
+				\subsubsection{What is classification?}
 			\subsection{Vision Libraries}
 				\subsubsection{OpenCV}
 				\subsubsection{Point Cloud Library}
 				
 	%----------------------------------------- Chapter 3 -----------------------------------------%
 	\chapter{Requirements Analysis}\label{chap:req}
-	This chapter attempts to lay out a set of requirements for the Library, from the point of view of the users.
-	They will set out a contract between the users and the library developer as a means to show what the library is going to be. It should \textbf{not} show how it will be done - that is the purpose of design \cite{book:dawson}.
+	This chapter attempts to lay out a set of requirements for the Library, from the point of view of the stakeholders.
+	They will set out a contract between the stakeholders and the library developer as a means to show what the library is going to be. It should \textbf{not} show how it will be done - that is the purpose of design \cite{book:dawson}.
 	They provide goals upon which a realistic scope for the project may be set and will also be the backbone of the tests that are to be written for \autoref{chap:test}.
 	The elements needed to produce a good requirements analysis are as follows.
 	\begin{itemize}
-		\item \textbf{Stakeholder identification}
+		\item \textbf{Stakeholder identification} is important so that the requirements are of use to who they are being developed for.
 		\item \textbf{Use case analysis} identifies interactions between your system and users or other external systems. Also helpful in mapping requirements to your systems \cite{book:uml}.
 		\item \textbf{Functional requirements} of a system define the system, the data and the user interface \cite{book:dawson}.
 		\item \textbf{Non-functional requirements} should lay out constraints, standards, limitations, performance requirements, verification requirements and validation criteria~\cite{book:dawson}.
-		\item \textbf{Prioritisation}
+		\item \textbf{MoSCoW Prioritisation} will set the prioritisation for each requirement. This gives a good identification as to which ones should be developed first.
 	\end{itemize}
 	The next few sections will elaborate on these and show the documentation produced. 
 		\section{Aims} 
@@ -295,13 +304,18 @@ texcount -sum -1 report.tex
 			In the case of a line between use cases that shows the ``\textit{extend}'' relationship, it shows that the use case might want to completely reuse the connected use cases behaviour.
 			However in \textit{UML 2.0} this reuse is optional and dependent on a runtime or system implementation decision.
 			Remember at this stage we should not be stating \textbf{how} it should be implemented.
+			\input{retrieve_camera_images_use_case}
+			\input{manipulate_by_transform_use_case}
+			\input{classify_object_use_case}
+		\clearpage
 		\section{Functional requirements}
 			
 			As this is a library, user interface requirements do not need to be considered.
 			\begin{description}
 				\item[Automatic camera configuration.] The library should abstract the leap motion configuration away from the application developer and should not require any explicit calibration.
-			\end{description}
 				\item[Default configuration.] The library should have a default configuration for training and classifying three dimensional shapes.
+			\end{description}
+				
 			
 		\section{Non-functional requirements}
 			\begin{description}
@@ -325,13 +339,23 @@ texcount -sum -1 report.tex
 			Where the term \textit{business value} is used above, in terms of this project it will just mean a limited value to the libraries end result.
 			Table~\ref{tab:moscow_table} shows the user stories with their recognised priority.
 			\input{moscow_table}
+			\clearpage
+			The prioritisations have been worked out so that the fundamental elements of the library will get created first.
+			Although the end product should be able to classify images, there is not yet a guarantee that it is possible to do so.
+			All of the previous requirements have to be implemented before any type of classification can be considered.
 
     		
 	
 	%----------------------------------------- Chapter 4 -----------------------------------------%
 	\chapter{Design}\label{chap:des}
 	%----------------------------------------- Chapter 5 -----------------------------------------%
-	
+	\section{System Architecture}
+	\begin{figure}[ht]
+			\begin{center}
+    			\includegraphics[scale=0.5]{system_architecture_1}
+    			\caption{High level system architecture \protect {\label{fig:system_arch_1}}}
+    		\end{center}
+			\end{figure}	
 	\chapter{Implementation}\label{chap:imp}
 	
 	%----------------------------------------- Chapter 6 -----------------------------------------%

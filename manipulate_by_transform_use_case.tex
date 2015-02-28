@@ -1,0 +1,19 @@
+\begin{table}[h]
+\begin{tabular}{|p{1.5in}|p{3.4in}|}
+\hline
+\varusecase         & \texttt{ManipulateByTransform} \\ \hline
+\vardescription     & The application developer should be able to manipulate the image by transformation. (Such as resize or warp). For use if overriding calibration methods. \\ \hline
+\varactor           & Application developer \\ \hline
+\varentry           & The image needs to be instantiated and valid for a successful transformation. \texttt{RetrieveCameraImages} needs to have been successful. \\ \hline
+\varflow            & \begin{enumerate}
+                        \item Application developer requests a transformed image by transformation type.
+                        \item Library checks image is valid.
+                        \item Library validates transformation.
+                        \item Library library transforms image.
+                        \item Library returns transformed image.
+                      \end{enumerate} \\ \hline
+\varaltflow         & If the image or transformation is not valid a \texttt{transformationException} should be thrown. \\ \hline
+\varexit            & Application developer receives a transformed image as a new instance. \\ \hline
+\end{tabular}
+\caption{Documented \texttt{ManipulateByTransform} use case \protect {\label{tab:use_manipulate_by_transform}}}
+\end{table}
