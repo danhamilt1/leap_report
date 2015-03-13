@@ -80,7 +80,7 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 				Even though computer vision in terms of comparison to biological vision, still remains an unsolved problem, there have still been many excellent achievements in the field to date.
 			\subsection{Uses of Computer Vision}
 				One of the most prominent uses of computer vision currently, is in driver less cars.
-				Which in recent years, have reached a level of sophistication at which they are being approved by governments to be used on public highways \cite{web:driverlessCars}.
+				In recent years, they have reached a level of sophistication at which they are being approved by governments to be used on public highways \cite{web:driverlessCars}.
 				Complex and expensive equipment with the capability to analyse a three-dimensional scene in real-time is required to achieve this.
 				%Add the http://velodynelidar.com/lidar/hdlproducts/hdl64e.aspx here, try and find a price to reference "expensive" maybe mention google explicitely.
 				Computer vision is also used on manufacturing production lines.
@@ -105,7 +105,7 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 				It aimed to advance computer vision research by providing open and already optimised code.
 				Providing a basic vision infrastructure with no need to reinvent the wheel.
 				It also provided a common infrastructure on which knowledge of computer vision could be shared between developers.
-				Making code more readable and transferable \cite[p. 6]{definition:cv}. 
+				This makes code more readable and transferable \cite[p. 6]{definition:cv}. 
 				This is an overview for now but more specifics will be covered later in the document.
 				
 		\section{The Leap Motion Controller}
@@ -123,11 +123,11 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 				With the access to the images it allows exploration of other, custom methods for classification.
 
 			\subsection{Uses in Computer Vision}
-			The Leap Motion Controller has already been used in many innovative ways.
-				An example being its use in recognising Australian and Arabic sign language \cite{journal:leapSignLanguage,journal:leapSignLanguage2}.
-				However these solutions only make use of the default detection system in the SDK.
-				While these are useful, raw image access is required to detect other types of object.
-				Now that this capability has been made available however, a whole new future of possibilities have been opened.
+				The Leap Motion Controller has already been used in many innovative ways.
+				An example of this is its use in recognising Australian and Arabic sign language \cite{journal:leapSignLanguage,journal:leapSignLanguage2}.
+				However, these solutions only make use of the default detection system in the SDK.
+				The default detection system is advanced and accurate enough to detect hand movements to this scale but raw image access is required to detect objects other than hands.
+				As stated previously, image access has now been given, and so a whole new future of possibilities have been opened.
 				Having access to the images allows for their use in computer vision.
 				In turn this means that such an accessible and small device can be used in a variety of new ways.
 				By creating an open source computer vision library for the leap motion, it might become of use in the field of robotics.
@@ -136,13 +136,33 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 			\subsection{Why use the Leap Motion?}
 			
 		\section{Current State-of-the-Art}
-		\section{Product Expectations}
-		%define the boundaries of the project		
+		\section{Aims} 
+		\begin{itemize}
+			\item To develop an open source Computer Vision library usable by the leap motion community.
+			\item Enable the leap motion to recognise simple three dimensional shapes using Artificial Intelligence.
+		\end{itemize}
+		\section{Objectives} 
+		\begin{itemize}
+			\item Research Artificial Intelligence methods for stereoscopic image object recognition.
+			\item Research stereoscopic image processing methods.
+			\item Design and develop a library that allows for the training and recognition of simple 3D shapes.
+			\item Evaluate the accuracy of the recognition algorithm.
+			\item Release an open source library.
+			\item Produce a report that communicates my findings
+		\end{itemize}
+		\section{Solution Approach}
+		\section{Report Structure}
+			\subsection{Chapter \ref{chap:background}}
+			\subsection{Chapter \ref{chap:req}}
+			\subsection{Chapter \ref{chap:des&imp}}
+			\subsection{Chapter \ref{chap:test}}
+			\subsection{Chapter \ref{chap:eval}}
+			\subsection{Chapter \ref{chap:concl}}
+			
 		
 	%----------------------------------------- Chapter 2 -----------------------------------------%
 	\chapter{Background Research}\label{chap:background}
-		\section{Literature Review}
-			\subsection{Stereopsis and Calibration}
+			\section{Stereopsis and Calibration}
 			\begin{quote}
 				``\textit{Stereo matching is the process of taking two or more images and estimating a 3D model of the scene by finding matching pixels in the images and converting their 2D positions into 3D depths.}''\cite{book:sam}
 			\end{quote}
@@ -172,7 +192,7 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 			Allowing the process of calibration to be carried out with ease, not needing to know all of the mathematics behind the process.
 			Although it is good to have a general overview of what is happening.
 			As this is a fundamental element to this project, each stage of calibration will be covered in a little more detail.
-				\subsubsection{Image Correction}
+				\subsection{Image Correction}
 				%get the fundamental matrix using opencv
 				Images produced by cameras with lenses suffer from aberrations.
 				No lens is perfect.
@@ -198,7 +218,7 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 				This is done by producing both a camera geometry and a lens distortion model through a process of calibration.  
 				The two models will now be discussed in a little more depth.				
 				%more depth here
-				\subsubsection{Camera Model}
+				\subsection{Camera Model}
 				Most of the information available on camera models are focused around a pinhole camera.
 				The following description and figures of this model is taken from \citeasnoun[p. 371-373]{definition:cv}, If more depth is needed I advise you read the cited material.
 				The pinhole camera model is the most basic type of camera, that still holds the fundamental mathematics on how most modern digital cameras work today.
@@ -230,7 +250,7 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 				Having a model like this allows us to define the parameters of the camera so that false transformations of light being collected from the physical world can be corrected.
 				%MAYBE ADD SOME MORE STUFF ABOUT PIXEL MATCHING HERE
 				This is important for methods of image rectification which will be discussed later.
-				\subsubsection{Lens Distortion}
+				\subsection{Lens Distortion}
 					The camera models discussed assume that cameras produce images in which the straight lines represent the same straight lines that are in the scene.
 					However as discussed earlier a lens is never perfect and so many will create a visible curvature in the projections of straight lines in an image.
 					Unless this distortion is taken into account, it becomes impossible to create highly accurate photorealistic reconstructions.
@@ -240,19 +260,63 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 					The Leap Motion has a radial distortion, more specifically it is known as a fisheye.
 					The fisheye is a distortion where the image that is produced provides an near 180\degree span side-to-side \cite{book:sam}.
 					
-				\subsubsection{Image Rectification}
+				\subsection{Image Rectification}
 				
 				
-			\subsection{Classification}
-				\subsubsection{What is classification?}
+			\section{Classification}
 				\begin{quote}
 					\textit{A classifier is a procedure that accepts a set of features and produces a class label for them.}
 					\cite[p. 487]{book:modern}
 				\end{quote}
-				The idea behind them is to take a set of labelled examples, which are used to classify any new examples that it receives as input.
-			\subsection{Vision Libraries}
-				\subsubsection{OpenCV}
-				\subsubsection{Point Cloud Library}
+				Classifiers are like rules, data gets passed in, in this case a feature in an image, and the rule returns a class label.
+				There are three basic ingredients to the recipe of classification.
+				\begin{enumerate}
+					\item{Find a labelled dataset.}
+					\item{Build the features from within the dataset.}
+					\item{Train the classifier with the features.}
+				\end{enumerate}
+				The most difficult ingredient to apply is building the features.
+				Some feature constructions are more suited to certain applications than others.
+				It is important to extract the features that show the variation between each class, as opposed to extract the features that show the variation within a class.
+				As an example, one might want to extract the features of a car and the features of a van.
+				The only features that are important are the ones that differentiate between a car and a van.
+				The features that differentiate between one car and another variation of a car are not important.
+				On the other hand, it is clear to see there might also be a use for differentiating between two different cars in another scenario.
+				Showing that extraction of these features is very much application dependant.
+				
+				\subsection{Extracting image features}
+					\subsubsection{Edge detection}
+					In many cases, the first stage of image analysis is to determine where the edges are.
+					Evidence suggests that edge detection is an important part of biological vision, particularly in mammals.
+					In most situations a predator (or prey) can be seen to be contrasted sharply with its background.
+					By noting the edges enables the animal to quickly recognise other animals near it.
+					Which explains why camouflage is such a popular technique in the animal kingdom \cite{book:aiIlluminated}.
+					An object is separated from its background in an image by an occluding contour.
+					An occluding contour is a line where, on one side, the pixels in the image lie on the background, and on the other side, lie on the object.
+					Occluding contours form the outlines of objects.
+					Edges can be obtained from large image gradients.
+					Such as those cause by sharp changes in brightness.
+					\subsubsection{Corner detection}
+					The terms "feature", "corner" and "image point" are used interchangeably throughout literature.
+					For example \citeasnoun[p. 317]{definition:cv} describes corners as
+					\begin{quote}
+						``\textit{the points that contain enough information to be picked out from one frame to the next.}''
+					\end{quote}
+					Where as, \citeasnoun[p. 179]{book:modern} describes corners as a local area where the orientation of the image gradient changes sharply; a corner in the more literal sense of the word.
+					\citeasnoun{book:modern} says a corner is a more specific term that can be described by the more general term of image point.
+					This report will continue using the term corner as \citeasnoun{definition:cv} has, so as to avoid confusion with any code references in OpenCV later on.
+					
+					Corners are easy to match between different images.
+					This makes them extremely useful when reconstructing points in three dimensions when using multiple images.
+					Such as the images produced in stereopsis.
+					The idea is to extract unique points in an image that can be tracked in another image of the same object or scene.
+					Imagine picking a point on a large blank wall in one image, it wont be very easy to find the exact same point in the second image.
+					Instead unique points should be selected.
+					
+					
+			\section{Vision Libraries}
+				\subsection{OpenCV}
+				\subsection{Point Cloud Library}
 				
 	%----------------------------------------- Chapter 3 -----------------------------------------%
 	\chapter{Requirements Analysis}\label{chap:req}
@@ -268,20 +332,7 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 		\item \textbf{MoSCoW Prioritisation} will set the prioritisation for each requirement. This gives a good identification as to which ones should be developed first.
 	\end{itemize}
 	The next few sections will elaborate on these and show the documentation produced. 
-		\section{Aims} 
-		\begin{itemize}
-			\item To develop an open source Computer Vision library usable by the leap motion community.
-			\item Enable the leap motion to recognise simple three dimensional shapes using Artificial Intelligence.
-		\end{itemize}
-		\section{Objectives} 
-		\begin{itemize}
-			\item Research Artificial Intelligence methods for stereoscopic image object recognition.
-			\item Research stereoscopic image processing methods.
-			\item Design and develop a library that allows for the training and recognition of simple 3D shapes.
-			\item Evaluate the accuracy of the recognition algorithm.
-			\item Release an open source library.
-			\item Produce a report that communicates my findings
-		\end{itemize}
+		
 		\section{Stakeholder identification}
 			This project is aimed at producing an open source library that will suit a variety of users.
 			With the main focus being on the \textit{application developer}.
@@ -324,7 +375,8 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 			
 		\section{Non-functional requirements}
 			\begin{description}
-				\item[Speed.] The library needs to be able to process images and return a useful classification output in near real-time.
+				\item[Speed.] The library needs to be able to process images and return a useful classification output in near real-time. 
+				A minimum of 14 frames per second should be the target.
 				\item[Accuracy.] The library should have equal to or greater than 90\% accuracy in its classification ability.
 				\item[Multi-platform.] The library should be usable on all of the platforms that the leap motion is currently supported on.
 				\item[Java standards] The library should conform to Java standards and have a well documented interface.
@@ -352,7 +404,7 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
     		
 	
 	%----------------------------------------- Chapter 4 -----------------------------------------%
-	\chapter{Design}\label{chap:des}
+	\chapter{Design and Implementation}\label{chap:des&imp}
 	%----------------------------------------- Chapter 5 -----------------------------------------%
 	\section{System Architecture}
 	\begin{figure}[ht]
@@ -361,8 +413,15 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
     			\caption{High level system architecture \protect {\label{fig:system_arch_1}}}
     		\end{center}
 			\end{figure}	
-	\chapter{Implementation}\label{chap:imp}
-	
+	\section{Prototype 1}\label{sec:p1}
+		\subsection{Design}
+		\subsection{Implementation}
+	\section{Prototype 2}\label{sec:p2}
+		\subsection{Design}
+		\subsection{Implementation}
+	\section{Prototype 3}\label{sec:p3}
+		\subsection{Design}
+		\subsection{Implementation}
 	%----------------------------------------- Chapter 6 -----------------------------------------%
 	\chapter{Test}\label{chap:test}
 		%----------------------------------------- Chapter 7 -----------------------------------------%
