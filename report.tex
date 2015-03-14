@@ -50,7 +50,8 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 \begin{document}
 	\maketitle
 	\tableofcontents
-
+	\listoffigures
+	\listoftables
 	
 	Word Count: \bashStdout.
 	\begin{abstract}
@@ -96,18 +97,6 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 				%The line below is dependant on a reference
 				A hacking culture has enabled this type of exploitation of technology to take place and is spurring the creators of these technologies to make them more open.
 				
-			\subsection{OpenCV}
-			
-			%Introduction to OpenCV here. Overview, not in depth.	
-				OpenCV is an open source computer vision library.
-				It was designed for computational efficiency with a strong focus on real-time applications.
-				One of OpenCV's goals is to provide a simple-to-use computer vision infrastructure that helps people build fairly sophisticated vision applications quickly \cite[p. 1]{definition:cv}.	
-				It aimed to advance computer vision research by providing open and already optimised code.
-				Providing a basic vision infrastructure with no need to reinvent the wheel.
-				It also provided a common infrastructure on which knowledge of computer vision could be shared between developers.
-				This makes code more readable and transferable \cite[p. 6]{definition:cv}. 
-				This is an overview for now but more specifics will be covered later in the document.
-				
 		\section{The Leap Motion Controller}
 			\subsection{What is the Leap Motion?}
 				%cite leapmotion https://developer.leapmotion.com/articles/intro-to-motion-control
@@ -115,12 +104,19 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 				It is made up of two infra red cameras both with a fisheye lense, set up stereoscopically. %INCLUDE IMAGE OF LEAPMOTION HERE
 				It provides functionality out of the box that allows a developer to track movements and gestures made by a hand \cite{web:leapGestures}.
 				%Don't really need the price...
-				It is discrete in size and has an accessible price. %maybe include the price here
 				Leap motion have recently released a new version of their SDK, allowing access to more elements of their Leap Motion Controller. 
 				Namely, images from the two cameras. 
-				This allows the library user to generate a three dimensional representation of a scene, using techniques of which are discussed later in this document. %define disparity
-				The source code for the SDK is closed source, therefore it is not known the current methods by which hands and gestures are classified \cite[p. 217]{journal:leapEvaluation}.
+				This could possibly be exploited in computer vision. %define disparity
+				The  SDK is closed source, therefore it is not known the current methods by which hands and gestures are classified \cite[p. 217]{journal:leapEvaluation}.
 				With the access to the images it allows exploration of other, custom methods for classification.
+				The SDK is for C++, C\#, Objective-C, Java, Python and Javascript.
+				It works on Microsoft Windows, Mac OS X and a variety of Linux systems.
+				
+				The leap motion is an extremely accessible device and it can be purchased for a price of about \pounds55\footnote{\url{http://www.amazon.co.uk/Leap-Motion-Controller-Interacts-Airspace/dp/B00C66Z9ZC}}.
+				It is small in size with dimensions 80mm $\times$ 30mm $\times$ 11.25mm.
+				
+				
+				
 
 			\subsection{Uses in Computer Vision}
 				The Leap Motion Controller has already been used in many innovative ways.
@@ -134,8 +130,42 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 				It's size would make it suitable for much smaller robots.
 				%need to talk about its use in areas such as robotic arms to pick up things for packaging etc.
 			\subsection{Why use the Leap Motion?}
-			
+				The main aim is to try and expand the areas on the leap motion can be developed with.
+				To try and find out whether it is feasible to say that a leap motion can be used for computer vision.
+				For example, to detect objects other than hands and tools.
+				
+				There is a large community of interest in the leap motion forums, with many different projects using the current SDK.
+				It might be assumed from the mere interest on threads that contain any form of reference to computer vision, that carrying out research on this will be a useful piece of work.
 		\section{Current State-of-the-Art}
+		
+			\subsection{OpenCV}
+				OpenCV is an extensive Computer Vision library that has grown out of a research project, initially run by Intel.
+				Universities were seen to be sharing internal computer vision infrastructures between students, and so OpenCV was conceived to make this type of infrastructure universally available.
+				Its first alpha release was made available in January 1999.
+				One of its goals is to provide a simple-to-use computer vision infrastructure that helps people build fairly sophisticated vision applications quickly \cite[p. 1]{definition:cv}.	
+				By making computer vision more accessible, Intel were increasing the need for faster processors, in turn generating themselves more income \cite{definition:cv}.
+				
+				Computer vision is computationally expensive.
+				However, many scenarios that use computer vision, need to happen in real time.
+				OpenCV was designed for computational efficiency with a strong focus on real-time applications.
+				Early on in its life, Intel had pushed for the requirement of more power from CPUs.
+				Then in 2010 GPU acceleration was added to OpenCV.
+				It has been developed so that adoption from the CPU library to the GPU library is easy, so that developers do not require any training.
+				\citeasnoun{journal:nvidia} have shown this extension has sped up algorithms up to four times on a GPU than a CPU.
+				
+				While the original library is written in C/C++, it has also been wrapped to work on iOS and Java/Android platforms.
+				With smartphone processors often improving in each new release, as well as built in cameras, the demand for computer vision applications is increasing.
+				Currently, devices are capable of stitching together several photographs into a high resolution panoramic image in real time.
+				As well as having the capability of using facial recognition to unlock the device \cite{journal:face}.
+				
+				Since its first release the library has become well established in the Computer Vision field.
+				A simple search with the term ``\textit{OpenCV}'' on google scholar, returns about 38,700 results.
+				With the \citeasnoun{definition:cv} book itself cited by 3409 others.
+				
+				OpenCV is licensed under the BSD open source licence.
+				Meaning it is open and free.
+				The code can be embedded in other applications for research or for profit and there is no obligation that the created applications code needs to be open or free.
+				
 		\section{Aims} 
 		\begin{itemize}
 			\item To develop an open source Computer Vision library usable by the leap motion community.
@@ -314,23 +344,6 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 					Instead unique points should be selected.
 					Such as a tap sticking out of the wall.
 					
-					
-			\section{Vision Libraries}
-				\subsection{OpenCV}
-				OpenCV is an extensive Computer Vision library that has grown out of a research project run by Intel.
-				Universities were seen to be sharing internal computer vision infrastructures between students, and so OpenCV was conceived to make this type of infrastructure universally available.
-				Its first alpha release was made in January 1999.
-				By enabling computer vision applications, Intel were increasing the need for faster processors, generating more income \cite{definition:cv}.
-				Since its first release the library has become well established in the Computer Vision field.
-				A simple search with the term OpenCV on google scholar, returns about 38,700 results.
-				With the \citeasnoun{definition:cv} book itself cited by 3409 others.
-				
-				OpenCV is licensed under the BSD open source licence.
-				Meaning it is open and free.
-				The code can be embedded in other applications for research or for profit and there is no obligation that the created applications code needs to be open or free.
-				
-				
-				\subsection{Point Cloud Library}
 				
 	%----------------------------------------- Chapter 3 -----------------------------------------%
 	\chapter{Requirements Analysis}\label{chap:req}
