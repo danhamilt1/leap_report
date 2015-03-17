@@ -6,10 +6,13 @@
 \varactor           & User \\ \hline
 \varentry           & The leap motion controller must be successfully calibrated and receiving valid images. The classifier must have been trained before detecting objects.\\ \hline
 \varflow            & \begin{enumerate}
-                        \item TODO
+                        \item User requests classification of image
+                        \item Library checks image is valid
+                        \item Library runs object detection algorithm
+                        \item Library returns classification of image
                         
                       \end{enumerate} \\ \hline
-\varaltflow         & TODO \\ \hline
+\varaltflow         & If the image is not valid then the Library will notify the User. If no classification can be given then a pre defined value will be given to the user stating this.\\ \hline
 \varexit            & User receives a classification for the object in the image \\ \hline
 \end{tabular}
 \caption{Documented \texttt{ClassifyObject} use case \protect {\label{tab:use_classify_object}}}

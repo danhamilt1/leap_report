@@ -40,7 +40,7 @@
 
 \graphicspath{{images/}}
 
-\title{An Open Source Computer Vision Library for Leapmotion}
+\title{An Open Source Computer Vision Framework for Leapmotion}
 \author{Daniel Hamilton 10026535,\\Computer Science,\\University of the West of England.}
 	
 \bash
@@ -82,9 +82,9 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 			\subsection{Uses of Computer Vision}
 				One of the most prominent uses of computer vision currently, is in driver less cars.
 				In recent years, they have reached a level of sophistication at which they are being approved by governments to be used on public highways \cite{web:driverlessCars}.
-				Complex and expensive equipment with the capability to analyse a three-dimensional scene in real-time is required to achieve this.
+				Complex and expensive equipment with the capability to analyse a three-dimensional scene in real-time is usually required to achieve this.
 				%Add the http://velodynelidar.com/lidar/hdlproducts/hdl64e.aspx here, try and find a price to reference "expensive" maybe mention google explicitely.
-				Computer vision is also used on manufacturing production lines.
+				Computer vision is also used on production lines.
 				\citeasnoun{journal:salmon} set out to try and classify salmon fillets, to see if it was possible to determine whether a salmon fillet had been processed using enzymes. %maybe expand on what they actually did experementally here.
 				However, computer vision isn't only available to big companies with large amounts of money to spend on research.
 				\begin{quote}
@@ -108,11 +108,13 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 				Namely, images from the two cameras. 
 				This could possibly be exploited in computer vision. %define disparity
 				The  SDK is closed source, therefore it is not known the current methods by which hands and gestures are classified \cite[p. 217]{journal:leapEvaluation}.
-				With the access to the images it allows exploration of other, custom methods for classification.
+				With the access to the images it allows exploration of other, custom methods for object classification and tracking.
 				The SDK is for C++, C\#, Objective-C, Java, Python and Javascript.
 				It works on Microsoft Windows, Mac OS X and a variety of Linux systems.
+				There are currently iOS and Android libraries that are available through request.
+				It is therefore a truly multi platform device.
 				
-				The leap motion is an extremely accessible device and it can be purchased for a price of about \pounds55\footnote{\url{http://www.amazon.co.uk/Leap-Motion-Controller-Interacts-Airspace/dp/B00C66Z9ZC}}.
+				The leap motion is an extremely accessible device and it can be purchased for a price in the range of \pounds55\footnote{\url{http://www.amazon.co.uk/Leap-Motion-Controller-Interacts-Airspace/dp/B00C66Z9ZC}}.
 				It is small in size with dimensions 80mm $\times$ 30mm $\times$ 11.25mm.
 				
 				
@@ -126,20 +128,15 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 				As stated previously, image access has now been given, and so a whole new future of possibilities have been opened.
 				Having access to the images allows for their use in computer vision.
 				In turn this means that such an accessible and small device can be used in a variety of new ways.
-				By creating an open source computer vision library for the leap motion, it might become of use in the field of robotics.
-				It's size would make it suitable for much smaller robots.
-				%need to talk about its use in areas such as robotic arms to pick up things for packaging etc.
-			\subsection{Why use the Leap Motion?}
-				The main aim is to try and expand the areas on the leap motion can be developed with.
-				To try and find out whether it is feasible to say that a leap motion can be used for computer vision.
-				For example, to detect objects other than hands and tools.
+				By creating an open source computer vision framework for the leap motion, it might become of use in the field of robotics.
+				For example, it's size would make it suitable to attach to a robot as a rudimentary depth sensing system for collision avoidance.
 				
-				There is a large community of interest in the leap motion forums, with many different projects using the current SDK.
-				It might be assumed from the mere interest on threads that contain any form of reference to computer vision, that carrying out research on this will be a useful piece of work.
+				%need to talk about its use in areas such as robotic arms to pick up things for packaging etc.
+			
 		\section{Current State-of-the-Art}
 		
 			\subsection{OpenCV}
-				OpenCV is an extensive Computer Vision library that has grown out of a research project, initially run by Intel.
+				OpenCV is an extensive Computer Vision framework that has grown out of a research project, initially run by Intel.
 				Universities were seen to be sharing internal computer vision infrastructures between students, and so OpenCV was conceived to make this type of infrastructure universally available.
 				Its first alpha release was made available in January 1999.
 				One of its goals is to provide a simple-to-use computer vision infrastructure that helps people build fairly sophisticated vision applications quickly \cite[p. 1]{definition:cv}.	
@@ -165,22 +162,72 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 				OpenCV is licensed under the BSD open source licence.
 				Meaning it is open and free.
 				The code can be embedded in other applications for research or for profit and there is no obligation that the created applications code needs to be open or free.
+		\section{The Problem}
+				Currently, there is no simple solution that allows a developer to simply plug in a leap motion and start developing for computer vision.
+				While a computer vision expert might be able to start programming straight away.
+				A non-expert would have to learn a large amount before they start to see any results.	
 				
+				The main aim is to try and expand the areas on the leap motion can be developed with.
+				To try and find out whether it is feasible to say that a leap motion can be used for computer vision in a simple way.
+				For example, to detect objects other than hands and tools with only a few function calls.
+				
+				There is a large community of interest in the leap motion forums, with many different projects using the current SDK.
+				It might be assumed from the mere interest on threads that contain any form of reference to computer vision, that carrying out research on this will be a useful piece of work.
+		\section{Hypotheses}
+				Is it possible to use the leap motion in the field of computer vision, so that application developers can exploit the technology in different ways as to what was originally intended?		
+				Can this ability then be structured into a framework, so that the effort application developers have to put in to use the leap motion as a solution, is low, making it an option to consider in new projects?	
+		\section{Solution Approach}	
+			\subsection{Project Goals}
+				There are two main goals for this project. 
+				The primary goal is to develop a computer vision development framework for the leap motion. 
+				The secondary goal is to make use of this library in an application that shows successful detection of objects by the leap motion.
+			
+			\subsection{Development Methodology}
+					There are lots of development methodologies out there.
+					It is important to follow a methodology to
+					\begin{itemize}
+						\item Divide a large problem into easy to understand tasks.
+						\item Sharpen focus
+						\item Improve time estimates
+						\item Provide progress visibility
+						\item Provide better structure
+						\item Lead to better coding and documentation
+					\end{itemize}\cite{book:dawson}.
+					
+					As this is not a team based project, methodologies such as SCRUM will not be considered.
+					Neither will a conventional waterfall model be considered, as this project has a relatively high uncertainty in user requirements.
+					Many requirements will be explored throughout the development process.
+					Therefore an iterative approach will be followed.
+					With the first iteration being an example of a throw away prototype so as to explore technical uncertainties and ascertain initial requirements and scope estimate.
+					The later iterations will then follow a more of an evolutionary prototype approach.
+					Figure \ref{fig:iterative} gives a visual representation of the iterative approach.
+					\begin{figure}[!h]
+						\begin{center}
+					
+    						\includegraphics[scale=0.5]{iterative_development}
+    						\caption{Overview of an iterative development methodology {\label{fig:iterative}}}
+    					\end{center}
+					\end{figure}
+			\subsection{Planned Iterations}
+					\subsubsection{Iteration 1}
+					\subsubsection{Iteration 2}
+					\subsubsection{Iteration 3}
+			\subsection{Tools}
 		\section{Aims} 
 		\begin{itemize}
-			\item To develop an open source Computer Vision library usable by the leap motion community.
-			\item Enable the leap motion to recognise simple three dimensional shapes using Artificial Intelligence.
+			\item To develop an open source Computer Vision framework usable by the leap motion community.
+			\item Enable the leap motion to recognise simple three dimensional shapes.
 		\end{itemize}
 		\section{Objectives} 
 		\begin{itemize}
-			\item Research Artificial Intelligence methods for stereoscopic image object recognition.
+			\item Research methods for stereoscopic image object recognition.
 			\item Research stereoscopic image processing methods.
-			\item Design and develop a library that allows for the training and recognition of simple 3D shapes.
-			\item Evaluate the accuracy of the recognition algorithm.
-			\item Release an open source library.
+			\item Design and develop a framework that allows the leap motion to be used for computer vision.
+			\item Evaluate the accuracy of object recognition.
+			\item Release an open source framework.
 			\item Produce a report that communicates my findings
 		\end{itemize}
-		\section{Solution Approach}
+		
 		\section{Report Structure}
 			\subsection{Chapter \ref{chap:background}}
 			\subsection{Chapter \ref{chap:req}}
@@ -347,8 +394,8 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 				
 	%----------------------------------------- Chapter 3 -----------------------------------------%
 	\chapter{Requirements Analysis}\label{chap:req}
-	This chapter attempts to lay out a set of requirements for the Library, from the point of view of the stakeholders.
-	They will set out a contract between the stakeholders and the library developer as a means to show what the library is going to be. It should \textbf{not} show how it will be done - that is the purpose of design \cite{book:dawson}.
+	This chapter attempts to lay out a set of requirements for the framework, from the point of view of the stakeholders.
+	They will set out a contract between the stakeholders and the framework developer as a means to show what the framework is going to be. It should \textbf{not} show how it will be done - that is the purpose of design \cite{book:dawson}.
 	They provide goals upon which a realistic scope for the project may be set and will also be the backbone of the tests that are to be written for \autoref{chap:test}.
 	The elements needed to produce a good requirements analysis are as follows.
 	\begin{itemize}
@@ -361,12 +408,12 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 	The next few sections will elaborate on these and show the documentation produced. 
 		
 		\section{Stakeholder identification}
-			This project is aimed at producing an open source library that will suit a variety of users.
+			This project is aimed at producing an open source framework that will suit a variety of users.
 			With the main focus being on the \textit{application developer}.
-			Where the \textit{application developer} will use the library to develop other applications.
-			The library being developed here will not be an application that can be used as an end user.
+			Where the \textit{application developer} will use the framework to develop other applications.
+			The framework being developed here will not be an application that can be used as an end user.
 			It will be designed to be a simple to use interface that saves the \textit{application developer} a large amount of time when applying it to their own application.
-			However, it is possible that other applications might need access to information that is produced by the library, therefore another actor of \textit{user} needs to be considered.
+			However, it is possible that other applications might need access to information that is produced by the framework, therefore another actor of \textit{user} needs to be considered.
 			Through the analysis of existing libraries and solutions that work with other imaging systems, it is possible to identify what would be suitable to provide as a simpler solution for the leap motion.
 			The stakeholder also plays a major role in discovering and keeping a project, within a defined scope.
 			As the \textit{application developer} will be the main user of the system, they will	have most of the interactions.
@@ -393,22 +440,22 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 		\clearpage
 		\section{Functional requirements}
 			
-			As this is a library, user interface requirements do not need to be considered.
+			As this is a framework, user interface requirements do not need to be considered.
 			\begin{description}
-				\item[Automatic camera configuration.] The library should abstract the leap motion configuration away from the application developer and should not require any explicit calibration.
-				\item[Default configuration.] The library should have a default configuration for training and classifying three dimensional shapes.
+				\item[Automatic camera configuration.] The framework should abstract the leap motion configuration away from the application developer and should not require any explicit calibration.
+				\item[Default configuration.] The framework should have a default configuration for training and classifying three dimensional shapes.
 			\end{description}
 				
 			
 		\section{Non-functional requirements}
 			\begin{description}
-				\item[Speed.] The library needs to be able to process images and return a useful classification output in near real-time. 
+				\item[Speed.] The framework needs to be able to process images and return a useful classification output in near real-time. 
 				A minimum of 14 frames per second should be the target.
-				\item[Accuracy.] The library should have equal to or greater than 90\% accuracy in its classification ability.
-				\item[Multi-platform.] The library should be usable on all of the platforms that the leap motion is currently supported on.
-				\item[Java standards] The library should conform to Java standards and have a well documented interface.
-				\item[Semantics.] The library should not stray too far from terminologies and semantics used within existing computer vision libraries, unless it is essential. Ensuring users with prior experience of computer vision can use it with ease.
-				\item[Extensibility.] As the project will be made open source, the library needs to be designed with extensibility in mind.
+				\item[Accuracy.] The framework should have equal to or greater than 90\% accuracy in its classification ability.
+				\item[Multi-platform.] The framework should be usable on all of the platforms that the leap motion is currently supported on.
+				\item[Java standards] The framework should conform to Java standards and have a well documented interface.
+				\item[Semantics.] The framework should not stray too far from terminologies and semantics used within existing computer vision libraries, unless it is essential. Ensuring users with prior experience of computer vision can use it with ease.
+				\item[Extensibility.] As the project will be made open source, the framework needs to be designed with extensibility in mind.
 			\end{description}
 			
 		\section{MoSCoW prioritisation}
@@ -424,7 +471,7 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 			Table~\ref{tab:moscow_table} shows the user stories with their recognised priority.
 			\input{moscow_table}
 			\clearpage
-			The prioritisations have been worked out so that the fundamental elements of the library will get created first.
+			The prioritisations have been worked out so that the fundamental elements of the framework will get created first.
 			Although the end product should be able to classify images, there is not yet a guarantee that it is possible to do so.
 			All of the previous requirements have to be implemented before any type of classification can be considered.
 
