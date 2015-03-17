@@ -40,7 +40,7 @@
 
 \graphicspath{{images/}}
 
-\title{An Open Source Computer Vision Framework for Leapmotion}
+\title{An Open Source Computer Vision Framework for Leap Motion}
 \author{Daniel Hamilton 10026535,\\Computer Science,\\University of the West of England.}
 	
 \bash
@@ -177,10 +177,14 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 				Is it possible to use the leap motion in the field of computer vision, so that application developers can exploit the technology in different ways as to what was originally intended?		
 				Can this ability then be structured into a framework, so that the effort application developers have to put in to use the leap motion as a solution, is low, making it an option to consider in new projects?	
 		\section{Solution Approach}	
+			It is envisaged that the framework will be made possible by taking advantage of functionality of the OpenCV library.
+			Then exploiting the new image functionality of the leap motion SDK as mentioned earlier.
+			The next few sections will outline the processes that will be followed to keep the project within a realistic scope and enable its completion.
+					
 			\subsection{Project Goals}
 				There are two main goals for this project. 
 				The primary goal is to develop a computer vision development framework for the leap motion. 
-				The secondary goal is to make use of this library in an application that shows successful detection of objects by the leap motion.
+				The secondary goal is to make use of this library in an example application that shows successful detection of objects by the leap motion.
 			
 			\subsection{Development Methodology}
 					There are lots of development methodologies out there.
@@ -209,10 +213,39 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
     					\end{center}
 					\end{figure}
 			\subsection{Planned Iterations}
+					During each iteration a prototype application will be developed that will make use of the framework.
+					The development of this prototype will depend upon what level to which the framework is completed.
+					It will also act as a test bench for the framework.
+					Throughout each iteration sufficient unit tests will be implemented based on the requirements.
+					Below is an outline of what work is aimed to be completed in each iteration.
+					Each iteration will be fully documented in chapter~\ref{chap:des&imp}.
 					\subsubsection{Iteration 1}
+					The first iteration will be an initial throwaway prototype.
+					It will be used to explore the technologies that are going to be used in the project.
+					Mainly to find out how the extensive OpenCV library works, and how well it will interface with the leap motion SDK.
+					Once completed it will allow better requirements to be established for the framework.
 					\subsubsection{Iteration 2}
+					The second iteration will be the first of an evolutionary prototype.
+					It will better expand on the knowledge that will be obtained in iteration 1.
+					It will implement the foundation upon which the whole framework will be based.
+					The initial requirements will be established so that a high level design can be accomplished.
+					It is hoped that most of the image utility functionality will be implemented in this stage.
+					Providing a solid integration of OpenCV and the leap motion SDK.
 					\subsubsection{Iteration 3}
+					The third iteration will be the second stage of an evolutionary prototype.
+					It will implement the more complex elements of the library, taking full advantage of the work that has been completed in iteration 2.
+					Most of the stereo utilities will be created in this iteration.
+					If successful and time allows then object detection will be explored here.
 			\subsection{Tools}
+			The framework will be written in Java using the Java SDK.
+			For the purpose of scope it will only be developed using version 1.8 of the Java SDK.
+			It will be developed in and built to be used within the Eclipse IDE (Luna).
+			Development will be carried out mainly on Ubuntu 14.04 but also on Mac OS X 10.10 and Windows 8.1 to ensure multi platform capability.
+			Due to time constraints the project will only get fully tested on Ubuntu.
+			
+			For the leap motion, version 2.2.3 of the SDK will be used.
+			For OpenCV version 2.4.10 will be used.
+			There is a more recent version 3.0 of OpenCV however it is a beta version and so might be unstable.
 		\section{Aims} 
 		\begin{itemize}
 			\item To develop an open source Computer Vision framework usable by the leap motion community.
