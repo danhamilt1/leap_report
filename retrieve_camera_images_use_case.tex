@@ -2,17 +2,17 @@
 \begin{tabular}{|p{1.5in}|p{3.4in}|}
 \hline
 \varusecase         & \texttt{RetrieveCameraImages}                                                                                                        \\ \hline
-\vardescription     & The application developer must have access to raw camera images to use with other elements of the library. It will also allow for the images to be displayed. \\ \hline
+\vardescription     & The application developer must have access to raw camera images to use with other elements of the framework. It will also allow for the images to be displayed. \\ \hline
 \varactor           & Application developer \\ \hline
-\varentry           & The library and the system it is being used on, must have the relevant dependencies loaded and the leap motion controller connected. \\ \hline
+\varentry           & The framework and the system it is being used on, must have the relevant dependencies loaded and the leap motion controller connected. \\ \hline
 \varflow            & \begin{enumerate}
                         \item Application developer requests an image
-                        \item Library checks leap motion is ready
-                        \item Library retrieves image from \texttt{LeapSDK}
-                        \item Library converts image to usable format
-                        \item Library returns image
+                        \item Framework checks leap motion is ready
+                        \item Framework retrieves image from \texttt{LeapSDK}
+                        \item Framework converts image to usable format
+                        \item Framework returns image
                       \end{enumerate} \\ \hline
-\varaltflow         & If leap motion controller is not ready , library throws \texttt{LeapNotFound} exception. \\ \hline
+\varaltflow         & If leap motion controller is not ready , framework throws \texttt{LeapNotFound} exception. \\ \hline
 \varexit            & Application developer receives valid image. \\ \hline
 \end{tabular}
 \caption{Documented \texttt{RetrieveCameraImages} use case \protect {\label{tab:use_retrieve_camera_images}}}

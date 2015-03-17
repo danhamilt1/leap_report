@@ -7,10 +7,10 @@
 \varentry           & The image needs to be instantiated and valid for a successful transformation. \texttt{RetrieveCameraImages} needs to have been successful. \\ \hline
 \varflow            & \begin{enumerate}
                         \item Application developer requests a transformed image by transformation type.
-                        \item Library checks image is valid.
-                        \item Library validates transformation.
-                        \item Library library transforms image.
-                        \item Library returns transformed image.
+                        \item Framework checks image is valid.
+                        \item Framework validates transformation.
+                        \item Framework transforms image.
+                        \item Framework returns transformed image.
                       \end{enumerate} \\ \hline
 \varaltflow         & If the image or transformation is not valid a \texttt{TransformationException} should be thrown. \\ \hline
 \varexit            & Application developer receives a transformed image as a new instance. \\ \hline

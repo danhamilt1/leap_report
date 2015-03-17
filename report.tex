@@ -213,29 +213,41 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
     					\end{center}
 					\end{figure}
 			\subsection{Planned Iterations}
-					During each iteration a prototype application will be developed that will make use of the framework.
+					During each iteration a test bench application will be developed that will make use of the framework.
 					The development of this prototype will depend upon what level to which the framework is completed.
-					It will also act as a test bench for the framework.
 					Throughout each iteration sufficient unit tests will be implemented based on the requirements.
 					Below is an outline of what work is aimed to be completed in each iteration.
+					The work breaks down three discrete sections
+					\begin{enumerate}
+						\item Image processing
+						\item Object detection
+						\item Classification
+					\end{enumerate}
+					Each section in the order of the list, is dependant on the previous work being completed.	
+					Therefore each iteration will aim to solve
 					Each iteration will be fully documented in chapter~\ref{chap:des&imp}.
 					\subsubsection{Iteration 1}
 					The first iteration will be an initial throwaway prototype.
 					It will be used to explore the technologies that are going to be used in the project.
 					Mainly to find out how the extensive OpenCV library works, and how well it will interface with the leap motion SDK.
+					Image processing and stereo image processing will be explored here.
 					Once completed it will allow better requirements to be established for the framework.
 					\subsubsection{Iteration 2}
 					The second iteration will be the first of an evolutionary prototype.
 					It will better expand on the knowledge that will be obtained in iteration 1.
 					It will implement the foundation upon which the whole framework will be based.
-					The initial requirements will be established so that a high level design can be accomplished.
-					It is hoped that most of the image utility functionality will be implemented in this stage.
+					The initial requirements will be established here so that a high level design can be accomplished.
+					It is hoped that most of the image processing and stereo image processing functionality will be implemented in this stage.
 					Providing a solid integration of OpenCV and the leap motion SDK.
 					\subsubsection{Iteration 3}
 					The third iteration will be the second stage of an evolutionary prototype.
 					It will implement the more complex elements of the library, taking full advantage of the work that has been completed in iteration 2.
-					Most of the stereo utilities will be created in this iteration.
-					If successful and time allows then object detection will be explored here.
+					Object detection will be implemented here.
+					Any previous work will be refined based on any requirement changes.
+					If successful and time allows then classification will be explored here.
+					\subsection{Project timeline}
+					Table \ref{tab:project_timeline} gives a rough outline as to when work will get completed.
+					\input{project_timeline}
 			\subsection{Tools}
 			The framework will be written in Java using the Java SDK.
 			For the purpose of scope it will only be developed using version 1.8 of the Java SDK.
