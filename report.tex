@@ -171,6 +171,8 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 				To try and find out whether it is feasible to say that a leap motion can be used for computer vision in a simple way.
 				For example, to detect objects other than hands and tools with only a few function calls.
 				
+				This might start a new interest in computer vision.
+				Allowing these non-experts that might have thought it too difficult before, to experiment in a new and easy way.
 				There is a large community of interest in the leap motion forums, with many different projects using the current SDK.
 				It might be assumed from the mere interest on threads that contain any form of reference to computer vision, that carrying out research on this will be a useful piece of work.
 		\section{Hypotheses}
@@ -187,15 +189,15 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 				The secondary goal is to make use of this library in an example application that shows successful detection of objects by the leap motion.
 			
 			\subsection{Development Methodology}
-					There are lots of development methodologies out there.
-					It is important to follow a methodology to
+					There are lots of development methodologies available for consideration.
+					It is important to follow a development methodology to
 					\begin{itemize}
 						\item Divide a large problem into easy to understand tasks.
-						\item Sharpen focus
-						\item Improve time estimates
-						\item Provide progress visibility
-						\item Provide better structure
-						\item Lead to better coding and documentation
+						\item Sharpen focus.
+						\item Improve time estimates.
+						\item Provide progress visibility.
+						\item Provide better structure.
+						\item Lead to better coding and documentation.
 					\end{itemize}\cite{book:dawson}.
 					
 					As this is not a team based project, methodologies such as SCRUM will not be considered.
@@ -203,7 +205,11 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 					Many requirements will be explored throughout the development process.
 					Therefore an iterative approach will be followed.
 					With the first iteration being an example of a throw away prototype so as to explore technical uncertainties and ascertain initial requirements and scope estimate.
-					The later iterations will then follow a more of an evolutionary prototype approach.
+					The later iterations will then follow more of an evolutionary prototype approach.
+					Where a large upfront requirements analysis and design takes place in the first of the evolutionary prototypes.
+					This will be based on knowledge gained in the first iteration but not so much the implementation from the first iteration.
+					It will aim to have a good base structure for the rest of the iterations to be evolved from.
+					With tweaks to requirements happening in later iterations based on the evaluation of the previous implementation.
 					Figure \ref{fig:iterative} gives a visual representation of the iterative approach.
 					\begin{figure}[!h]
 						\begin{center}
@@ -224,7 +230,7 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 						\item Classification
 					\end{enumerate}
 					Each section in the order of the list, is dependant on the previous work being completed.	
-					Therefore each iteration will aim to solve
+					Therefore each iteration will aim to solve the work break down in order.
 					Each iteration will be fully documented in chapter~\ref{chap:des&imp}.
 					\subsubsection{Iteration 1}
 					The first iteration will be an initial throwaway prototype.
@@ -274,12 +280,22 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 		\end{itemize}
 		
 		\section{Report Structure}
-			\subsection{Chapter \ref{chap:background}}
-			\subsection{Chapter \ref{chap:req}}
-			\subsection{Chapter \ref{chap:des&imp}}
-			\subsection{Chapter \ref{chap:test}}
-			\subsection{Chapter \ref{chap:eval}}
-			\subsection{Chapter \ref{chap:concl}}
+			Here is a brief summary of what will be covered in each chapter.
+			\begin{itemize}
+			 \item \textbf{Chapter \ref{chap:background}}
+			 	is a literature review that covers the basic principles of stereo imaging and classification.
+			 \item \textbf{Chapter \ref{chap:req}}
+			 	defines the initial requirement that have been identified for the project.
+			 \item \textbf{Chapter \ref{chap:des&imp}}
+			 	shows the evolution of this project throughout its development.
+			 	It shows how the requirements and designs have evolved over the project lifecycle.
+			 	It also highlights the key decisions that were made throughout the implementation.
+			 \item \textbf{Chapter \ref{chap:test}}
+			 	
+			 \item \textbf{Chapter \ref{chap:eval}}
+			 
+			 \item \textbf{Chapter \ref{chap:concl}}
+			\end{itemize}				
 			
 		
 	%----------------------------------------- Chapter 2 -----------------------------------------%
@@ -329,8 +345,8 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
     				\end{center}
 				\end{figure}				
 				It is caused by the fact that different areas of a lens have slightly different focal lengths \cite[p. 42]{book:modern}.
-				There is a lot of information available on how distortion happens so only the basics will be covered here, however some reading suggestions are (READING SUGGESTIONS HERE).
-				The fundamental stages of processing images for use in computer vision comes down to geometry.
+				There is a lot of information available on how distortion happens so only the basics will be covered here. %, however some reading suggestions are (READING SUGGESTIONS HERE).
+				The fundamental stages of processing images for use in computer vision are based on geometry.
 				To reliably calculate depth in a scene, the system needs to know the intrinsic %and extrinsic 
 				parameters of a camera.
 				Essentially, the system wants to know if what the camera is producing is a true representation of the scene it is recording.
@@ -367,8 +383,8 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 				%THIS ASSUMES KNOWLEDGE ON HOW A CAMERA WORKS
 				In the real world, the center of projection will not be precisely in the middle of the imaging sensor of a camera.
 				Therefore displacement values need to be considered, $c_{x}$ and $c_{y}$.
-				The resulting model allows us to pinpoint the point $Q$ with coordinates $(X,Y,Z)$ as a pixel location given as $(x_{screen}, y_{screen})$.
-				With the resulting mathematical model of $x_{screen}=f_{x}\left(\dfrac{X}{Z}\right)+c_{x}$, $y_{screen}=f_{y}\left(\dfrac{Y}{Z}\right)+c_{y}$.
+				The resulting model allows us to pinpoint the point $Q$ (a point in real space) with coordinates $(X,Y,Z)$ as a pixel location (a point on the image) where the pixel location is $(x_{screen}, y_{screen})$.
+				This results mathematical model of $x_{screen}=f_{x}\left(\dfrac{X}{Z}\right)+c_{x}$, $y_{screen}=f_{y}\left(\dfrac{Y}{Z}\right)+c_{y}$.
 				Having a model like this allows us to define the parameters of the camera so that false transformations of light being collected from the physical world can be corrected.
 				%MAYBE ADD SOME MORE STUFF ABOUT PIXEL MATCHING HERE
 				This is important for methods of image rectification which will be discussed later.
@@ -383,7 +399,7 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 					The fisheye is a distortion where the image that is produced provides an near 180\degree span side-to-side \cite{book:sam}.
 					
 				\subsection{Image Rectification}
-				
+				 TODO
 				
 			\section{Classification}
 				\begin{quote}
@@ -425,7 +441,7 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 						``\textit{the points that contain enough information to be picked out from one frame to the next.}''
 					\end{quote}
 					Where as, \citeasnoun[p. 179]{book:modern} describes corners as a local area where the orientation of the image gradient changes sharply; a corner in the more literal sense of the word.
-					\citeasnoun{book:modern} says a corner is a more specific term that can be described by the more general term of image point.
+					\citeasnoun{book:modern} says a corner is a more specific term of something that can be described as an image point.
 					This report will continue using the term corner as \citeasnoun{definition:cv} has, so as to avoid confusion with any code references in OpenCV later on.
 					
 					Corners are easy to match between different images.
@@ -482,6 +498,14 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 			\input{retrieve_camera_images_use_case}
 			\input{manipulate_by_transform_use_case}
 			\input{classify_object_use_case}
+			\input{change_stereo_algorithm_use_case}
+			\input{change_stereo_parameters_use_case}
+			\input{change_classifier_type_use_case}
+			\input{change_classifier_parameters_use_case}
+			%\input{get_disparity_map_use_case}
+			%\input{reset_training_data_use_case}
+			%\input{view_current_classifications_use_case}
+			\input{train_classifier_use_case}
 		\clearpage
 		\section{Functional requirements}
 			
@@ -519,7 +543,11 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 			The prioritisations have been worked out so that the fundamental elements of the framework will get created first.
 			Although the end product should be able to classify images, there is not yet a guarantee that it is possible to do so.
 			All of the previous requirements have to be implemented before any type of classification can be considered.
-
+		\section{Summary}
+			The initial requirements for the system have now been identified.
+			Now this is completed an initial design can be created.
+			Chapter~\ref{chap:des&imp} will make use of these requirements.
+			As part of the software development methodology being used (stated in chapter \ref{chap:introduction}) they might be evolved throughout the development lifecycle.
     		
 	
 	%----------------------------------------- Chapter 4 -----------------------------------------%

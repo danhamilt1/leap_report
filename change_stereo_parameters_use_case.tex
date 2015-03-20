@@ -1,0 +1,18 @@
+\begin{table}[h]
+\begin{tabular}{|p{1.5in}|p{3.4in}|}
+\hline
+\varusecase         & \texttt{ChangeStereoParameters}                                                                                                        \\ \hline
+\vardescription     & The application developer should be able to change the stereo algorithm parameters used to generate the disparity map. \\ \hline
+\varactor           & Application developer \\ \hline
+\varentry           & The application developer should pass in a valid set of parameters for the stereo algorithm. The stereo algorithm to be used should already be set.\\ \hline
+\varflow            & \begin{enumerate}
+                        \item Application developer passes in parameters.
+                        \item Framework checks parameters are valid.
+                        \item Framework sets parameters.
+                        \item Framework notifies application developer of a successful parameter set.
+                      \end{enumerate} \\ \hline
+\varaltflow         & If the parameters are not valid then an exception should be thrown. \\ \hline
+\varexit            & Application developer receives valid object for generating a disparity map. \\ \hline
+\end{tabular}
+\caption{Documented \texttt{ChangeStereoParameters} use case \protect {\label{tab:use_change_stereo_parameters}}}
+\end{table}

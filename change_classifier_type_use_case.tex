@@ -1,0 +1,18 @@
+\begin{table}[h]
+\begin{tabular}{|p{1.5in}|p{3.4in}|}
+\hline
+\varusecase         & \texttt{ChangeClassifierType}                                                                                                        \\ \hline
+\vardescription     & The application developer should be able to change the type of classifier that gets used to classify objects. \\ \hline
+\varactor           & Application developer \\ \hline
+\varentry           & The application developer should pass in a valid pre defined flag to a constructor, stating what type of classifier will be used.\\ \hline
+\varflow            & \begin{enumerate}
+                        \item Application developer passes in pre defined flag.
+                        \item Framework checks flag is valid.
+                        \item Framework constructs object based on flag.
+                        \item Framework returns a valid object.
+                      \end{enumerate} \\ \hline
+\varaltflow         & If the flag is not valid then an exception should be thrown. \\ \hline
+\varexit            & Application developer receives valid object for generating a disparity map. \\ \hline
+\end{tabular}
+\caption{Documented \texttt{ChangeClassifierType} use case \protect {\label{tab:use_change_classifier_type}}}
+\end{table}
