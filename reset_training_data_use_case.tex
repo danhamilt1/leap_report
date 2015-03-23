@@ -1,0 +1,18 @@
+\begin{table}[h]
+\begin{tabular}{|p{1.5in}|p{3.4in}|}
+\hline
+\varusecase         & \texttt{ResetTrainingData} \\ \hline
+\vardescription     & The user should be able to reset the classification data. \\ \hline
+\varactor           & User \\ \hline
+\varentry           & The leap motion controller must be successfully calibrated and receiving valid images. The images being passed into the classifier must be valid.\\ \hline
+\varflow            & \begin{enumerate}
+                        \item User requests for the classification data to be removed.
+                        \item Framework removed the .
+                        \item Framework notifies user on successful classification.
+                        
+                      \end{enumerate} \\ \hline
+\varaltflow         & If the images are not valid then the framework will notify the User. If training the classifier fails then the user will be notified.\\ \hline
+\varexit            & User is notified on success of training. \\ \hline
+\end{tabular}
+\caption{Documented \texttt{ResetTrainingData} use case \protect {\label{tab:use_train_classifier}}}
+\end{table}

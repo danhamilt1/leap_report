@@ -16,7 +16,9 @@
 \usepackage{fancyhdr}
 \usepackage{gensymb}
 \usepackage{multirow}
+\usepackage{listings}
 \usepackage[font={small,it}]{caption}
+\usepackage[toc,page]{appendix}
 
 \pagestyle{fancy}
 \fancyhf{}
@@ -49,14 +51,17 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 
 \begin{document}
 	\maketitle
-	\tableofcontents
-	\listoffigures
-	\listoftables
 	
-	Word Count: \bashStdout.
 	\begin{abstract}
 	
 	\end{abstract}	
+	
+	\tableofcontents
+	\listoffigures
+	\listoftables
+
+	Word Count: \bashStdout.
+
 	%----------------------------------------- Chapter 1 -----------------------------------------%
 	\chapter{Introduction}\label{chap:introduction}
 		\section{Computer Vision: An Intellectual Frontier}
@@ -164,10 +169,10 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 				The code can be embedded in other applications for research or for profit and there is no obligation that the created applications code needs to be open or free.
 		\section{The Problem}
 				Currently, there is no simple solution that allows a developer to simply plug in a leap motion and start developing for computer vision.
-				While a computer vision expert might be able to start programming straight away.
-				A non-expert would have to learn a large amount before they start to see any results.	
+				While a computer vision expert might be able to start programming straight away, a non-expert would have to learn a large amount before they start to see any results.	
 				
-				The main aim is to try and expand the areas on the leap motion can be developed with.
+		\section{The Purpose}
+				The main purpose is to try and expand the areas on the leap motion can be developed with.
 				To try and find out whether it is feasible to say that a leap motion can be used for computer vision in a simple way.
 				For example, to detect objects other than hands and tools with only a few function calls.
 				
@@ -175,20 +180,33 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 				Allowing these non-experts that might have thought it too difficult before, to experiment in a new and easy way.
 				There is a large community of interest in the leap motion forums, with many different projects using the current SDK.
 				It might be assumed from the mere interest on threads that contain any form of reference to computer vision, that carrying out research on this will be a useful piece of work.
-		\section{Hypotheses}
-				Is it possible to use the leap motion in the field of computer vision, so that application developers can exploit the technology in different ways as to what was originally intended?		
-				Can this ability then be structured into a framework, so that the effort application developers have to put in to use the leap motion as a solution, is low, making it an option to consider in new projects?	
+		\section{Hypothesis}
+				It is possible to use the leap motion in the field of computer vision, so that application developers can exploit the technology in different ways as to what was originally intended.	
+				This ability can then be structured into a framework, so that the effort application developers have to put in to use the leap motion as a solution, is low, making it an option to consider in new projects.	
 		\section{Solution Approach}	
 			It is envisaged that the framework will be made possible by taking advantage of functionality of the OpenCV library.
 			Then exploiting the new image functionality of the leap motion SDK as mentioned earlier.
 			The next few sections will outline the processes that will be followed to keep the project within a realistic scope and enable its completion.
 					
-			\subsection{Project Goals}
-				There are two main goals for this project. 
-				The primary goal is to develop a computer vision development framework for the leap motion. 
-				The secondary goal is to make use of this library in an example application that shows successful detection of objects by the leap motion.
+		\section{Aim and Objectives} 
+		This section outlines what the scope of the project is to be.
+		The success of this project will be calculated based on the completion of each of the aim and objectives.
+		\subsection{Aim}
+		\begin{itemize}
+			\item To develop an open source Computer Vision framework usable by the leap motion community.
+			\item Enable the leap motion to recognise simple three dimensional shapes.
+		\end{itemize}
+		\subsection{Objectives} 
+		\begin{itemize}
+			\item Research methods for stereoscopic image object recognition.
+			\item Research stereoscopic image processing methods.
+			\item Design and develop a framework that allows the leap motion to be used for computer vision.
+			\item Evaluate the accuracy of object recognition.
+			\item Release an open source framework.
+			\item Produce a report that communicates my findings
+		\end{itemize}
 			
-			\subsection{Development Methodology}
+		\section{Development Methodology}
 					There are lots of development methodologies available for consideration.
 					It is important to follow a development methodology to
 					\begin{itemize}
@@ -251,33 +269,20 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 					Object detection will be implemented here.
 					Any previous work will be refined based on any requirement changes.
 					If successful and time allows then classification will be explored here.
-					\subsection{Project timeline}
+					\subsection{Project Timeline}
 					Table \ref{tab:project_timeline} gives a rough outline as to when work will get completed.
 					\input{project_timeline}
 			\subsection{Tools}
 			The framework will be written in Java using the Java SDK.
-			For the purpose of scope it will only be developed using version 1.8 of the Java SDK.
-			It will be developed in and built to be used within the Eclipse IDE (Luna).
+			For the purpose of scope it will only be developed using version 1.8 of the Java SDK with JavaFX included.
+			It will be developed in and built to be used within the IntelliJ IDEA integrated development environment.
 			Development will be carried out mainly on Ubuntu 14.04 but also on Mac OS X 10.10 and Windows 8.1 to ensure multi platform capability.
 			Due to time constraints the project will only get fully tested on Ubuntu.
+			JUnit 4 will be used for unit testing.
 			
 			For the leap motion, version 2.2.3 of the SDK will be used.
 			For OpenCV version 2.4.10 will be used.
-			There is a more recent version 3.0 of OpenCV however it is a beta version and so might be unstable.
-		\section{Aims} 
-		\begin{itemize}
-			\item To develop an open source Computer Vision framework usable by the leap motion community.
-			\item Enable the leap motion to recognise simple three dimensional shapes.
-		\end{itemize}
-		\section{Objectives} 
-		\begin{itemize}
-			\item Research methods for stereoscopic image object recognition.
-			\item Research stereoscopic image processing methods.
-			\item Design and develop a framework that allows the leap motion to be used for computer vision.
-			\item Evaluate the accuracy of object recognition.
-			\item Release an open source framework.
-			\item Produce a report that communicates my findings
-		\end{itemize}
+			There is a more recent version 3.0 of OpenCV however it is a beta version and so will not be considered due to possible instability.
 		
 		\section{Report Structure}
 			Here is a brief summary of what will be covered in each chapter.
@@ -285,7 +290,7 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 			 \item \textbf{Chapter \ref{chap:background}}
 			 	is a literature review that covers the basic principles of stereo imaging and classification.
 			 \item \textbf{Chapter \ref{chap:req}}
-			 	defines the initial requirement that have been identified for the project.
+			 	defines the initial requirements that have been identified for the project.
 			 \item \textbf{Chapter \ref{chap:des&imp}}
 			 	shows the evolution of this project throughout its development.
 			 	It shows how the requirements and designs have evolved over the project lifecycle.
@@ -296,10 +301,15 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 			 
 			 \item \textbf{Chapter \ref{chap:concl}}
 			\end{itemize}				
-			
+		\section{Summary}
+		Chapter~\ref{chap:introduction} has identified the problem and suggested an approach to solving it.
+		Following this, chapter~\ref{chap:background} outlines more specifics in terms of the technology and background onto which the overall solution will be based.
 		
 	%----------------------------------------- Chapter 2 -----------------------------------------%
 	\chapter{Background Research}\label{chap:background}
+			\section{Introduction}
+			This chapter looks to inform the reader about the methods that will be used within this project.
+			It aims to give a brief understanding in how Computer Vision works and what elements are applicable to enable this project to succeed.
 			\section{Stereopsis and Calibration}
 			\begin{quote}
 				``\textit{Stereo matching is the process of taking two or more images and estimating a 3D model of the scene by finding matching pixels in the images and converting their 2D positions into 3D depths.}''\cite{book:sam}
@@ -422,8 +432,8 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 				On the other hand, it is clear to see there might also be a use for differentiating between two different cars in another scenario.
 				Showing that extraction of these features is very much application dependant.
 				
-				\subsection{Extracting image features}
-					\subsubsection{Edge detection}
+				\subsection{Extracting Image Features}
+					\subsubsection{Edge Detection}
 					In many cases, the first stage of image analysis is to determine where the edges are.
 					Evidence suggests that edge detection is an important part of biological vision, particularly in mammals.
 					In most situations a predator (or prey) can be seen to be contrasted sharply with its background.
@@ -434,7 +444,7 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 					Occluding contours form the outlines of objects.
 					Edges can be obtained from large image gradients.
 					Such as those cause by sharp changes in brightness.
-					\subsubsection{Corner detection}
+					\subsubsection{Corner Detection}
 					The terms "feature", "corner" and "image point" are used interchangeably throughout literature.
 					For example \citeasnoun[p. 317]{definition:cv} describes corners as
 					\begin{quote}
@@ -452,12 +462,14 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 					Instead unique points should be selected.
 					Such as a tap sticking out of the wall.
 					
-				
+				\section{Summary}
 	%----------------------------------------- Chapter 3 -----------------------------------------%
 	\chapter{Requirements Analysis}\label{chap:req}
+	\section{Introduction}
 	This chapter attempts to lay out a set of requirements for the framework, from the point of view of the stakeholders.
 	They will set out a contract between the stakeholders and the framework developer as a means to show what the framework is going to be. It should \textbf{not} show how it will be done - that is the purpose of design \cite{book:dawson}.
 	They provide goals upon which a realistic scope for the project may be set and will also be the backbone of the tests that are to be written for \autoref{chap:test}.
+	
 	The elements needed to produce a good requirements analysis are as follows.
 	\begin{itemize}
 		\item \textbf{Stakeholder identification} is important so that the requirements are of use to who they are being developed for.
@@ -468,25 +480,31 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 	\end{itemize}
 	The next few sections will elaborate on these and show the documentation produced. 
 		
-		\section{Stakeholder identification}
-			This project is aimed at producing an open source framework that will suit a variety of users.
-			With the main focus being on the \textit{application developer}.
-			Where the \textit{application developer} will use the framework to develop other applications.
+		\section{Stakeholder Identification}
+			This project is aimed at producing an open source framework that will suit a variety of users, with the main focus being on the \textit{application developer}, where the \textit{application developer} will use the framework to develop other applications.
 			The framework being developed here will not be an application that can be used as an end user.
-			It will be designed to be a simple to use interface that saves the \textit{application developer} a large amount of time when applying it to their own application.
+			It will be designed to be a simple-to-use interface that saves the \textit{application developer} a large amount of time when applying it to their own application.
 			However, it is possible that other applications might need access to information that is produced by the framework, therefore another actor of \textit{user} needs to be considered.
 			Through the analysis of existing libraries and solutions that work with other imaging systems, it is possible to identify what would be suitable to provide as a simpler solution for the leap motion.
 			The stakeholder also plays a major role in discovering and keeping a project, within a defined scope.
 			As the \textit{application developer} will be the main user of the system, they will	have most of the interactions.
+			
+			In summary, the stakeholders are
+			\begin{description}
+			\item[Application Developer] who will have the most interactions with the system.
+			\item[User] who will in most cases be an external system.
+			\end{description}
 		
-		\section{Use case analysis}
+		\section{Use Case Analysis}
+		This section has been produced by following the methods outlined by \citeasnoun{book:uml} in ``\textit{Learning UML 2.0}''.
+			\subsection{Use Case Diagram}
+			
 			\begin{figure}[ht]
 			\begin{center}
-    			\includegraphics[scale=0.45]{use_case_1}
+    				\includegraphics[scale=0.45]{use_case_1}
     			\caption{UML use case diagram \protect {\label{fig:use_case_1}}}
-    		\end{center}
+    			\end{center}
 			\end{figure}	
-			This section has been produced by following the methods outlined by \citeasnoun{book:uml} in ``\textit{Learning UML 2.0}''.
 			A use case diagram is used to capture pieces of functionality that a system will provide to the stakeholder and other users.
 			Figure~\ref{fig:use_case_1} is an example of a UML use case diagram.
 			The stick figures represent actors on the system, the ovals represent use cases and the box enclosing the use cases show the overall system. 
@@ -495,19 +513,10 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 			In the case of a line between use cases that shows the ``\textit{extend}'' relationship, it shows that the use case might want to completely reuse the connected use cases behaviour.
 			However in \textit{UML 2.0} this reuse is optional and dependent on a runtime or system implementation decision.
 			Remember at this stage we should not be stating \textbf{how} it should be implemented.
+			\subsection{Use Case Description}
 			\input{retrieve_camera_images_use_case}
-			\input{manipulate_by_transform_use_case}
-			\input{classify_object_use_case}
-			\input{change_stereo_algorithm_use_case}
-			\input{change_stereo_parameters_use_case}
-			\input{change_classifier_type_use_case}
-			\input{change_classifier_parameters_use_case}
-			%\input{get_disparity_map_use_case}
-			%\input{reset_training_data_use_case}
-			%\input{view_current_classifications_use_case}
-			\input{train_classifier_use_case}
 		\clearpage
-		\section{Functional requirements}
+		\section{Functional Requirements}
 			
 			As this is a framework, user interface requirements do not need to be considered.
 			\begin{description}
@@ -516,18 +525,19 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 			\end{description}
 				
 			
-		\section{Non-functional requirements}
+		\section{Non-Functional Requirements}
 			\begin{description}
 				\item[Speed.] The framework needs to be able to process images and return a useful classification output in near real-time. 
-				A minimum of 14 frames per second should be the target.
+				A minimum of 15 frames per second should be the target.
 				\item[Accuracy.] The framework should have equal to or greater than 90\% accuracy in its classification ability.
 				\item[Multi-platform.] The framework should be usable on all of the platforms that the leap motion is currently supported on.
 				\item[Java standards] The framework should conform to Java standards and have a well documented interface.
+				A Javadoc should be produced.
 				\item[Semantics.] The framework should not stray too far from terminologies and semantics used within existing computer vision libraries, unless it is essential. Ensuring users with prior experience of computer vision can use it with ease.
 				\item[Extensibility.] As the project will be made open source, the framework needs to be designed with extensibility in mind.
 			\end{description}
 			
-		\section{MoSCoW prioritisation}
+		\section{MoSCoW Prioritisation}
 			MoSCoW is a recognised method for prioritising requirements by their importance. \citeasnoun{book:moscow} defines the categories in order of highest to lowest importance as
 			\begin{description}
 				\item[Must have. ] All features categorised in this group must me implemented for the system to work.
@@ -547,12 +557,19 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 			The initial requirements for the system have now been identified.
 			Now this is completed an initial design can be created.
 			Chapter~\ref{chap:des&imp} will make use of these requirements.
-			As part of the software development methodology being used (stated in chapter \ref{chap:introduction}) they might be evolved throughout the development lifecycle.
+			It will aim to build upon them and turn them into a working system.
     		
 	
-	%----------------------------------------- Chapter 4 -----------------------------------------%
+	%----------------------------------------- Chapter -----------------------------------------%
 	\chapter{Design and Implementation}\label{chap:des&imp}
-	%----------------------------------------- Chapter 5 -----------------------------------------%
+	\section{Introduction}
+	This chapter covers the implementation stage of the project.
+	In chaper \ref{chap:introduction} the methodology of how this was going to be done was outlined.
+	The implementation has been planned in three iterations.
+	Where the first iteration is a throwaway prototype and the further two iteration will follow the evolutionary prototype method.
+	Each iteration will be further broken down into work items.
+	The work items are loosely based on the initial requirements defined in chapter \ref{chap:req}.
+	These might changed slightly based on the evaluation carried out in each iteration.
 	\section{System Architecture}
 	\begin{figure}[ht]
 			\begin{center}
@@ -560,24 +577,66 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
     			\caption{High level system architecture \protect {\label{fig:system_arch_1}}}
     		\end{center}
 			\end{figure}	
+			\clearpage
+	\section{Pre-Requisites for Implementation}
+		Before any implementation can take place the environment needs to be set up.
+		The Java 1.8 SDK should be installed on the platform that is being developed on, ensuring that it is a version with JavaFX support.
+		IntelliJ IDEA should be installed on the platform that is being developed on.
+		JUnit comes as a standard package with IntelliJ IDEA.
+		
+		The latest version of OpenCV should be downloaded from the website\footnote{\url{http://www.opencv.org}}.
+		Instructions for installation are also available there.
+		It is important to ensure that OpenCV has been compiled with the Java bindings so the instructions have to be followed carefully.
+		Once installed the library should be imported to the project.%METHOD HERE
+		To ensure the library gets loaded when the project gets built it is important to include the line in listing \ref{lst:code_1}.
+		\begin{lstlisting}[captionpos=b,caption=Loading the OpenCV Library into the Project,label=lst:code_1]
+		System.loadLibrary{Core.NATIVE_LIBRARY_NAME};
+		\end{lstlisting}
+		
+		The LeapSDK is available from the leap motion website\footnote{\url{http://developer.leapmotion.com}}.
+		The methods for importing the LeapSDK into the project are also found here.
 	\section{Prototype 1}\label{sec:p1}
 		\subsection{Design}
 		\subsection{Implementation}
+		\subsection{Test}
+		\subsection{Evaluation}
 	\section{Prototype 2}\label{sec:p2}
 		\subsection{Design}
 		\subsection{Implementation}
+		\subsection{Test}
+		\subsection{Evaluation}
 	\section{Prototype 3}\label{sec:p3}
 		\subsection{Design}
 		\subsection{Implementation}
-	%----------------------------------------- Chapter 6 -----------------------------------------%
-	\chapter{Test}\label{chap:test}
-		%----------------------------------------- Chapter 7 -----------------------------------------%
+		\subsection{Test}
+		\subsection{Evaluation}
+	\section{Summary}
+
+	%----------------------------------------- Chapter -----------------------------------------%
 	
 	\chapter{Evaluation}\label{chap:eval}
-	%----------------------------------------- Chapter 7 -----------------------------------------%
+	\section{Introduction}
+	\section{Summary}
+	%----------------------------------------- Chapter -----------------------------------------%
 	
 	\chapter{Conclusion}\label{chap:concl}
-
+	\section{Introduction}
+	\section{Summary}
+	\clearpage
+	\addcontentsline{toc}{chapter}{Bibliography}
 	\bibliographystyle{dcu}
 	\bibliography{bibfile}
+	\begin{appendices}
+	\chapter{Use case descriptions} \label{app:use_case_descriptions}
+			\input{manipulate_by_transform_use_case}
+			\input{classify_object_use_case}
+			\input{change_stereo_algorithm_use_case}
+			\input{change_stereo_parameters_use_case}
+			\input{change_classifier_type_use_case}
+			\input{change_classifier_parameters_use_case}
+			%\input{get_disparity_map_use_case}
+			%\input{reset_training_data_use_case}
+			%\input{view_current_classifications_use_case}
+			\input{train_classifier_use_case}
+	\end{appendices}
 \end{document}
