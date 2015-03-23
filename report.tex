@@ -17,8 +17,32 @@
 \usepackage{gensymb}
 \usepackage{multirow}
 \usepackage{listings}
+\usepackage{color}
 \usepackage[font={small,it}]{caption}
 \usepackage[toc,page]{appendix}
+
+
+\usepackage{inconsolata}
+
+\definecolor{pblue}{rgb}{0.13,0.13,1}
+\definecolor{pgreen}{rgb}{0,0.5,0}
+\definecolor{pred}{rgb}{0.9,0,0}
+\definecolor{pgrey}{rgb}{0.46,0.45,0.48}
+\lstset{language=Java,
+  showspaces=false,
+  showtabs=false,
+  breaklines=true,
+  showstringspaces=false,
+  breakatwhitespace=true,
+  commentstyle=\color{pgreen},
+  keywordstyle=\color{pblue},
+  stringstyle=\color{pred},
+  basicstyle=\ttfamily\scriptsize,
+  moredelim=[il][\textcolor{pgrey}]{!!},
+  moredelim=[is][\textcolor{pgrey}]{\%\%}{\%\%},
+  captionpos=b,
+  inputpath=./src
+}
 
 \pagestyle{fancy}
 \fancyhf{}
@@ -28,7 +52,7 @@
 
 \citationmode{abbr}
 \renewcommand{\baselinestretch}{1.5}
-
+\newcommand\code[1]{\texttt{#1}}
 \newcommand{\varusecase}{\textbf{Use case}}
 \newcommand{\vardescription}{Description}
 \newcommand{\varactor}{Actor}
@@ -283,7 +307,13 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 			For the leap motion, version 2.2.3 of the SDK will be used.
 			For OpenCV version 2.4.10 will be used.
 			There is a more recent version 3.0 of OpenCV however it is a beta version and so will not be considered due to possible instability.
-		
+			
+			The code will be managed in a Git based version control system (VCS).
+			Using a VCS, records changes to files and code over time which will be of use when discussing project implementation in chapter~\ref{chap:des&imp}.
+			It will also prove useful when testing on multiple platforms.
+			By storing the code on a server, any changes can be made locally and then made available to all other platforms.
+			This helps to ensure that each platform uses the same version and avoids platform specific versions of code being created.
+			
 		\section{Report Structure}
 			Here is a brief summary of what will be covered in each chapter.
 			\begin{itemize}
@@ -295,11 +325,11 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 			 	shows the evolution of this project throughout its development.
 			 	It shows how the requirements and designs have evolved over the project lifecycle.
 			 	It also highlights the key decisions that were made throughout the implementation.
-			 \item \textbf{Chapter \ref{chap:test}}
 			 	
 			 \item \textbf{Chapter \ref{chap:eval}}
-			 
+			 	will evaluate the work and layout a call for future work based on what has been completed.
 			 \item \textbf{Chapter \ref{chap:concl}}
+			 	
 			\end{itemize}				
 		\section{Summary}
 		Chapter~\ref{chap:introduction} has identified the problem and suggested an approach to solving it.
@@ -514,6 +544,11 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 			However in \textit{UML 2.0} this reuse is optional and dependent on a runtime or system implementation decision.
 			Remember at this stage we should not be stating \textbf{how} it should be implemented.
 			\subsection{Use Case Description}
+			Table~\ref{tab:use_retrieve_camera_images} is one example of a use case description.
+			A use case description provides the reader a little more insight into what actions are going to be performed.
+			This is not always immediately clear from the higher level use case diagrams.
+			Each use case that has been defined so far, has a corresponding use case description.
+			These can be found in appendix~\ref{app:use_case_descriptions}.
 			\input{retrieve_camera_images_use_case}
 		\clearpage
 		\section{Functional Requirements}
@@ -587,17 +622,47 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 		The latest version of OpenCV should be downloaded from the website\footnote{\url{http://www.opencv.org}}.
 		Instructions for installation are also available there.
 		It is important to ensure that OpenCV has been compiled with the Java bindings so the instructions have to be followed carefully.
-		Once installed the library should be imported to the project.%METHOD HERE
+		Once installed the library should be imported to the project. %METHOD HERE 
 		To ensure the library gets loaded when the project gets built it is important to include the line in listing \ref{lst:code_1}.
-		\begin{lstlisting}[captionpos=b,caption=Loading the OpenCV Library into the Project,label=lst:code_1]
-		System.loadLibrary{Core.NATIVE_LIBRARY_NAME};
-		\end{lstlisting}
 		
+		\lstinputlisting[caption=Loading the OpenCV Library into the Project, label=lst:code_1]{main.java}		
 		The LeapSDK is available from the leap motion website\footnote{\url{http://developer.leapmotion.com}}.
 		The methods for importing the LeapSDK into the project are also found here.
+	\section{Iterations}
+		The next few sections will talk in depth about the key work items that were completed to produce the prototype in each iteration.
+		Below is a description of what will be found in each section.
+		\begin{description}
+		\item[Design] will show the design that has been used in the implementation.
+		\item[Implementation] will be split into stages to highlight the though process that went into developing the library.
+		\item[Test] will describe the unit tests and any key results that might have an effect on further decisions to be made.
+		\item[Evaluation] will review how that iteration went and what work needs to be completed or changes made before moving into the next one.
+		\end{description}
 	\section{Prototype 1}\label{sec:p1}
 		\subsection{Design}
+		The first implementation will be based on the requirements that were discovered in chapter~\ref{chap:req}.
+		This iteration is a throwaway prototype, with the idea of exploring the functionality of the libraries, so as to elicit more requirements.
+		These will be discussed in the evaluation section later in prototype~\ref{sec:p1}.
+		The knowledge gained through this prototype will then be applied to the first of the evolutionary prototypes, prototype~\ref{sec:p2}.
 		\subsection{Implementation}
+		\subsubsection{Stage 1 - Retrieve Images From the leap motion}
+		The first stage involves gaining an understanding of what type of images can be received from the leap motion.
+		The type \code{Image} in package \code{com.leapmotion.leap} has some useful publicly visible methods at its disposal.
+		\code{Image.data()} returns a \code{byte[]} where each individual \code{byte} is a pixel in the image.
+		Each \code{byte} holds an \code{8-bit} intensity value for the pixel, in integer form this is between 0(black) and 255(white).
+		The \code{byte[]} is of length \code{Image.width() * Image.height()}.
+		\lstinputlisting[caption=Convert an \code{Image} into a \code{BufferedImage}, label=lst:code_2]{toBufferedImage.java}	
+		
+		Now that this is understood the first image can be retrieved from the leap motion.
+		A \code{Controller} must be initialised, from this we can retrieve a \code{Frame}.
+		The \code{Frame} contains an \code{ImageList} which contains an \code{Image} for both the left and the right camera.
+		To ensure the images can be retrieved from the camera the \code{PolicyFlag.POLICY\_IMAGES} must be set on the \code{Controller} object.
+		
+		\lstinputlisting[caption=Write \code{ImageList} to a \code{File}, label=lst:code_3]{imageWrite.java}	
+		
+		Listing~\ref{lst:code_3} is a simplified version of writing the images to two files.
+		It makes use of the converter defined in listing~\ref{lst:code_2}.
+		An example of one of these images is shown in figure~(INSERT FIGURE HERE). %FIGURE HERE
+		
 		\subsection{Test}
 		\subsection{Evaluation}
 	\section{Prototype 2}\label{sec:p2}
