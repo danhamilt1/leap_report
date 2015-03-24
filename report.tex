@@ -48,6 +48,7 @@
 \fancyhf{}
 \rhead{\thepage}
 \lhead{\leftmark}
+
 \cfoot{}
 
 \citationmode{abbr}
@@ -79,6 +80,11 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 	\begin{abstract}
 	
 	\end{abstract}	
+	
+	\renewcommand{\abstractname}{Acknowledgements}
+	\begin{abstract}
+	
+	\end{abstract}
 	
 	\tableofcontents
 	\listoffigures
