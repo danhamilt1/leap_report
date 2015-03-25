@@ -30,6 +30,7 @@
 \definecolor{pgrey}{rgb}{0.46,0.45,0.48}
 \lstset{language=Java,
   showspaces=false,
+  frame=single,
   showtabs=false,
   breaklines=true,
   showstringspaces=false,
@@ -531,6 +532,18 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 			\item[User] who will in most cases be an external system.
 			\end{description}
 		
+		\section{Requirements Capture}
+			The problem now is to capture what requirements need to be in place to create the framework.
+			In chapter~\ref{chap:background} four steps were defined to achieve successful correspondence between images.
+			In summary these were:
+			\begin{enumerate}
+				\item Remove distortion from the images.
+				\item Rectify the images.
+				\item Find corresponding features in the images and produce a disparity map.
+				\item Turn the disparity map into distances and produce a depth map.
+			\end{enumerate}
+			However, it is arguable to say that this is quite a specific problem, and a framework should be more generic.
+			
 		\section{Use Case Analysis}
 		This section has been produced by following the methods outlined by \citeasnoun{book:uml} in ``\textit{Learning UML 2.0}''.
 			\subsection{Use Case Diagram}
@@ -602,7 +615,7 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
     		
 	
 	%----------------------------------------- Chapter -----------------------------------------%
-	\chapter{Design and Implementation}\label{chap:des&imp}
+	\chapter{Design, Implementation and Testing}\label{chap:des&imp}
 	\section{Introduction}
 	This chapter covers the implementation stage of the project.
 	In chaper \ref{chap:introduction} the methodology of how this was going to be done was outlined.
@@ -657,7 +670,7 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 		Each \code{byte} holds an \code{8-bit} intensity value for the pixel, in integer form this is between 0(black) and 255(white).
 		The \code{byte[]} is of length \code{Image.width() * Image.height()}.
 		\lstinputlisting[caption=Convert an \code{Image} into a \code{BufferedImage}, label=lst:code_2]{toBufferedImage.java}	
-		
+		The example in listing~\ref{lst:code_2} shows how the \code{Image} is converted into a \code{BufferedImage}.
 		Now that this is understood the first image can be retrieved from the leap motion.
 		A \code{Controller} must be initialised, from this we can retrieve a \code{Frame}.
 		The \code{Frame} contains an \code{ImageList} which contains an \code{Image} for both the left and the right camera.
@@ -669,6 +682,42 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 		It makes use of the converter defined in listing~\ref{lst:code_2}.
 		An example of one of these images is shown in figure~(INSERT FIGURE HERE). %FIGURE HERE
 		
+		\subsubsection{Stage 2 - Distortion Removal}
+		Now that the \code{Images} can be successfully taken from the leap motion, the distortion must be removed from them.
+		The LeapSDK provides a method for this, however the documentation states that it is not suitable for processing full images.
+		They suggest that using a shader program with OpenGL.
+		This would allow the process to run on a GPU in a much faster time.
+		However at this stage it is more interesting (and valuable to proving the hypothesis) to see whether a disparity map can be produced using OpenCV.
+		Therefore, for now, the slow method will suffice.
+		Listing~\ref{lst:code_4} shows the method by which this was done.
+		\clearpage
+		\lstinputlisting[caption=Slow Method of \code{Image} Distortion Removal, label=lst:code_4]{toUndistortedImage.java}
+		
+		This method then results in an image as shown in figure~(INSERT FIGURE HERE).
+		Unfortunately it seems that during the process of distortion removal, some of the resolution of the \code{Image} has been lost.
+		We can see this from the black pixels that are left around the outside of the \code{BufferedImage} that has been given here.
+		
+		\subsubsection{Stage 3 - Further Removal of Distortion with OpenCV}
+		OpenCV provides functionality to resize and crop images.
+		Therefore here we shall explore the further removal of distortion using OpenCV.
+		In OpenCV, the type \code{Mat} in package \code{org.opencv.core} is described as ``The Basic Image Container'' in the documentation\footnote{\url{http://docs.opencv.org}}.
+		The \code{Mat} is a matrix, with the same width and height of the image.
+		Each location in the index holds an intensity value for the pixel.
+		Fortunately, as previously seen, the LeapSDK provides a \code{byte[]} of pixel values.
+		The images are also grey scale, meaning that they are single channel.
+		Therefore there is less complexity in the storage of the image in a \code{Mat} due to there being only a single integer between the values 0 and 255 in a grey scale image.
+		In comparison, a colour image has three (sometimes four if including alpha) channels of colour at any pixel location.
+		These channels being red, green and blue (RGB).
+		Each one with a value between 0 and 255.
+		It is actually fortunate that the images are already grey scale, as it seems that algorithms used in feature detection, favour the use of grey scale images.
+		Listing~\ref{lst:code_5} shows the method used to convert the \code{Image} into a \code{Mat}.
+		\lstinputlisting[caption=Convert \code{Image} type to \code{Mat} type, label=lst:code_5]{convertToMat.java}
+		Now that the image is in a \code{Mat} format it can be resized.
+		This is done using the \code{resize()} method provided by the class \code{Imgproc} in the package \code{org.opencv.imgproc}.
+		\code{Imgproc} is the class that handles the majority of the image processing functionality within OpenCV.
+		The crop is handled by passing a region of interest to the method \code{submat()} provided by the \code{Mat} to be cropped, then storing the returned value in a new \code{Mat}.
+		This is quite a generic process to carry out on images and can be viewed in appendix~(INSERT APPENDIX HERE).
+		The end result is an image that looks like that in figure~(INSERT FIGURE HERE).
 		\subsection{Test}
 		\subsection{Evaluation}
 	\section{Prototype 2}\label{sec:p2}
