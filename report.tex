@@ -28,9 +28,11 @@
 \definecolor{pgreen}{rgb}{0,0.5,0}
 \definecolor{pred}{rgb}{0.9,0,0}
 \definecolor{pgrey}{rgb}{0.46,0.45,0.48}
-\lstset{language=Java,
+\lstset{
+  numbers=left,  
+  language=Java,
   showspaces=false,
-  frame=single,
+  frame=leftline,
   showtabs=false,
   breaklines=true,
   showstringspaces=false,
@@ -90,6 +92,8 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 	\tableofcontents
 	\listoffigures
 	\listoftables
+	\renewcommand{\lstlistlistingname}{List of Listings}
+	\lstlistoflistings
 
 	Word Count: \bashStdout.
 
@@ -542,7 +546,10 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 				\item Find corresponding features in the images and produce a disparity map.
 				\item Turn the disparity map into distances and produce a depth map.
 			\end{enumerate}
-			However, it is arguable to say that this is quite a specific problem, and a framework should be more generic.
+			However, it is arguable to say that these steps are for quite a specific problem, and a framework should be more generic.
+			Therefore this framework should be able to carry out all of the operations above, without any dependency on the previous step.
+			The application developer should be able to carry out manipulation on the images separately from the images that are getting processed through the algorithms in OpenCV.
+			This will allow for the development of an application that might show a before and after image for example, rather than only having access to an image post processing, that might have become non-understandable to a human.
 			
 		\section{Use Case Analysis}
 		This section has been produced by following the methods outlined by \citeasnoun{book:uml} in ``\textit{Learning UML 2.0}''.
@@ -610,6 +617,7 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 		\section{Summary}
 			The initial requirements for the system have now been identified.
 			Now this is completed an initial design can be created.
+			This design will be shown in prototype 1 of chapter~\ref{chap:des&imp}.
 			Chapter~\ref{chap:des&imp} will make use of these requirements.
 			It will aim to build upon them and turn them into a working system.
     		
@@ -627,7 +635,7 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 	\section{System Architecture}
 	\begin{figure}[ht]
 			\begin{center}
-    			\includegraphics[scale=0.5]{system_architecture_1}
+    			\includegraphics[scale=0.65]{system_architecture_2}
     			\caption{High level system architecture \protect {\label{fig:system_arch_1}}}
     		\end{center}
 			\end{figure}	
@@ -652,7 +660,7 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 		Below is a description of what will be found in each section.
 		\begin{description}
 		\item[Design] will show the design that has been used in the implementation.
-		\item[Implementation] will be split into stages to highlight the though process that went into developing the library.
+		\item[Implementation] will be split into stages to highlight the thought process that went into developing the library.
 		\item[Test] will describe the unit tests and any key results that might have an effect on further decisions to be made.
 		\item[Evaluation] will review how that iteration went and what work needs to be completed or changes made before moving into the next one.
 		\end{description}
@@ -669,30 +677,27 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 		\code{Image.data()} returns a \code{byte[]} where each individual \code{byte} is a pixel in the image.
 		Each \code{byte} holds an \code{8-bit} intensity value for the pixel, in integer form this is between 0(black) and 255(white).
 		The \code{byte[]} is of length \code{Image.width() * Image.height()}.
-		\lstinputlisting[caption=Convert an \code{Image} into a \code{BufferedImage}, label=lst:code_2]{toBufferedImage.java}	
+		
 		The example in listing~\ref{lst:code_2} shows how the \code{Image} is converted into a \code{BufferedImage}.
 		Now that this is understood the first image can be retrieved from the leap motion.
 		A \code{Controller} must be initialised, from this we can retrieve a \code{Frame}.
 		The \code{Frame} contains an \code{ImageList} which contains an \code{Image} for both the left and the right camera.
 		To ensure the images can be retrieved from the camera the \code{PolicyFlag.POLICY\_IMAGES} must be set on the \code{Controller} object.
 		
-		\lstinputlisting[caption=Write \code{ImageList} to a \code{File}, label=lst:code_3]{imageWrite.java}	
-		
 		Listing~\ref{lst:code_3} is a simplified version of writing the images to two files.
 		It makes use of the converter defined in listing~\ref{lst:code_2}.
 		An example of one of these images is shown in figure~(INSERT FIGURE HERE). %FIGURE HERE
-		
+		%\clearpage
+		\lstinputlisting[caption=Convert an \code{Image} into a \code{BufferedImage}, label=lst:code_2]{toBufferedImage.java}	
+		\lstinputlisting[caption=Write \code{ImageList} to a \code{File}, label=lst:code_3]{imageWrite.java}	
 		\subsubsection{Stage 2 - Distortion Removal}
-		Now that the \code{Images} can be successfully taken from the leap motion, the distortion must be removed from them.
-		The LeapSDK provides a method for this, however the documentation states that it is not suitable for processing full images.
-		They suggest that using a shader program with OpenGL.
-		This would allow the process to run on a GPU in a much faster time.
+		Now that the \code{Images} can be successfully taken from the leap motion, the distortion must be removed.
+		The LeapSDK provides the \code{Image.warp()} method for this, however the documentation states that it is not suitable for processing full images.
+		They suggest that using a shader program with OpenGL is faster.
+		As this would allow the process to run on a GPU.
 		However at this stage it is more interesting (and valuable to proving the hypothesis) to see whether a disparity map can be produced using OpenCV.
 		Therefore, for now, the slow method will suffice.
-		Listing~\ref{lst:code_4} shows the method by which this was done.
-		\clearpage
-		\lstinputlisting[caption=Slow Method of \code{Image} Distortion Removal, label=lst:code_4]{toUndistortedImage.java}
-		
+		The listing as appendix~\ref{lst:code_4} shows the method by which this was done.
 		This method then results in an image as shown in figure~(INSERT FIGURE HERE).
 		Unfortunately it seems that during the process of distortion removal, some of the resolution of the \code{Image} has been lost.
 		We can see this from the black pixels that are left around the outside of the \code{BufferedImage} that has been given here.
@@ -718,6 +723,19 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 		The crop is handled by passing a region of interest to the method \code{submat()} provided by the \code{Mat} to be cropped, then storing the returned value in a new \code{Mat}.
 		This is quite a generic process to carry out on images and can be viewed in appendix~(INSERT APPENDIX HERE).
 		The end result is an image that looks like that in figure~(INSERT FIGURE HERE).
+		
+		\subsubsection{Stage 4 - Stereo Correspondence}
+		OpenCV provides stereo correspondence functionality in the \code{org.opencv.calib3d} and the \code{org.opencv.contrib} packages.
+		Namely \code{StereoBM}, \code{StereoSGBM} and \code{StereoVar}.
+		The first two are variations of the stereo block matching method(TODO) and the later is the stereo variation method.
+		\code{StereoSGBM} seems to be generally accepted as better than \code{StereoBM} in most scenarios, therefore \code{StereoBM} will not be attempted here.
+		(INSERT CODE AND DESCRIPTIONS ON STEREO)
+		
+		\subsubsection{Stage 5 - Parameter Tweaking}
+		Through the exploration of the algorithms in stage 4, it became clear that it was quite difficult to know what parameters to set to get a good disparity map from the image.
+		Therefore as part of the prototyping methodology, a test bench graphical user interface (GUI) application will be made in JavaFX.
+		The GUI will not only be able to allow for parameter changing at run-time.
+		It will also give a good idea as to the performance that can be achieved with each of the stereo matching algorithms.
 		\subsection{Test}
 		\subsection{Evaluation}
 	\section{Prototype 2}\label{sec:p2}
@@ -758,5 +776,9 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 			%\input{reset_training_data_use_case}
 			%\input{view_current_classifications_use_case}
 			\input{train_classifier_use_case}
+			
+	\chapter{Implementation Code Snippets}
+			\lstinputlisting[caption=Slow Method of \code{Image} Distortion Removal, label=lst:code_4]{toUndistortedImage.java}
 	\end{appendices}
+	
 \end{document}
