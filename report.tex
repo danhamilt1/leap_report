@@ -537,6 +537,9 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 			\end{description}
 		
 		\section{Requirements Capture}
+			Due to the exploratory nature of this projects, it is hard to realise what is required of the system at this stage.
+			However, the research carried out in chapter~\ref{chap:background} can give a guide as to what might be needed.
+			The requirements caught here can then be explored in the first iteration and then then expanded upon during evaluation.
 			The problem now is to capture what requirements need to be in place to create the framework.
 			In chapter~\ref{chap:background} four steps were defined to achieve successful correspondence between images.
 			In summary these were:
@@ -550,6 +553,12 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 			Therefore this framework should be able to carry out all of the operations above, without any dependency on the previous step.
 			The application developer should be able to carry out manipulation on the images separately from the images that are getting processed through the algorithms in OpenCV.
 			This will allow for the development of an application that might show a before and after image for example, rather than only having access to an image post processing, that might have become non-understandable to a human.
+			
+			For classification it will be useful to be able to train the classifier.
+			It will also be useful to be able to change the parameters that define the classifier.
+			This data should have the ability to be reset, on a new set of data.
+			
+			The ability to remap the pair of two dimensional image into a three dimensional form will be used to explore classification methods.
 			
 		\section{Use Case Analysis}
 		This section has been produced by following the methods outlined by \citeasnoun{book:uml} in ``\textit{Learning UML 2.0}''.
@@ -632,6 +641,7 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 	Each iteration will be further broken down into work items.
 	The work items are loosely based on the initial requirements defined in chapter \ref{chap:req}.
 	These might changed slightly based on the evaluation carried out in each iteration.
+	\clearpage
 	\section{System Architecture}
 	\begin{figure}[ht]
 			\begin{center}
@@ -639,6 +649,16 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
     			\caption{High level system architecture \protect {\label{fig:system_arch_1}}}
     		\end{center}
 			\end{figure}	
+			
+			Figure~\ref{fig:system_arch_1} outlines the intended architecture of the framework.
+			\begin{description}
+			\item[Leap and OpenCV Facade] This will bring the two libraries, being OpenCV and the LeapSDK, together.
+			This is where most of the utility style functionality will sit.
+			\item[Extended Functionality] This is where the functionality of each library will be put to use.
+			Higher level functionality such as classification and object detection will sit here.
+			\item[Public Facing API] The framework will provide a public facing API that will ensure that the library is simple to use.
+			All of the complex functionality will be occurring in the private packages.
+			\end{description}
 			\clearpage
 	\section{Pre-Requisites for Implementation}
 		Before any implementation can take place the environment needs to be set up.
@@ -650,7 +670,7 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 		Instructions for installation are also available there.
 		It is important to ensure that OpenCV has been compiled with the Java bindings so the instructions have to be followed carefully.
 		Once installed the library should be imported to the project. %METHOD HERE 
-		To ensure the library gets loaded when the project gets built it is important to include the line in listing \ref{lst:code_1}.
+		Once imported, to ensure the native libraries get loaded when the project gets built it is important to include the line in listing \ref{lst:code_1}.
 		
 		\lstinputlisting[caption=Loading the OpenCV Library into the Project, label=lst:code_1]{main.java}		
 		The LeapSDK is available from the leap motion website\footnote{\url{http://developer.leapmotion.com}}.
@@ -659,10 +679,10 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 		The next few sections will talk in depth about the key work items that were completed to produce the prototype in each iteration.
 		Below is a description of what will be found in each section.
 		\begin{description}
-		\item[Design] will show the design that has been used in the implementation.
+		\item[Design] will show the design that has been used in the implementation and highlight any key changes through discussion.
 		\item[Implementation] will be split into stages to highlight the thought process that went into developing the library.
 		\item[Test] will describe the unit tests and any key results that might have an effect on further decisions to be made.
-		\item[Evaluation] will review how that iteration went and what work needs to be completed or changes made before moving into the next one.
+		\item[Evaluation] will review how that iteration went and what work needs to be completed or changes made before moving into the next one. It will be broken down into ``what went well'', ``what went badly'' and ``lessons learned''.
 		\end{description}
 	\section{Prototype 1}\label{sec:p1}
 		\subsection{Design}
@@ -710,7 +730,7 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 		Each location in the index holds an intensity value for the pixel.
 		Fortunately, as previously seen, the LeapSDK provides a \code{byte[]} of pixel values.
 		The images are also grey scale, meaning that they are single channel.
-		Therefore there is less complexity in the storage of the image in a \code{Mat} due to there being only a single integer between the values 0 and 255 in a grey scale image.
+		Therefore there is less complexity in the storage of the image in a \code{Mat} due to there being only a single integer between the values 0 and 255 representing a pixel in a grey scale image.
 		In comparison, a colour image has three (sometimes four if including alpha) channels of colour at any pixel location.
 		These channels being red, green and blue (RGB).
 		Each one with a value between 0 and 255.
@@ -720,7 +740,8 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 		Now that the image is in a \code{Mat} format it can be resized.
 		This is done using the \code{resize()} method provided by the class \code{Imgproc} in the package \code{org.opencv.imgproc}.
 		\code{Imgproc} is the class that handles the majority of the image processing functionality within OpenCV.
-		The crop is handled by passing a region of interest to the method \code{submat()} provided by the \code{Mat} to be cropped, then storing the returned value in a new \code{Mat}.
+		The crop is performed by passing a region of interest to the method \code{submat()} provided by the \code{Mat} to be cropped, then storing the returned value in a new \code{Mat}.
+		The region of interest is a \code{Rect} object which is a rectangle that consists of a width, a height and a pair of coordinates, at which the top left of the rectangle should begin.
 		This is quite a generic process to carry out on images and can be viewed in appendix~(INSERT APPENDIX HERE).
 		The end result is an image that looks like that in figure~(INSERT FIGURE HERE).
 		
@@ -736,19 +757,75 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 		Therefore as part of the prototyping methodology, a test bench graphical user interface (GUI) application will be made in JavaFX.
 		The GUI will not only be able to allow for parameter changing at run-time.
 		It will also give a good idea as to the performance that can be achieved with each of the stereo matching algorithms.
+		JavaFX is a GUI framework for Java.
+		It is shipped with Java 1.8 SDK and has been developed to take the place of the Java Swing framework.
+		For speed of development, SwingBuilder will be used.
+		SwingBuilder is a tool that allows for rapid development of GUIs.
+		It allows for the drag and drop of GUI elements such as sliders onto the page and generates the underlying code.
+		An example of the GUI that was quickly put together is in figure~(INSERT FIGURE HERE).
+		The sliders visible are used to quickly change the stereo parameters.
+		To allow for the processing to get done in real time, it was decided to make use of the \code{Listener} class within the LeapSDK.
+		Then implementing an \code{ObservableValue} which is included in the JavaFX framework.
+		The \code{ObservableValue} follows the observer design pattern.
+		Allowing the \code{Listener} to notify the main GUI thread when there is some new data for it to display.
+		The reason for doing this was so the \code{Listener} could be run on a separate thread to the JavaFX GUI.
+		It is also important to allow the GUI thread to handle when to instantiate the \code{Listener}.
+		Using the \code{Platform.runLater()} method.
+		The \code{Listener} seems to lock the GUI thread if it is not done this way.
+		This is possibly due to the fact that by default the leap motion returns images at a very high frame rate.
+		This resulted in finding good parameters for the correspondence algorithms.
 		\subsection{Test}
+		As this prototype is intended to be thrown away, it must be noted that the testing of this prototype was not intended.
+		However, some performance tests were completed with JUnit using the best parameters found.
+		\code{StereoVar} gave the best resulting disparity map, however, it took a lot longer to process (INSERT FRAMES PER SECOND HERE).
+		\code{StereoSGBM} gave the worst resulting disparity map but the processing time was a lot faster.
 		\subsection{Evaluation}
+		\subsubsection{What went well?}
+		The first prototype allowed for a good exploration of the OpenCV library.
+		A vast amount of knowledge was gained as to how the library works.
+		This will be useful in the next iteration.
+		\subsubsection{What did not go so well?}
+		Using the \code{Listener} seemed to make the code a lot more complex to work with.
+		It seems more suited to applications that are heavily making use of the LeapSDK with its tracking functionality alone.
+		In this case it is believed it would be better to access the images, by explicitly requesting them from the leap motion.
+		This will make it a lot simpler for development as each image needs to be developed individually.
+		The \code{Listener} is intended for use when the camera is working at it highest frame rate.
+		However through the frame rate results we have here, we can see that it will never be working at full capacity with the methods intended to be used.
+		%After completion, there are a few requirements changes that will be considered.
+		\subsubsection{Lessons learned?}
+			In stage 2 of this iteration, it was suggested that the slow method was going to be used for distortion removal, as speed was not important at this stage.
+			Going into the next iteration, an attempt should be made at optimising the process.
+			This is due to the fact using the slow method did indeed have a large hit on the frame rate.
 	\section{Prototype 2}\label{sec:p2}
 		\subsection{Design}
+		
+		\begin{figure}[ht]
+		\begin{center}
+    			\includegraphics[scale=0.65]{class_diagram_it_2}
+    			\caption{Class Diagram for Prototype 2 \protect {\label{fig:class_diagram_it_2}}}
+    		\end{center}
+		\end{figure}			
+		
 		\subsection{Implementation}
 		\subsection{Test}
 		\subsection{Evaluation}
+			\subsubsection{What went well?}
+			\subsubsection{What did not go so well?}
+			\subsubsection{Lessons learned?}
 	\section{Prototype 3}\label{sec:p3}
 		\subsection{Design}
 		\subsection{Implementation}
 		\subsection{Test}
 		\subsection{Evaluation}
+			\subsubsection{What went well?}
+			\subsubsection{What did not go so well?}
+			\subsubsection{Lessons learned?}
 	\section{Summary}
+	This chapter has logged the development process of the project.
+	It has discussed the difficulties that were faced throughout the process and highlighted the problems that were particularly interesting to overcome.
+	It shows how the design has evolved over each iteration through an evaluation of the requirements.
+	Moving into chapter~\ref{chap:eval}, the project as a whole will be evaluated.
+	Looking at how far the project has gone in solving the original problem.
 
 	%----------------------------------------- Chapter -----------------------------------------%
 	
