@@ -351,6 +351,36 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 			\section{Introduction}
 			This chapter looks to inform the reader about the methods that will be used within this project.
 			It aims to give a brief understanding in how Computer Vision works and what elements are applicable to enable this project to succeed.
+			\section{Object Recognition}
+				\subsection{What is Object Recognition?}
+				Humans can look at an object only a few times, to then enable them to recognise other examples of a similar object at a later date.
+				However the problem isn't as simple as just recognising an object.
+				Humans can also recognise the context of an object.
+				A human can recognise the difference in intention of another person holding a gun to their face, compared to holding a bunch of flowers.
+				They can also choose which objects in a scene are relevant, and which are not \cite{book:modern}.
+				
+				Object recognition in digital images is not a new problem.
+				And neither is the specific problem of three dimensional object detection.
+				\citeasnoun{journal:3dImages} discuss methods by which range data might be used as a method of object detection.
+				This is one of the earliest papers that suggest the usage of range data for classification.
+				With triangulation based finders that collect this type of data, dating back to the early seventies \cite{journal:range}.
+				\citeasnoun[p. 82-83]{journal:3dImages} lays out the characteristics of an ideal object recognition system.
+				As does \citeasnoun[p.570-572]{book:modern}.
+				Through cross comparison the characteristics that were looked for then are very much the same as what would be an ideal system now.
+				\citeasnoun{book:modern} says that a system such as this should:
+				\begin{itemize}
+					\item Recognise many different objects.
+					\item Recognise objects seen against many different backgrounds.
+					\item Recognise objects at an appropriate level of abstraction.
+					\item Infer useful information about the special properties in a particular instance.
+					\item Produce useful responses to unfamiliar objects.
+					\item Produce responses that help achieve goals.
+					\item Produce responses of useful complexity.
+				\end{itemize}
+				However, they then go on to highlight the fact that most current recognition strategies perform poorly when measured against these requirements.
+				\begin{quotation}
+					\textit{``Not because they are bad; the problem is just very difficult''}.
+				\end{quotation}
 			\section{Stereopsis and Calibration}
 			\begin{quote}
 				``\textit{Stereo matching is the process of taking two or more images and estimating a 3D model of the scene by finding matching pixels in the images and converting their 2D positions into 3D depths.}''\cite{book:sam}
@@ -537,9 +567,9 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 			\end{description}
 		
 		\section{Requirements Capture}
-			Due to the exploratory nature of this projects, it is hard to realise what is required of the system at this stage.
+			Due to the exploratory nature of this project, it is hard to realise what is fully required of the system at this stage.
 			However, the research carried out in chapter~\ref{chap:background} can give a guide as to what might be needed.
-			The requirements caught here can then be explored in the first iteration and then then expanded upon during evaluation.
+			The requirements caught here can then be explored in the first iteration and then then expanded upon during the design stage of the next iteration.
 			The problem now is to capture what requirements need to be in place to create the framework.
 			In chapter~\ref{chap:background} four steps were defined to achieve successful correspondence between images.
 			In summary these were:
@@ -558,7 +588,7 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 			It will also be useful to be able to change the parameters that define the classifier.
 			This data should have the ability to be reset, on a new set of data.
 			
-			The ability to remap the pair of two dimensional image into a three dimensional form will be used to explore classification methods.
+			The ability to remap the pair of two dimensional images into a three dimensional form will be used to explore classification methods.
 			
 		\section{Use Case Analysis}
 		This section has been produced by following the methods outlined by \citeasnoun{book:uml} in ``\textit{Learning UML 2.0}''.
@@ -566,7 +596,7 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 			
 			\begin{figure}[ht]
 			\begin{center}
-    				\includegraphics[scale=0.45]{use_case_1}
+    				\includegraphics[scale=0.45]{use_case_2}
     			\caption{UML use case diagram \protect {\label{fig:use_case_1}}}
     			\end{center}
 			\end{figure}	
@@ -788,7 +818,7 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 		Using the \code{Listener} seemed to make the code a lot more complex to work with.
 		It seems more suited to applications that are heavily making use of the LeapSDK with its tracking functionality alone.
 		In this case it is believed it would be better to access the images, by explicitly requesting them from the leap motion.
-		This will make it a lot simpler for development as each image needs to be developed individually.
+		This will make it a lot simpler for development as each image needs to be processed individually.
 		The \code{Listener} is intended for use when the camera is working at it highest frame rate.
 		However through the frame rate results we have here, we can see that it will never be working at full capacity with the methods intended to be used.
 		%After completion, there are a few requirements changes that will be considered.
@@ -798,15 +828,44 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 			This is due to the fact using the slow method did indeed have a large hit on the frame rate.
 	\section{Prototype 2}\label{sec:p2}
 		\subsection{Design}
-		
+		\subsubsection{Class Diagram}
+		The class diagram shown in figure~\ref{fig:class_diagram_it_2} is a basic model of the system that is going to be built upon.
 		\begin{figure}[ht]
 		\begin{center}
     			\includegraphics[scale=0.65]{class_diagram_it_2}
     			\caption{Class Diagram for Prototype 2 \protect {\label{fig:class_diagram_it_2}}}
     		\end{center}
 		\end{figure}			
-		
+		Each class was identified using the CRC process. (CITE)
+		CRC stands for Classes Responsibilities and Collaborations.
+		The cards contain three sections of information about a single class.
+		These are:
+		\begin{itemize}
+			\item \textbf{Class:} The name of the class.
+			\item \textbf{Responsibilities:} The information the class owns and the functionality it performs.
+			\item \textbf{Collaborations:} The classes that this class also interacts with.
+		\end{itemize}
+		\input{crc_LeapCVController}
+		The CRC for each class can be found in appendix~\ref{app:crc_diagrams}.
+		The \code{Utilities} package will be where most of the extended functionality will sit.
+		\subsubsection{Requirements Changes}
+				
 		\subsection{Implementation}
+		\subsubsection{Stage 1 - The Basic of the Framework}
+			As the framework is designed to be extended upon by other application developers, it is useful to think about the way in which it will be deployed.
+			The framework should be IDE independent.
+			The application developers using it should be able to easily import the framework into their own project.
+			All they will need is the source code being developed here, and the OpenCV and LeapSDK dependencies to be satisfied.
+			To do this a Git repository will be made that holds the source for the framework.
+			The Git repository will have nothing but Java related files.
+			None of the files should be related to any individual IDE.
+			%The documentation below will then describe how the project can be imported.
+		\subsubsection{Stage 2 - Refactoring Based on New Design}
+			Now that the design has been created, it will be useful to create the templates for each class.
+			Also sometimes known as the skeleton classes.
+			It is also the case that some of the functionality from prototype 1 can be transferred into the new utilities classes.
+			Primarily the segments of code that were used to manipulate and convert the images.
+		\subsubsection{Stage 3 - }
 		\subsection{Test}
 		\subsection{Evaluation}
 			\subsubsection{What went well?}
@@ -853,7 +912,11 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 			%\input{reset_training_data_use_case}
 			%\input{view_current_classifications_use_case}
 			\input{train_classifier_use_case}
-			
+	\chapter{CRC Diagrams} \label{app:crc_diagrams}
+			\input{crc_LeapCVCamera}
+			\input{crc_LeapCVImage}
+			\input{crc_leapCVStereoUtils}
+			\input{crc_leapCVImageUtils}
 	\chapter{Implementation Code Snippets}
 			\lstinputlisting[caption=Slow Method of \code{Image} Distortion Removal, label=lst:code_4]{toUndistortedImage.java}
 	\end{appendices}
