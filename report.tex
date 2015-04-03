@@ -307,6 +307,7 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 					\subsection{Project Timeline}
 					Table \ref{tab:project_timeline} gives a rough outline as to when work will get completed.
 					\input{project_timeline}
+			
 			\subsection{Tools}
 			The framework will be written in Java using the Java SDK.
 			For the purpose of scope it will only be developed using version 1.8 of the Java SDK with JavaFX included.
@@ -324,7 +325,18 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 			It will also prove useful when testing on multiple platforms.
 			By storing the code on a server, any changes can be made locally and then made available to all other platforms.
 			This helps to ensure that each platform uses the same version and avoids platform specific versions of code being created.
-			
+			\subsection{Testing Methods}
+				Testing will be carried out to ensure that the framework works as intended, and that there are no bugs.
+				This will consist of:
+				\begin{itemize}
+					\item \textbf{Unit testing} these will be used to test modules of the program as they are developed.
+					\item \textbf{Performance testing} this will be used to ensure that some of the non-functional requirements have been met.
+					\item \textbf{Acceptance testing} will show how far the solution has gone to meeting the requirements outlined by the stakeholder.
+				\end{itemize}
+				Regression testing will also take place, but not explicitly.
+				The unit tests that will be written in the early iterations will also get run in the later iterations, to ensure that no functionality has been broken when changes get made in the code.
+				Most of the testing results will be discussed in chapter~\ref{chap:des&imp} however due to the close relationship with the use cases the acceptance tests will be shown in chapter~\ref{chap:req}.
+				
 		\section{Report Structure}
 			Here is a brief summary of what will be covered in each chapter.
 			\begin{itemize}
@@ -340,8 +352,8 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 			 \item \textbf{Chapter \ref{chap:eval}}
 			 	will evaluate the work and layout a call for future work based on what has been completed.
 			 \item \textbf{Chapter \ref{chap:concl}}
-			 	
-			\end{itemize}				
+			\end{itemize}
+						
 		\section{Summary}
 		Chapter~\ref{chap:introduction} has identified the problem and suggested an approach to solving it.
 		Following this, chapter~\ref{chap:background} outlines more specifics in terms of the technology and background onto which the overall solution will be based.
@@ -539,7 +551,7 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 	\section{Introduction}
 	This chapter attempts to lay out a set of requirements for the framework, from the point of view of the stakeholders.
 	They will set out a contract between the stakeholders and the framework developer as a means to show what the framework is going to be. It should \textbf{not} show how it will be done - that is the purpose of design \cite{book:dawson}.
-	They provide goals upon which a realistic scope for the project may be set and will also be the backbone of the tests that are to be written for \autoref{chap:test}.
+	They provide goals upon which a realistic scope for the project may be set and will also be the backbone of the tests that are to be written during implementation.
 	
 	The elements needed to produce a good requirements analysis are as follows.
 	\begin{itemize}
@@ -667,7 +679,7 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 	This chapter covers the implementation stage of the project.
 	In chaper \ref{chap:introduction} the methodology of how this was going to be done was outlined.
 	The implementation has been planned in three iterations.
-	Where the first iteration is a throwaway prototype and the further two iteration will follow the evolutionary prototype method.
+	Where the first iteration is a throwaway prototype and the further two iterations will follow the evolutionary prototype method.
 	Each iteration will be further broken down into work items.
 	The work items are loosely based on the initial requirements defined in chapter \ref{chap:req}.
 	These might changed slightly based on the evaluation carried out in each iteration.
@@ -806,9 +818,9 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 		This resulted in finding good parameters for the correspondence algorithms.
 		\subsection{Test}
 		As this prototype is intended to be thrown away, it must be noted that the testing of this prototype was not intended.
-		However, some performance tests were completed with JUnit using the best parameters found.
-		\code{StereoVar} gave the best resulting disparity map, however, it took a lot longer to process (INSERT FRAMES PER SECOND HERE).
+		\code{StereoVar} gave the best resulting disparity map, however, it took a lot longer to process.
 		\code{StereoSGBM} gave the worst resulting disparity map but the processing time was a lot faster.
+		However it needs to be considered that the slow method of distortion removal was implemented here.
 		\subsection{Evaluation}
 		\subsubsection{What went well?}
 		The first prototype allowed for a good exploration of the OpenCV library.
@@ -849,9 +861,9 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 		The CRC for each class can be found in appendix~\ref{app:crc_diagrams}.
 		The \code{Utilities} package will be where most of the extended functionality will sit.
 		\subsubsection{Requirements Changes}
-				
+			(TODO)
 		\subsection{Implementation}
-		\subsubsection{Stage 1 - The Basic of the Framework}
+		\subsubsection{Stage 1 - The Basis of the Framework}
 			As the framework is designed to be extended upon by other application developers, it is useful to think about the way in which it will be deployed.
 			The framework should be IDE independent.
 			The application developers using it should be able to easily import the framework into their own project.
@@ -865,22 +877,113 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 			Also sometimes known as the skeleton classes.
 			It is also the case that some of the functionality from prototype 1 can be transferred into the new utilities classes.
 			Primarily the segments of code that were used to manipulate and convert the images.
-		\subsubsection{Stage 3 - }
+			This functionality will be heavily tested within this iteration, providing a reliable foundation on which to build the rest of the system.
+			
+		\subsubsection{Stage 3 - Distortion Removal Optimisation}
+			As highlighted at the end of the previous iteration, it was suggested that during this iteration the distortion removal process should be optimised.
+			The method that is currently used, calls the \code{warp()} method from the LeapSDK \code{Image} class.
+			This method is, through self admittance by leap motion, a non optimised way to remove image distortion.
+			They suggest that only a few image pixels should be used.
+			However, in this scenario it is required that the entire picture gets used, so that it can be further processed in OpenCV.
+			The \code{Image} class also has \code{distortion()} method.
+			This method contains the calibration map for the leap motion.
+			It was suggested by \citeasnoun{blog:leap} that these values can be used with the \code{remap()} function in OpenCV.
+			\citeasnoun{blog:leap} does state that there is no guarantee that this method is correct.
+			With this method, the distortion map is loaded at the initialisation of the leap motion.
+			This data is set in the factory, or when the leap motion is explicitly calibrated within its separate settings application.
+			Unless the leap motion is going through the calibration process, this distortion map does not change.
+			Once the distortion map is loaded at initialisation, it can be passed with a \code{Mat}, to the \code{remap()} method.
+			The code provided by \citeasnoun{blog:leap} is written in the Python programming language, so analysis is required to port it over to Java.
+			The method provided by OpenCV is highly optimised with the library, and the processing time has been noticeably decreased.
+			Listing~\ref{lst:code_5} shows the method by which the distortion \code{Mat} has been initialised.
+			The values that get returned are placed into the \code{LeapCVCamera} class.
+			This method is quite similar to the code in listing~\ref{lst:code_4}.
+			It still uses the \code{warp()} method however this slow method is only used once throughout the run time of the using the LeapCV framework.
+			Rather than every time a frame is loaded as in iteration 1.
+			\lstinputlisting[caption=Initialisation of Distortion Data, label=lst:code_5]{initialiseDistortionMats.java}
 		\subsection{Test}
+			\subsubsection{Performance Tests}
+			\subsubsection{Unit Tests}
+			\subsubsection{Acceptance Tests}
+			\input{acc_test_template}
 		\subsection{Evaluation}
 			\subsubsection{What went well?}
+			The optimisation of distortion removal was successful.
+			Refactoring made the framework a lot easier to use and develop.
+			Creating a Git repository was easily done and will allow for a simple release of the open source framework.
 			\subsubsection{What did not go so well?}
 			\subsubsection{Lessons learned?}
 	\section{Prototype 3}\label{sec:p3}
 		\subsection{Design}
 		\subsection{Implementation}
+		\subsubsection{Stage 1 - Obtaining the Q Matrix}
+			OpenCV requires the camera's intrinsic parameters to be known so that images can have the distortion removed, and be rectified, in a stereo set up.
+			By carrying out the calibration, it gives what in OpenCV is known as the \code{Q} matrix.
+			This is a 3x3 \code{Mat} that contains the distortion coefficients for the camera.
+			In iteration 1 it was discovered that the images could have the distortion removed by using the distortion values that were provided by the LeapSDK.
+			However the distortion coefficients are not given.
+			This was not realised until this iteration.
+			An attempt was made to extract the distortion coefficients from the camera by doing stereo calibration.
+			However it was an unsuccessful attempt.
+			The code for this attempts can be found in appendix~(INSERT APPENDIX HERE).
+			Another thought is that the distortion coefficients can be calculated from the already obtained distortion map.
+			A method was outlined on the internet that might prove useful by \citeasnoun{url:distortion}.
+			It gives a mathematical example of how to recover the distortion coefficients from a pre calculated distortion map.
+			This method is quite advanced and it will not be feasible to complete in the time-scale of this project.
+			\citeasnoun{blog:leap} does provide some values obtained from calibration of the leap motion.
+			However these values will vary slightly from camera to camera due to manufacturing precision as mentioned in chapter~\ref{chap:background}.
+			It is therefore unlikely that the values will be exact for the leap motion in use here.
+			Although for speed of development these values will be used as the \code{Q} matrix for this project.
+			In hope that it will provide some form of output in the next stage.
+		\subsubsection{Stage 2 - Three Dimensional Reprojection}
+			The process of three dimensional reprojection is to achieve a model of the real world scene that the images represent. 
+			With true distance values that are identical to the real world.
+			This includes depth measurement.
+			To do this with OpenCV the \code{Q} matrix is needed as described in stage 1.
+			The \code{Q} matrix is made of values that allow the values in the disparity map, generated in the previous two prototypes, to be turned into true depth values.
+			The result is known as a point cloud.
+			The method used to generate the point cloud can be seen in listing~\ref{lst:code_6}
+			\lstinputlisting[caption=Generate a Point Cloud from the Disparity Map, label=lst:code_6]{getPointCloud.java}	
+			It was found that the point clouds varied greatly in quality based on the algorithm that was used to generate the disparity map.
+			There was no way to test this here other than to visually inspect the output point clouds.
+			The point clouds were written to file using the method in listing~(LISTING HERE).
+			They were then opened in a tool called ccViewer\footnote{\url{http://www.danielgm.net/cc/}}.
+			This tool allows for the visualisation of point clouds.
+			An example of a point cloud using the \code{StereoSGBM} method can be seen in figure~(INSERT FIGURE HERE).
+			And example of a point cloud using the \code{StereoVar} method can be seen in figure~(INSERT FIGURE HERE).
+			The images show that the \code{StereoVar} Method gives a much clearer point cloud.
+			However when looked at multiple angles It shows that some of the depths are non realistic.
+			This might be due to the \code{Q} matrix mentioned earlier, not being the exact one for the leap motion used in this project.
+			As time is running low and it is difficult to achieve a good point cloud without a good calibration method, a different approach will be made for object recognition.
+			Instead of making use of the disparity map functionality, an attempt will be made using methods of feature recognition for classification.
+		\subsubsection{Stage 3 - Feature Matching}
+			OpenCV provides numerous classes within the \code{org.opencv.features2d} and \code{org.opencv.calib3d} packages, that are used to match features within images.
+			The three important classes here are \code{DescriptorExtractor}, \code{DescriptorMatcher} and the \code{FeatureDetector}.
+			Each of these classes follow the factory pattern.
+			Using the \code{create()} method on each class, one is able to request an object specific to the type of algorithm that will be used to detect, extract and match the features within the images.
+			An example of creating a SIFT feature extractor with a FLANN matcher can be seen in listing~\ref{lst:code_7}.
+			\lstinputlisting[caption=Creating Detector\, Extractor and Matcher from Factories, label=lst:code_7]{constructorLeapCVObjectDetector.java}
+			This constructor makes it easy to swap the algorithms used to find the optimal one for object detection with the leap motion.
+			All that needs to be changed is the flag that is passed into the \code{create()} method.
+			Each algorithm type gave very different results.
+			It will not be clear which one is the best type until a classifier has been implemented.
+			An example of the output produced by the method in listing~\ref{lst:code_7} can be seen in figure~(INSERT FIGURE HERE).
 		\subsection{Test}
+			\subsubsection{Performance Tests}
+			\subsubsection{Unit Tests}
+			\subsubsection{Acceptance Tests}
+			\input{acc_test_template}
 		\subsection{Evaluation}
 			\subsubsection{What went well?}
+			Managed to create a point cloud, building upon successful functionality created in prototype 2.
+			Managed to get features matched between images.
 			\subsubsection{What did not go so well?}
+			The point cloud was not of high enough quality for classifying; it was noisy and unclear.
+			Time was lost looking up other options of object detection.
 			\subsubsection{Lessons learned?}
 	\section{Summary}
 	This chapter has logged the development process of the project.
+	
 	It has discussed the difficulties that were faced throughout the process and highlighted the problems that were particularly interesting to overcome.
 	It shows how the design has evolved over each iteration through an evaluation of the requirements.
 	Moving into chapter~\ref{chap:eval}, the project as a whole will be evaluated.
@@ -890,6 +993,12 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 	
 	\chapter{Evaluation}\label{chap:eval}
 	\section{Introduction}
+	In this chapter the aim is to evaluate the work that has been done toward this project.
+	It will highlight which areas of work might have benefited from being done differently.
+	It will also discuss how far the implementation has gone to fulfilling the original requirements.
+	
+	(COPY AIM AND OBJECTIVES HERE)
+	
 	\section{Summary}
 	%----------------------------------------- Chapter -----------------------------------------%
 	
