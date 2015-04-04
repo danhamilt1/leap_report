@@ -724,6 +724,16 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 		\item[Design] will show the design that has been used in the implementation and highlight any key changes through discussion.
 		\item[Implementation] will be split into stages to highlight the thought process that went into developing the library.
 		\item[Test] will describe the unit tests and any key results that might have an effect on further decisions to be made.
+		The tests will be split into:
+			\begin{itemize}
+				\item \textbf{Performance tests} These will be used to test some of the non-functional requirements such as the frame rate. 
+				It must be noted that these tests are specification dependant and will therefore vary machine to machine.
+				These tests will only be run on the basic specification MacBook Pro 13inch Version 8,1.
+				An example of a performance test written in JUnit can be seen as a listing in appendix~\ref{lst:code_8}.
+				\item \textbf{Unit tests} These will be used to test the program throughout development, any unit tests carried over into another iteration will also act as a form of regression test, though regression testing wont be explicitly carried out due to time constraints.
+				\item \textbf{Acceptance tests} These are previously defined tests, based on the use case analysis.
+				They will provide a measure as to how far the solution has gone to solving the initial problem.
+			\end{itemize}
 		\item[Evaluation] will review how that iteration went and what work needs to be completed or changes made before moving into the next one. It will be broken down into ``what went well'', ``what went badly'' and ``lessons learned''.
 		\end{description}
 	\section{Prototype 1}\label{sec:p1}
@@ -801,8 +811,8 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 		It will also give a good idea as to the performance that can be achieved with each of the stereo matching algorithms.
 		JavaFX is a GUI framework for Java.
 		It is shipped with Java 1.8 SDK and has been developed to take the place of the Java Swing framework.
-		For speed of development, SwingBuilder will be used.
-		SwingBuilder is a tool that allows for rapid development of GUIs.
+		For speed of development, SceneBuilder will be used.
+		SceneBuilder is a tool that allows for rapid development of GUIs.
 		It allows for the drag and drop of GUI elements such as sliders onto the page and generates the underlying code.
 		An example of the GUI that was quickly put together is in figure~(INSERT FIGURE HERE).
 		The sliders visible are used to quickly change the stereo parameters.
@@ -903,7 +913,8 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 			\lstinputlisting[caption=Initialisation of Distortion Data, label=lst:code_5]{initialiseDistortionMats.java}
 		\subsection{Test}
 			\subsubsection{Performance Tests}
-			\lstinputlisting[caption=Example JUnit Performance Test Case, label=lst:code_8]{exampleTestCase.java}
+			
+			
 			\subsubsection{Unit Tests}
 			\subsubsection{Acceptance Tests}
 			\input{acc_test_template}
@@ -1029,6 +1040,7 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 			\input{crc_leapCVImageUtils}
 	\chapter{Implementation Code Snippets}
 			\lstinputlisting[caption=Slow Method of \code{Image} Distortion Removal, label=lst:code_4]{toUndistortedImage.java}
+			\lstinputlisting[caption=Example JUnit Performance Test Case, label=lst:code_8]{exampleTestCase.java}
 	\end{appendices}
 	
 \end{document}
