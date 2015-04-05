@@ -4,6 +4,7 @@
 \usepackage[a4paper, margin=1.5in]{geometry}
 %\usepackage{fullpage}
 \usepackage{url}
+\usepackage{tabularx}
 \usepackage{graphicx}
 \usepackage{harvard}
 \usepackage{mathtools}
@@ -141,7 +142,14 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 			\subsection{What is the Leap Motion?}
 				%cite leapmotion https://developer.leapmotion.com/articles/intro-to-motion-control
 				The Leap Motion Controller is a device aimed at providing a Natural User Interface through hand gestures.
-				It is made up of two infra red cameras both with a fisheye lense, set up stereoscopically. %INCLUDE IMAGE OF LEAPMOTION HERE
+				It is made up of two infra red cameras both with a fisheye lense, set up stereoscopically.
+				Figure~\ref{fig:leapIR} shows an infra red image of the leap motion cameras and infra red lighting.
+				\begin{figure}[!ht]
+				\begin{center}
+					\includegraphics[width=\textwidth]{leap_ir.pdf}
+					\caption{Infra Red Image Showing Leap Motion Internals\protect {\label{fig:leapIR}}}
+				\end{center}
+				\end{figure}
 				It provides functionality out of the box that allows a developer to track movements and gestures made by a hand \cite{web:leapGestures}.
 				%Don't really need the price...
 				Leap motion have recently released a new version of their SDK, allowing access to more elements of their Leap Motion Controller. 
@@ -267,7 +275,7 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 					\begin{figure}[!h]
 						\begin{center}
 					
-    						\includegraphics[scale=0.5]{iterative_development}
+    						\includegraphics[width=\textwidth]{iterative_development}
     						\caption{Overview of an iterative development methodology {\label{fig:iterative}}}
     					\end{center}
 					\end{figure}
@@ -433,7 +441,7 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 				\begin{figure}[!h]
 				\begin{center}
 					
-    					\includegraphics[scale=0.5]{distortion_1}
+    					\includegraphics[width=\textwidth]{distortion_1}
     					\caption{Example of radial distortion of a square being corrected \protect\cite{book:multiViewGeo} {\label{fig:distortion}}}
     				\end{center}
 				\end{figure}				
@@ -455,7 +463,7 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 				The pinhole camera model is the most basic type of camera, that still holds the fundamental mathematics on how most modern digital cameras work today.
 				\begin{figure}[!ht]
 				\begin{center}
-					\includegraphics[scale=0.5]{pinhole}
+					\includegraphics[width=\textwidth]{pinhole}
 					\caption{Pinhole camera model as shown in \protect\citeasnoun[p. 372]{definition:cv} {\label{fig:pinhole}}}
 				\end{center}
 				\end{figure}
@@ -469,7 +477,7 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 				This results in an image that is the correct way up. However it would be impossible to make this camera physically, it is simply to make the mathematics less complicated.
 				\begin{figure}[!ht]
 				\begin{center}
-					\includegraphics[scale=0.5]{pinhole2}
+					\includegraphics[width=\textwidth]{pinhole2}
 					\caption{Pinhole camera model with image plane in front, as shown in \protect\citeasnoun[p. 372]{definition:cv} {\label{fig:pinhole2}}}
 				\end{center}
 				\end{figure}
@@ -608,7 +616,7 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 			
 			\begin{figure}[ht]
 			\begin{center}
-    				\includegraphics[scale=0.45]{use_case_2}
+    				\includegraphics[width=\textwidth]{use_case_2}
     			\caption{UML use case diagram \protect {\label{fig:use_case_1}}}
     			\end{center}
 			\end{figure}	
@@ -687,7 +695,7 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 	\section{System Architecture}
 	\begin{figure}[ht]
 			\begin{center}
-    			\includegraphics[scale=0.65]{system_architecture_2}
+    			\includegraphics[width=\textwidth]{system_architecture_2}
     			\caption{High level system architecture \protect {\label{fig:system_arch_1}}}
     		\end{center}
 			\end{figure}	
@@ -854,7 +862,7 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 		The class diagram shown in figure~\ref{fig:class_diagram_it_2} is a basic model of the system that is going to be built upon.
 		\begin{figure}[ht]
 		\begin{center}
-    			\includegraphics[scale=0.65]{class_diagram_it_2}
+    			\includegraphics[width=\textwidth]{class_diagram_it_2}
     			\caption{Class Diagram for Prototype 2 \protect {\label{fig:class_diagram_it_2}}}
     		\end{center}
 		\end{figure}			
@@ -871,7 +879,20 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 		The CRC for each class can be found in appendix~\ref{app:crc_diagrams}.
 		The \code{Utilities} package will be where most of the extended functionality will sit.
 		\subsubsection{Requirements Changes}
-			(TODO)
+			Now that much more knowledge has been gained surrounding the OpenCV library, it has been decided a few changes will be made to the requirements of the framework.
+			To simplify the use of the framework, and keep the project within scope, it has been decided that the image manipulation functionality will be handled by the framework.
+			Meaning that the application developer can request either, the original image, or the undistorted image that the framework has defined.
+			This will avoid complications in having to handle differently sized images.
+			It will also keep the framework within a certain performance boundary.
+			Block matching algorithms work faster on lower resolution images; if an application developer resized an image to become larger than it was originally, then requested a disparity map, the framework performance will decrease.
+			The new use case diagram reflecting these changes can be seen in figure~\ref{fig:use_case_2}.
+			
+			\begin{figure}[ht]
+			\begin{center}
+    				\includegraphics[width=\textwidth]{use_case_2}
+    			\caption{New UML use case diagram \protect {\label{fig:use_case_2}}}
+    			\end{center}
+			\end{figure}	
 		\subsection{Implementation}
 		\subsubsection{Stage 1 - The Basis of the Framework}
 			As the framework is designed to be extended upon by other application developers, it is useful to think about the way in which it will be deployed.
@@ -913,7 +934,7 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 			\lstinputlisting[caption=Initialisation of Distortion Data, label=lst:code_5]{initialiseDistortionMats.java}
 		\subsection{Test}
 			\subsubsection{Performance Tests}
-			
+			\input{performance_test_1}
 			
 			\subsubsection{Unit Tests}
 			\subsubsection{Acceptance Tests}
@@ -927,6 +948,14 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 			\subsubsection{Lessons learned?}
 	\section{Prototype 3}\label{sec:p3}
 		\subsection{Design}
+			\subsubsection{Class Diagram}
+			\begin{figure}[ht]
+		\begin{center}
+    			\includegraphics[width=\textwidth]{class_diagram_it_3}
+    			\caption{Class Diagram for Prototype 3 \protect {\label{fig:class_diagram_it_3}}}
+    		\end{center}
+		\end{figure}			
+			\subsubsection{Requirements Changes}
 		\subsection{Implementation}
 		\subsubsection{Stage 1 - Obtaining the Q Matrix}
 			OpenCV requires the camera's intrinsic parameters to be known so that images can have the distortion removed, and be rectified, in a stereo set up.

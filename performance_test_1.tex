@@ -1,0 +1,29 @@
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|l|l|}
+\hline
+\textbf{Test} & \textbf{Minimum Value} & \textbf{Actual Value} & \textbf{Pass}
+\\ \hline
+getImage                  & 15 FPS                 & 1112 FPS            & Yes           \\ \hline
+getImageUndistorted       & 15 FPS                 & 144 FPS             & Yes           \\ \hline
+getDisparityStereoVar     & 15 FPS                 & 11 FPS              & No            \\ \hline
+getDisparityStereoBM      & 15 FPS                 & 87 FPS              & Yes           \\ \hline
+getDisparityStereoSGBM    & 15 FPS                 & 42 FPS              & Yes           \\ \hline
+getPointCloud             & 15 FPS                 & 11 FPS              & No            \\ \hline
+\end{tabular}
+\caption{Results of First Frame Rate Performance Test (FPS = Frames Per Second)\protect {\label{tab:performance_1}}}
+\end{table}
+
+\textbf{\textit{Notes on table \ref{tab:performance_1}:}}
+\begin{description}
+	\item[getImage] The value in a single test varied between 800 - 1500 FPS.
+	Over 20 tests it averaged out.
+	\item[getDisparityStereoVar] This was below the minimum required value, however it produces the best disparity map.
+	This test can be passed, but not without sacrificing disparity map quality.
+	\item[getDisparityStereoSGBM] It was noted that after 10 consecutive runs of this process, the frame rate dropped dramatically.
+	It was discovered this was due to a memory leak.
+	Each time the method \code{getDisparityStereoSGBM()} gets called, a new StereoSGBM object is instantiated within the method scope. From the frame rate measurement we can assume that this happens 42 times per second and is therefore processor intensive. This was not leaving enough time or resource for the Java garbage collector to free the used memory. Although the test has not failed, this needs to be optimised as it causes the machine to become unresponsive.
+	\item[getPointCloud] This uses the StereoVar method with the default parameters and thus is bottlenecked by StereoVar.
+	This test can be passed, but not without sacrificing the point cloud quality.
+	
+\end{description}
