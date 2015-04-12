@@ -1,0 +1,23 @@
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{llll}
+\hline
+\textbf{Test} & \textbf{Minimum Value} & \textbf{Actual Value} & \textbf{Pass}
+\\ \hline
+getImage                  & 15 FPS                 & 1082 FPS            & Yes           \\ 
+getImageUndistorted       & 15 FPS                 & 134 FPS             & Yes           \\ 
+getDisparityStereoVar     & 15 FPS                 & 11 FPS              & No            \\ 
+getDisparityStereoBM      & 15 FPS                 & 84 FPS              & Yes           \\ 
+getDisparityStereoSGBM    & 15 FPS                 & 41 FPS              & Yes           \\ 
+getPointCloud             & 15 FPS                 & 11 FPS              & No            \\ \hline
+\end{tabular}
+\caption{Results of First Frame Rate Performance Test (FPS = Frames Per Second)\protect {\label{tab:performance_2}}}
+\end{table}
+
+\textbf{\textit{Notes on table \ref{tab:performance_1}:}}
+\begin{description}
+	\item[getPointCloud] This uses the StereoVar method with the default parameters and thus is bottlenecked by StereoVar.
+	This test can be passed, but not without sacrificing the point cloud quality.
+	
+\end{description}

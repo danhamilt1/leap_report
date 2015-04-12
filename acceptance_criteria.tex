@@ -1,0 +1,44 @@
+\begin{center}
+\small
+\begin{longtable}{p{.1\textwidth}|p{.2\textwidth}|p{.6\textwidth}}
+\hline
+\textbf{Test \#} & \textbf{Use Case}            & \textbf{Acceptance Criteria} \\ \hline
+1                & Retrieve Camera Images       &  \begin{itemize}
+												  	\item Can retrieve images from the camera.
+												  	\item Provides images in a useful format.
+												  \end{itemize}             \\ \hline
+2                & Manipulate Image             &  \begin{itemize}
+												  	\item Can manipulate images that are taken from the camera.
+												  	\item Can manipulate images with a transformation.
+												  	\item Can manipulate images with a filter.
+												  \end{itemize}                             \\ \hline
+3                & Change Stereo Algorithm      &  \begin{itemize}
+												  	\item Can select which method of stereo correspondence to use.
+												  \end{itemize}                             \\ \hline
+4                & Change Stereo Parameters     &  \begin{itemize}
+												  	\item Can change the parameters for a particular stereo correspondence algorithm.
+												  \end{itemize}                             \\ \hline
+5                & Change Classifier Type       &  \begin{itemize}
+												  	\item Can change types of classifier used.
+												  \end{itemize}                             \\ \hline
+6                & Change Classifier Parameters &  \begin{itemize}
+												  	\item Can change the parameters on a particular classifier.
+												  \end{itemize}                            \\ \hline
+7                & Reset Training Data          &  \begin{itemize}
+												  	\item Any previous training data can be removed.
+												  \end{itemize}                            \\ \hline
+8                & View Current Classifications &  \begin{itemize}
+												  	\item Existing trained classification labels can be viewed.
+												  \end{itemize}                            \\ \hline
+9                & Train Classifier             &  \begin{itemize}
+												  	\item The classifier can be trained on a new set of classification data.
+												  	\item Classification data can be collected at run time with the leap motion, prior to training.
+												  \end{itemize}                            \\ \hline
+10               & Classify Object              &  \begin{itemize}
+													\item The framework can segment an object within an image.
+												  	\item The framework will provide a classification label when provided with data to classify.
+												  \end{itemize}                            \\ \hline
+\caption{Acceptance Criteria \protect {\label{tab:acc_criteria}}}
+\end{longtable}
+
+\end{center}

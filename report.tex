@@ -21,6 +21,11 @@
 \usepackage{color}
 \usepackage[font={small,it}]{caption}
 \usepackage[toc,page]{appendix}
+\usepackage{pdflscape}
+\usepackage{longtable}
+\usepackage{setspace}
+
+\onehalfspacing
 
 
 \usepackage{inconsolata}
@@ -71,7 +76,7 @@
 
 \graphicspath{{images/}}
 
-\title{An Open Source Computer Vision Framework for Leap Motion}
+\title{Development of An Open Source Computer Vision Framework for the Leap Motion Controller}
 \author{Daniel Hamilton 10026535,\\Computer Science,\\University of the West of England.}
 	
 \bash
@@ -87,7 +92,16 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 	
 	\renewcommand{\abstractname}{Acknowledgements}
 	\begin{abstract}
+	\begin{center}
+	Firstly I would like to thank my parents, without whom I would not have been supported throughout my time at university.
+	To all my peers, I thank you for any time you have spared in helping me and providing motivation throughout my time at university.
 	
+	Without you all, I would not be in the position I am today.
+	
+	This project would not have been a success without the specific help of my supervisor Dr. Stewart Green, who supported me with guidance and feedback throughout.
+	Along with Professor Lyndon Smith, who pointed my in the direction of literature covering the field of computer vision.
+	%Also to my girlfriend Jen Marshall, for driving me on and proof reading this report.
+	\end{center}
 	\end{abstract}
 	
 	\tableofcontents
@@ -107,7 +121,7 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 				Information from the eyes is divided into multiple channels, each streaming different kinds of information to the brain.
 				The brain then subconsciously groups and identifies the parts of the image to examine along with what parts to suppress.
 				The way in which biological vision works is still largely unknown which makes it hard to emulate on computers \cite[p. xi]{book:multiViewGeo}.				
-				Computer vision systems are still relatively naive, all they "see" is a grid of numbers.%from def:cv
+				Computer vision systems are still relatively naive, all they ``see'' is a grid of numbers.%from def:cv
 				
 				%By default there is no built in pattern recognition, or what some might call, intelligence.
 				
@@ -136,122 +150,91 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 				It has been used in areas such as human activity analysis, where it is able to estimate details about the pose of the human subject in its field of vision \cite{kinect:1}.
 				It has also been used to for real time odometry whilst attached to a quadcopter, enabling the production of a three dimensional mapping of a physical space \cite{kinect:2}.
 				%The line below is dependant on a reference
-				A hacking culture has enabled this type of exploitation of technology to take place and is spurring the creators of these technologies to make them more open.
+				Some might say a hacking culture has enabled this type of exploitation of technology to take place and is spurring the creators of these technologies to make them more open.
 				
 		\section{The Leap Motion Controller}
-			\subsection{What is the Leap Motion?}
+			\subsection{What is the Leap Motion Controller?}
 				%cite leapmotion https://developer.leapmotion.com/articles/intro-to-motion-control
-				The Leap Motion Controller is a device aimed at providing a Natural User Interface through hand gestures.
+				The Leap Motion Controller (LMC) is a device aimed at providing a natural user interface through hand gestures.
 				It is made up of two infra red cameras both with a fisheye lense, set up stereoscopically.
-				Figure~\ref{fig:leapIR} shows an infra red image of the leap motion cameras and infra red lighting.
+				Figure~\ref{fig:leapIR} shows an internal infra red image of the LMC cameras and infra red lighting.
 				\begin{figure}[!ht]
-				\begin{center}
+				\centering
 					\includegraphics[width=\textwidth]{leap_ir.pdf}
-					\caption{Infra Red Image Showing Leap Motion Internals\protect {\label{fig:leapIR}}}
-				\end{center}
+					\caption{Infra Red Image Showing LMC Internals\protect {\label{fig:leapIR}}}
 				\end{figure}
 				It provides functionality out of the box that allows a developer to track movements and gestures made by a hand \cite{web:leapGestures}.
 				%Don't really need the price...
-				Leap motion have recently released a new version of their SDK, allowing access to more elements of their Leap Motion Controller. 
+				Leap Motion have recently released a new version of their software development kit (LeapSDK), allowing access to more elements of their LMC. 
 				Namely, images from the two cameras. 
 				This could possibly be exploited in computer vision. %define disparity
-				The  SDK is closed source, therefore it is not known the current methods by which hands and gestures are classified \cite[p. 217]{journal:leapEvaluation}.
+				The LeapSDK is closed source, therefore it is not known the current methods by which hands and gestures are classified \cite[p. 217]{journal:leapEvaluation}.
 				With the access to the images it allows exploration of other, custom methods for object classification and tracking.
-				The SDK is for C++, C\#, Objective-C, Java, Python and Javascript.
+				The LeapSDK is for C++, C\#, Objective-C, Java, Python and Javascript.
 				It works on Microsoft Windows, Mac OS X and a variety of Linux systems.
 				There are currently iOS and Android libraries that are available through request.
 				It is therefore a truly multi platform device.
 				
-				The leap motion is an extremely accessible device and it can be purchased for a price in the range of \pounds55\footnote{\url{http://www.amazon.co.uk/Leap-Motion-Controller-Interacts-Airspace/dp/B00C66Z9ZC}}.
-				It is small in size with dimensions 80mm $\times$ 30mm $\times$ 11.25mm.
-				
-				
-				
+				The LMC is an extremely accessible device and it can be purchased for a price in the range of \pounds55\footnote{\url{http://www.amazon.co.uk/Leap-Motion-Controller-Interacts-Airspace/dp/B00C66Z9ZC}}.
+				It is small in size with dimensions 80mm $\times$ 30mm $\times$ 11.25mm.				
 
 			\subsection{Uses in Computer Vision}
-				The Leap Motion Controller has already been used in many innovative ways.
+				The LMC has already been used in many innovative ways.
 				An example of this is its use in recognising Australian and Arabic sign language \cite{journal:leapSignLanguage,journal:leapSignLanguage2}.
-				However, these solutions only make use of the default detection system in the SDK.
+				However, these solutions only make use of the default detection system in the LeapSDK.
 				The default detection system is advanced and accurate enough to detect hand movements to this scale but raw image access is required to detect objects other than hands.
-				As stated previously, image access has now been given, and so a whole new future of possibilities have been opened.
+				As previously stated, image access has now been given in the LeapSDK so a whole new future of possibilities have been opened.
 				Having access to the images allows for their use in computer vision.
 				In turn this means that such an accessible and small device can be used in a variety of new ways.
-				By creating an open source computer vision framework for the leap motion, it might become of use in the field of robotics.
-				For example, it's size would make it suitable to attach to a robot as a rudimentary depth sensing system for collision avoidance.
+				By creating an open source computer vision framework (LeapCV) for the LMC, it might become of use in the field of robotics.
+				For example, its size would make it suitable to attach to a robot as a rudimentary depth sensing system for collision avoidance.
 				
 				%need to talk about its use in areas such as robotic arms to pick up things for packaging etc.
-			
-		\section{Current State-of-the-Art}
-		
-			\subsection{OpenCV}
-				OpenCV is an extensive Computer Vision framework that has grown out of a research project, initially run by Intel.
-				Universities were seen to be sharing internal computer vision infrastructures between students, and so OpenCV was conceived to make this type of infrastructure universally available.
-				Its first alpha release was made available in January 1999.
-				One of its goals is to provide a simple-to-use computer vision infrastructure that helps people build fairly sophisticated vision applications quickly \cite[p. 1]{definition:cv}.	
-				By making computer vision more accessible, Intel were increasing the need for faster processors, in turn generating themselves more income \cite{definition:cv}.
-				
-				Computer vision is computationally expensive.
-				However, many scenarios that use computer vision, need to happen in real time.
-				OpenCV was designed for computational efficiency with a strong focus on real-time applications.
-				Early on in its life, Intel had pushed for the requirement of more power from CPUs.
-				Then in 2010 GPU acceleration was added to OpenCV.
-				It has been developed so that adoption from the CPU library to the GPU library is easy, so that developers do not require any training.
-				\citeasnoun{journal:nvidia} have shown this extension has sped up algorithms up to four times on a GPU than a CPU.
-				
-				While the original library is written in C/C++, it has also been wrapped to work on iOS and Java/Android platforms.
-				With smartphone processors often improving in each new release, as well as built in cameras, the demand for computer vision applications is increasing.
-				Currently, devices are capable of stitching together several photographs into a high resolution panoramic image in real time.
-				As well as having the capability of using facial recognition to unlock the device \cite{journal:face}.
-				
-				Since its first release the library has become well established in the Computer Vision field.
-				A simple search with the term ``\textit{OpenCV}'' on google scholar, returns about 38,700 results.
-				With the \citeasnoun{definition:cv} book itself cited by 3409 others.
-				
-				OpenCV is licensed under the BSD open source licence.
-				Meaning it is open and free.
-				The code can be embedded in other applications for research or for profit and there is no obligation that the created applications code needs to be open or free.
+						
 		\section{The Problem}
-				Currently, there is no simple solution that allows a developer to simply plug in a leap motion and start developing for computer vision.
+				Currently, there is no simple solution that allows a developer to simply plug in a LMC and start developing for computer vision.
 				While a computer vision expert might be able to start programming straight away, a non-expert would have to learn a large amount before they start to see any results.	
 				
 		\section{The Purpose}
-				The main purpose is to try and expand the areas on the leap motion can be developed with.
-				To try and find out whether it is feasible to say that a leap motion can be used for computer vision in a simple way.
+				The main purpose is to try and expand the areas on the LMC can be developed with.
+				To try and find out whether it is feasible to say that a LMC can be used for computer vision in a simple way.
 				For example, to detect objects other than hands and tools with only a few function calls.
 				
 				This might start a new interest in computer vision.
 				Allowing these non-experts that might have thought it too difficult before, to experiment in a new and easy way.
-				There is a large community of interest in the leap motion forums, with many different projects using the current SDK.
+				There is a large community of interest in the Leap Motion forums, with many different projects using the current LeapSDK.
 				It might be assumed from the mere interest on threads that contain any form of reference to computer vision, that carrying out research on this will be a useful piece of work.
+				
+				The framework will be open source, unlike the current LeapSDK.
+				Providing a solution that can be changed in any way to suit a developer of the LMC.
+				Hopefully LeapCV will lead by example and be extended further after release.
 		\section{Hypothesis}
-				It is possible to use the leap motion in the field of computer vision, so that application developers can exploit the technology in different ways as to what was originally intended.	
-				This ability can then be structured into a framework, so that the effort application developers have to put in to use the leap motion as a solution, is low, making it an option to consider in new projects.	
+				It is possible to use the LMC in the field of computer vision, so that application developers can exploit the technology in different ways as to what was originally intended.	
+				This ability can then be structured into a framework, so that the effort application developers have to put in to use the LMC as a solution, is low, making it an option to consider in new projects.	
 		\section{Solution Approach}	
-			It is envisaged that the framework will be made possible by taking advantage of functionality of the OpenCV library.
-			Then exploiting the new image functionality of the leap motion SDK as mentioned earlier.
-			The next few sections will outline the processes that will be followed to keep the project within a realistic scope and enable its completion.
-					
+			It is envisaged that LeapCV will be made possible by taking advantage of functionality of the OpenCV library.
+			Then exploiting the new image functionality of the LeapSDK.
+								
 		\section{Aim and Objectives} 
 		This section outlines what the scope of the project is to be.
 		The success of this project will be calculated based on the completion of each of the aim and objectives.
 		\subsection{Aim}
 		\begin{itemize}
-			\item To develop an open source Computer Vision framework usable by the leap motion community.
-			\item Enable the leap motion to recognise simple three dimensional shapes.
+			\item To develop an open source Computer Vision framework (LeapCV) usable by the Leap Motion community.
 		\end{itemize}
 		\subsection{Objectives} 
 		\begin{itemize}
-			\item Research methods for stereoscopic image object recognition.
-			\item Research stereoscopic image processing methods.
-			\item Design and develop a framework that allows the leap motion to be used for computer vision.
+			\item Research stereoscopic image processing methods and object classification.
+			\item Design and develop a framework that allows the LMC to be used for computer vision.
+			\item Enable the LMC to recognise simple objects.
 			\item Evaluate the accuracy of object recognition.
-			\item Release an open source framework.
+			\item Release an open source computer vision framework.
 			\item Produce a report that communicates my findings
 		\end{itemize}
 			
 		\section{Development Methodology}
 					There are lots of development methodologies available for consideration.
-					It is important to follow a development methodology to
+					It is important to follow a development methodology to:
 					\begin{itemize}
 						\item Divide a large problem into easy to understand tasks.
 						\item Sharpen focus.
@@ -270,18 +253,18 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 					Where a large upfront requirements analysis and design takes place in the first of the evolutionary prototypes.
 					This will be based on knowledge gained in the first iteration but not so much the implementation from the first iteration.
 					It will aim to have a good base structure for the rest of the iterations to be evolved from.
-					With tweaks to requirements happening in later iterations based on the evaluation of the previous implementation.
+					With tweaks to requirements happening in later iterations based on the evaluation of one prior.
 					Figure \ref{fig:iterative} gives a visual representation of the iterative approach.
 					\begin{figure}[!h]
-						\begin{center}
+						\centering
 					
     						\includegraphics[width=\textwidth]{iterative_development}
     						\caption{Overview of an iterative development methodology {\label{fig:iterative}}}
-    					\end{center}
 					\end{figure}
 			\subsection{Planned Iterations}
-					During each iteration a test bench application will be developed that will make use of the framework.
-					The development of this prototype will depend upon what level to which the framework is completed.
+					During each iteration a test bench application will be developed that will make use of LeapCV.
+					The development of this test bench aims to emulate LeapCV being used in a real application.
+					The development of this prototype will depend upon what level to which LeapCV is completed.
 					Throughout each iteration sufficient unit tests will be implemented based on the requirements.
 					Below is an outline of what work is aimed to be completed in each iteration.
 					The work breaks down three discrete sections
@@ -296,16 +279,16 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 					\subsubsection{Iteration 1}
 					The first iteration will be an initial throwaway prototype.
 					It will be used to explore the technologies that are going to be used in the project.
-					Mainly to find out how the extensive OpenCV library works, and how well it will interface with the leap motion SDK.
+					Mainly to find out how the extensive OpenCV library works, and how well it will interface with the LeapSDK.
 					Image processing and stereo image processing will be explored here.
-					Once completed it will allow better requirements to be established for the framework.
+					Once completed it will allow better requirements to be established for LeapCV.
 					\subsubsection{Iteration 2}
 					The second iteration will be the first of an evolutionary prototype.
 					It will better expand on the knowledge that will be obtained in iteration 1.
-					It will implement the foundation upon which the whole framework will be based.
-					The initial requirements will be established here so that a high level design can be accomplished.
+					It will implement the foundation upon which the LeapCV will be based.
+					The first design will be established here.
 					It is hoped that most of the image processing and stereo image processing functionality will be implemented in this stage.
-					Providing a solid integration of OpenCV and the leap motion SDK.
+					Providing a solid integration of OpenCV and the LeapSDK for further development to be built upon.
 					\subsubsection{Iteration 3}
 					The third iteration will be the second stage of an evolutionary prototype.
 					It will implement the more complex elements of the library, taking full advantage of the work that has been completed in iteration 2.
@@ -317,27 +300,28 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 					\input{project_timeline}
 			
 			\subsection{Tools}
-			The framework will be written in Java using the Java SDK.
+			LeapCV will be written in Java using the Java SDK.
 			For the purpose of scope it will only be developed using version 1.8 of the Java SDK with JavaFX included.
 			It will be developed in and built to be used within the IntelliJ IDEA integrated development environment.
-			Development will be carried out mainly on Ubuntu 14.04 but also on Mac OS X 10.10 and Windows 8.1 to ensure multi platform capability.
-			Due to time constraints the project will only get fully tested on Ubuntu.
+			Development will be carried out mainly on Mac OS X 10.10 but also on Ubuntu 14.04 and Windows 8.1 to ensure multi platform capability.
+			Due to time constraints the project will only get fully tested on Mac OS X.
 			JUnit 4 will be used for unit testing.
 			
-			For the leap motion, version 2.2.3 of the SDK will be used.
+			For the LMC, version 2.2.3 of the LeapSDK will be used.
 			For OpenCV version 2.4.10 will be used.
 			There is a more recent version 3.0 of OpenCV however it is a beta version and so will not be considered due to possible instability.
 			
 			The code will be managed in a Git based version control system (VCS).
+			The VCS hosting will be provided by GitHub\footnote{\url{http://www.github.com}}.
 			Using a VCS, records changes to files and code over time which will be of use when discussing project implementation in chapter~\ref{chap:des&imp}.
 			It will also prove useful when testing on multiple platforms.
 			By storing the code on a server, any changes can be made locally and then made available to all other platforms.
 			This helps to ensure that each platform uses the same version and avoids platform specific versions of code being created.
 			\subsection{Testing Methods}
-				Testing will be carried out to ensure that the framework works as intended, and that there are no bugs.
+				Testing will be carried out to ensure that LeapCV works as intended, and that there are no bugs.
 				This will consist of:
 				\begin{itemize}
-					\item \textbf{Unit testing} these will be used to test modules of the program as they are developed.
+					\item \textbf{Unit testing} these will be used to test modules of the program throughout the development process.
 					\item \textbf{Performance testing} this will be used to ensure that some of the non-functional requirements have been met.
 					\item \textbf{Acceptance testing} will show how far the solution has gone to meeting the requirements outlined by the stakeholder.
 				\end{itemize}
@@ -358,8 +342,8 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 			 	It also highlights the key decisions that were made throughout the implementation.
 			 	
 			 \item \textbf{Chapter \ref{chap:eval}}
-			 	will evaluate the work and layout a call for future work based on what has been completed.
-			 \item \textbf{Chapter \ref{chap:concl}}
+			 	will evaluate the end product, techniques and tools used. It will also layout a call for future work based on what has been completed.
+			 \item \textbf{Chapter \ref{chap:concl}} will conclude the project
 			\end{itemize}
 						
 		\section{Summary}
@@ -371,19 +355,23 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 			\section{Introduction}
 			This chapter looks to inform the reader about the methods that will be used within this project.
 			It aims to give a brief understanding in how Computer Vision works and what elements are applicable to enable this project to succeed.
+			It begins with a brief overview of object recognition, stereoscopy and classification.
+			Then continues to discuss some real world applications, as well as attempts in creating similar frameworks.
+			
+
 			\section{Object Recognition}
 				\subsection{What is Object Recognition?}
-				Humans can look at an object only a few times, to then enable them to recognise other examples of a similar object at a later date.
+				Humans can look at an object only a few times, to then enable them to recognise other examples in future.
 				However the problem isn't as simple as just recognising an object.
-				Humans can also recognise the context of an object.
-				A human can recognise the difference in intention of another person holding a gun to their face, compared to holding a bunch of flowers.
-				They can also choose which objects in a scene are relevant, and which are not \cite{book:modern}.
+				The difference between a human and a computer is, a human can recognise the context of that object.
+				A human can recognise the difference in intention of an object appearing in a certain scene.
+				An example being another person holding a gun to their face, compared to holding a bunch of flowers.
+				They can also choose which objects in a scene are relevant, and which are not.
+				For example, you would generally never find a shower inside a kitchen.
+				Therefore if a shower was in a scene it would imply that it was a bathroom \cite{book:modern}.
 				
+				\subsection{What is Expected from Such a System?}
 				Object recognition in digital images is not a new problem.
-				And neither is the specific problem of three dimensional object detection.
-				\citeasnoun{journal:3dImages} discuss methods by which range data might be used as a method of object detection.
-				This is one of the earliest papers that suggest the usage of range data for classification.
-				With triangulation based finders that collect this type of data, dating back to the early seventies \cite{journal:range}.
 				\citeasnoun[p. 82-83]{journal:3dImages} lays out the characteristics of an ideal object recognition system.
 				As does \citeasnoun[p.570-572]{book:modern}.
 				Through cross comparison the characteristics that were looked for then are very much the same as what would be an ideal system now.
@@ -401,7 +389,8 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 				\begin{quotation}
 					\textit{``Not because they are bad; the problem is just very difficult''}.
 				\end{quotation}
-			\section{Stereopsis and Calibration}
+				
+			\section{Stereoscopy and Calibration}
 			\begin{quote}
 				``\textit{Stereo matching is the process of taking two or more images and estimating a 3D model of the scene by finding matching pixels in the images and converting their 2D positions into 3D depths.}''\cite{book:sam}
 			\end{quote}
@@ -410,7 +399,7 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 			%cite some stuff about algorithm performance from the scelzki2002aa paper
 			To emulate this in computer vision, the images of a scene produced by the cameras are taken from two different positions.
 			One of the difficulties then faced with stereo matching is being able to identify the corresponding pixels in each image taken.
-			When using two cameras, as those that are to be provided by the Leap Motion, \citeasnoun[p. 415]{definition:cv} define four steps that are needed to achieve successful correspondence between the images produced by each.
+			When using two cameras, as those that are to be provided by the LMC, \citeasnoun[p. 415]{definition:cv} define four steps that are needed to achieve successful correspondence between the images produced by each.
 			
 			\begin{enumerate}
 				%CHECK THESE ARE CORRECT
@@ -418,8 +407,8 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 				
 				\item Adjust for the angles and distances between cameras, a process called rectification. The outputs of this step are images that are row-aligned and rectified.
 				
-				\item Find the same features in the left and right camera views, a process known as correspondence. The output of this step is a disparity map, where the disparities are the differences in $x$-coordinates on the image planes of the same feature viewed in the left and right cameras: $x^{l} - x^{r}$.
-				
+				\item Find the same features in the left and right camera views, a process known as correspondence. The output of this is a disparity map.
+								
 				\item If we know the geometric arrangement of the cameras, then we can turn the disparity map into distances by triangulation. This step is called reprojection, and the output is a depth map.
 			\end{enumerate}
 			
@@ -439,11 +428,11 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 				There are many different types of aberration, but the only one that will be discussed here is distortion.
 				Distortion is an effect that changes the overall shape of an image (geometric warping) (See Figure \ref{fig:distortion}).
 				\begin{figure}[!h]
-				\begin{center}
+				\centering
 					
     					\includegraphics[width=\textwidth]{distortion_1}
     					\caption{Example of radial distortion of a square being corrected \protect\cite{book:multiViewGeo} {\label{fig:distortion}}}
-    				\end{center}
+
 				\end{figure}				
 				It is caused by the fact that different areas of a lens have slightly different focal lengths \cite[p. 42]{book:modern}.
 				There is a lot of information available on how distortion happens so only the basics will be covered here. %, however some reading suggestions are (READING SUGGESTIONS HERE).
@@ -462,24 +451,24 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 				The following description and figures of this model is taken from \citeasnoun[p. 371-373]{definition:cv}, If more depth is needed I advise you read the cited material.
 				The pinhole camera model is the most basic type of camera, that still holds the fundamental mathematics on how most modern digital cameras work today.
 				\begin{figure}[!ht]
-				\begin{center}
+				\centering
 					\includegraphics[width=\textwidth]{pinhole}
 					\caption{Pinhole camera model as shown in \protect\citeasnoun[p. 372]{definition:cv} {\label{fig:pinhole}}}
-				\end{center}
+
 				\end{figure}
 				In a pinhole camera (See Figure \ref{fig:pinhole}) light reflected from the scene/object travels through a pinhole that is made in the pinhole plane.
 				This light then gets projected onto the image plane.
 				The size of this projected image is proportional to the focal length $f$.
-				Where $Z$ is the distance from the pinhole plane to the object, $X$ is the length of the object and $x$ is the objects image on the image plane.
+				Where $Z$ is the distance from the pinhole plane to the object, $X$ is the length of the object and $x$ is the objects projection on the image plane.
 				Therefore we can work out the size of the object using the equation $-x=f\dfrac{X}{Z}$.
 				For mathematical simplification \citeasnoun{definition:cv} states that the negative value can be ommited leaving $x=f\dfrac{X}{Z}$.
 				This is done by moving the image plane in front of the pinhole plane, and then treating the pinhole as a center of projection (See Figure \ref{fig:pinhole2}).
 				This results in an image that is the correct way up. However it would be impossible to make this camera physically, it is simply to make the mathematics less complicated.
 				\begin{figure}[!ht]
-				\begin{center}
+				\centering
 					\includegraphics[width=\textwidth]{pinhole2}
 					\caption{Pinhole camera model with image plane in front, as shown in \protect\citeasnoun[p. 372]{definition:cv} {\label{fig:pinhole2}}}
-				\end{center}
+
 				\end{figure}
 				%THIS ASSUMES KNOWLEDGE ON HOW A CAMERA WORKS
 				In the real world, the center of projection will not be precisely in the middle of the imaging sensor of a camera.
@@ -496,12 +485,39 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 					A phenomenon known as radial distortion produces a visible curvature on the straight lines that appear in the image.
 					This is where pixels in the image are displaced away or towards the image centre by an amount proportional to their radial distance.
 					These types of distortion are known as barrel and pincushion respectively.
-					The Leap Motion has a radial distortion, more specifically it is known as a fisheye.
+					The LMC has a radial distortion, more specifically it is known as a fisheye.
 					The fisheye is a distortion where the image that is produced provides an near 180\degree span side-to-side \cite{book:sam}.
 					
 				\subsection{Image Rectification}
-				 TODO
+				 	To simplify the way in which pixels are matched between two images, it is a good idea to align them vertically along the y-axis.
+				 	This is done by aligning the corresponding what are known as epipolar lines.
+					This then means that to find a corresponding pixel in the left and right image, a search only has to take place in one dimension, along the epipolar lines.
+					This is known as the epipolar constraint.
+					This can be easier to understand if seen visually an example of the rectification step can be seen as item C in figure~\ref{fig:rect}.
+					For more in depth information on image rectification please read \citeasnoun[p. 419-421]{definition:cv}.
+					\begin{figure}
+				\centering
+					\includegraphics[scale=0.5]{rect_proc}
+					\caption{Stages Leading up to Image Rectification \protect\cite{pap:rect} {\label{fig:rect}}}
+
+				\end{figure}
 				
+				\subsection{Stereo Correspondence}
+					Stereo correspondence is the process of finding the same pixel in two different images or camera views.
+					The displacement of the pixel in one image in relation to corresponding pixel in the other image is known as a disparity.
+					The set of all disparities between two images is known as a disparity map \cite{journal:matchers}.
+					
+					There are many methods of finding correspondence between a stereo pair of images.
+					Two terms that are used in literature are ``global methods'' and ``local methods''.
+					Both \citeasnoun{journal:matchers} and \citeasnoun{journal:matchers2} carry out a review on these methods.
+					It is inferred that local methods are much more computationally efficient than global methods.
+					However global methods generally seem to generate the best disparity.
+					
+					Block matching algorithms are the most popular of the local methods but one can also use gradient methods or feature matching.
+					Of the three, block matching seems to have become the more accepted method.
+					Block matching methods estimate disparity of a pixel in one image (the template), with a series of small regions extracted from the other image (the search region).
+					A statistical method, known as a match metric is then run over the pixels to determine the best match.
+					The sum of absolute differences method (SAD) is the most popular of these match metrics\cite{journal:matchers}.
 			\section{Classification}
 				\begin{quote}
 					\textit{A classifier is a procedure that accepts a set of features and produces a class label for them.}
@@ -523,6 +539,9 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 				On the other hand, it is clear to see there might also be a use for differentiating between two different cars in another scenario.
 				Showing that extraction of these features is very much application dependant.
 				
+				It is worth noting that classifying an image of an object, is a different problem to detecting an object within an image.
+				The classification of an image is stating what the object in the image is.
+				The detection of an object within an image is stating that something exists within that image.
 				\subsection{Extracting Image Features}
 					\subsubsection{Edge Detection}
 					In many cases, the first stage of image analysis is to determine where the edges are.
@@ -535,30 +554,123 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 					Occluding contours form the outlines of objects.
 					Edges can be obtained from large image gradients.
 					Such as those cause by sharp changes in brightness.
-					\subsubsection{Corner Detection}
+					\subsubsection{Feature Detection}
 					The terms "feature", "corner" and "image point" are used interchangeably throughout literature.
 					For example \citeasnoun[p. 317]{definition:cv} describes corners as
 					\begin{quote}
 						``\textit{the points that contain enough information to be picked out from one frame to the next.}''
 					\end{quote}
-					Where as, \citeasnoun[p. 179]{book:modern} describes corners as a local area where the orientation of the image gradient changes sharply; a corner in the more literal sense of the word.
-					\citeasnoun{book:modern} says a corner is a more specific term of something that can be described as an image point.
-					This report will continue using the term corner as \citeasnoun{definition:cv} has, so as to avoid confusion with any code references in OpenCV later on.
+					Where as, \citeasnoun[p. 179]{book:modern} describes corners as being a local area where the orientation of the image gradient changes sharply; a corner in the more literal sense of the word.
+					\citeasnoun{book:modern} says a feature is a more specific term of something that can be described as an image point.
+					This report will continue using the term feature so as to avoid confusion with any code references in OpenCV later on.
 					
-					Corners are easy to match between different images.
+					Features are easy to match between different images.
 					This makes them extremely useful when reconstructing points in three dimensions when using multiple images.
-					Such as the images produced in stereopsis.
-					The idea is to extract unique points in an image that can be tracked in another image of the same object or scene.
+					Such as the images produced in stereoscopy.
+					The idea is to extract unique features in an image that can be tracked in another image of the same object or scene.
 					Imagine picking a point on a large blank wall in one image, it wont be very easy to find the exact same point in the second image.
 					Instead unique points should be selected.
 					Such as a tap sticking out of the wall.
 					
+					\subsubsection{Classification of Three Dimensional Objects}
+				Attempts have also been made at classifying objects in a three dimensional reconstructed scene.
+				\citeasnoun{journal:3dImages} discuss methods by which range data might be used as a method of object detection.
+				This is one of the earliest papers that suggest the usage of range data for classification.
+				With triangulation based finders that collect this type of data, dating back to the early seventies \cite{journal:range}.
+				
+				Range data comes in the form of a point cloud.
+				A point cloud is a three dimensional array or pixels that also hold an extra depth coordinate.
+				This results in what looks like a cloud of points, hence the name point cloud.
+				An example can be seen in figure~\ref{fig:example_pc}.
+				\begin{figure}[!h]
+				\centering
+					
+    					\includegraphics[width=\textwidth]{example_pc}
+    					\caption{Example Point Cloud Image from a Microsoft Kinect \protect\cite{video:pc} {\label{fig:example_pc}}}
+
+				\end{figure}	
+				They are produced in many different ways. Devices such as the Microsoft Kinect use a three dimensional scanner producing a dot matrix to produce them.
+				LiDAR\footnote{Literature varies in describing what this acronym stands for. Light Detection and Ranging seems the accepted term.} is another example, that uses a single pulsing laser to scan a scene.
+				Other methods include using a pair of images in a scene.
+				
+				Attempts have been made at classifying point clouds. A piece of software called CANUPO has been developed based on methods outlined by \citeasnoun{journal:3dclass}.
+				This makes use of classifiers to determine the physical features of rivers, coastal environments and cliffs.
+				Being able to classify between water, gravel vegetation and a rock surface.
+					
+				\section{Real World Application}
+					With the brief overview of computer vision theory, the question is ``where is this technology actually used?''.
+					There are companies that exist, that dedicate their mission to providing computer vision solutions.
+					One such company is Stemmer Imaging.
+					Stemmer Imaging is a european imaging technology company.
+					They provide pre-built vision solutions and define some of the application areas of these in their Imaging and Vision Handbook \cite{cat:stemmer}.
+					Some of these areas are:
+					\begin{itemize}
+						\item \textbf{Verification} - The process of verifying that a product, assembly or package has been correctly produced. For example in 
+						\item \textbf{Measurement} - The accurate measurement of component dimensions ensuring they are within pre-defined manufacturing tolerances.
+						\item \textbf{Flaw Detection} - Ensuring that flaws such as contamination, scratches, cracks, discolouration or burn marks have not been caused by slight variations in the manufacturing process.
+						\item \textbf{Code Readers} - The tracking of one or two dimensional barcodes for product recognition.
+						\item \textbf{Positioning} - Picking objects up from a production line and placing them in a package for shipping. Or aligning the objects for precision machining.
+					\end{itemize}
+					These are just a few of the examples they give, but it is clear that there are many areas in which computer vision technology can be exploited.
+					
+				\section{Computer Vision Software}
+					There are plenty of solutions available in terms of computer vision, but what solutions are there for developers to create applications with computer vision equipment?
+					With smartphone processors often improving in each new release, as well as built in cameras, the demand for computer vision applications is increasing.
+				Currently, devices are capable of stitching together several photographs into a high resolution panoramic image in real time.
+				As well as having the capability of using facial recognition to unlock the device \cite{journal:face}.
+					
+					Here is an overview of software libraries that are available to develop computer vision solutions with.
+					
+					\subsection{OpenCV}
+						OpenCV is an extensive Computer Vision library that has grown out of a research project, initially run by Intel.
+				Universities were seen to be sharing internal computer vision infrastructures between students, and so OpenCV was conceived to make this type of infrastructure universally available.
+				Its first alpha release was made available in January 1999.
+				One of its goals is to provide a simple-to-use computer vision infrastructure that helps people build fairly sophisticated vision applications quickly \cite[p. 1]{definition:cv}.	
+				By making computer vision more accessible, Intel were increasing the need for faster processors, in turn generating themselves more income \cite{definition:cv}.
+				
+				Computer vision is computationally expensive.
+				However, many scenarios that use computer vision, need to happen in real time.
+				OpenCV was designed for computational efficiency with a strong focus on real-time applications.
+				Early on in its life, Intel had pushed for the requirement of more power from CPUs.
+				Then in 2010 GPU\footnote{Graphical Processing Unit} acceleration was added to OpenCV.
+				It has been developed so that adoption from the CPU\footnote{Central Processing Unit} library to the GPU library is easy, so that developers do not require any training.
+				\citeasnoun{journal:nvidia} have shown this extension has sped up algorithms up to four times on a GPU than a CPU.
+				
+				While the original library is written in C/C++, it has also been wrapped to work on the Apple iPhone iOS and Google Android platforms.
+				The Google Android platform version is also compatible with any Java application.
+								
+				Since its first release the library has become well established in the Computer Vision field.
+				A simple search with the term ``\textit{OpenCV}'' on google scholar, returns about 38,700 results.
+				With the \citeasnoun{definition:cv} book itself cited by 3409 others.
+				
+				OpenCV is licensed under the BSD\footnote{Berkley Software Distribution} open source licence.
+				Meaning it is open and free.
+				The code can be embedded in other applications for research or for profit and there is no obligation that the created applications code needs to be open or free.
+					\subsection{SimpleCV}
+						SimpleCV defines itself as an open source framework for building computer vision applications \cite{code:simplecv}.
+						It makes use of OpenCV and the Python programming language.
+						It is only available to be used with Python.
+						Its focus is to simplify the process of developing computer vision applications by providing a simple programming interface.
+						It does this by providing a simple and semantic interface for cameras, image manipulation, feature extraction and format conversion.
+					\subsection{Point Cloud Library}
+						The point cloud library is focussed on three dimensional perception.
+						The library is written in C++ and currently there is no supported wrapper available for using it with other languages.
+						Although it does state that an Google Android version is in the works \cite{journal:pcl}.
+						Their literature mainly highlights the use of this library with robots being able to see in three dimensions.
+						It incorporates three dimensional processing algorithms and can perform filtering, feature estimation, surface reconstruction to name a few.
+						
 				\section{Summary}
+					The knowledge obtained throughout the background research should provide enough of a starting point to apply the technologies to the LMC.
+					Methods of stereoscopy will be useful throughout the development of LeapCV as will the basic understanding of feature detection.
+					OpenCV will be the library of choice throughout development, mainly due to it being the only one discovered with a Java interface.
+					Although out of the three libraries discovered, it seemed to be the most extensive and supported, with a very good history of development.
+					Java is the preferred language of the author, therefore a Java library was preferable.
+					Now this paper moves on to carrying out a requirements analysis.
 	%----------------------------------------- Chapter 3 -----------------------------------------%
 	\chapter{Requirements Analysis}\label{chap:req}
 	\section{Introduction}
-	This chapter attempts to lay out a set of requirements for the framework, from the point of view of the stakeholders.
-	They will set out a contract between the stakeholders and the framework developer as a means to show what the framework is going to be. It should \textbf{not} show how it will be done - that is the purpose of design \cite{book:dawson}.
+	This chapter attempts to lay out a set of requirements for LeapCV, from the point of view of the stakeholders.
+	They will set out a contract between the stakeholders and LeapCV developer as a means to show what LeapCV is going to be. It should \textbf{not} show how it will be done - that is the purpose of design \cite{book:dawson}.
 	They provide goals upon which a realistic scope for the project may be set and will also be the backbone of the tests that are to be written during implementation.
 	
 	The elements needed to produce a good requirements analysis are as follows.
@@ -572,11 +684,11 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 	The next few sections will elaborate on these and show the documentation produced. 
 		
 		\section{Stakeholder Identification}
-			This project is aimed at producing an open source framework that will suit a variety of users, with the main focus being on the \textit{application developer}, where the \textit{application developer} will use the framework to develop other applications.
-			The framework being developed here will not be an application that can be used as an end user.
+			This project is aimed at producing an open source framework that will suit a variety of users, with the main focus being on the \textit{application developer}, where the \textit{application developer} will use LeapCV to develop other applications.
+			LeapCV will not be an application that can be used as an end user.
 			It will be designed to be a simple-to-use interface that saves the \textit{application developer} a large amount of time when applying it to their own application.
-			However, it is possible that other applications might need access to information that is produced by the framework, therefore another actor of \textit{user} needs to be considered.
-			Through the analysis of existing libraries and solutions that work with other imaging systems, it is possible to identify what would be suitable to provide as a simpler solution for the leap motion.
+			However, it is possible that other applications might need access to information that is produced by LeapCV, therefore another actor of \textit{user} needs to be considered.
+			Through the analysis of existing libraries and solutions that work with other imaging systems, it is possible to identify what would be suitable to provide as a simpler solution for the LMC.
 			The stakeholder also plays a major role in discovering and keeping a project, within a defined scope.
 			As the \textit{application developer} will be the main user of the system, they will	have most of the interactions.
 			
@@ -590,7 +702,7 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 			Due to the exploratory nature of this project, it is hard to realise what is fully required of the system at this stage.
 			However, the research carried out in chapter~\ref{chap:background} can give a guide as to what might be needed.
 			The requirements caught here can then be explored in the first iteration and then then expanded upon during the design stage of the next iteration.
-			The problem now is to capture what requirements need to be in place to create the framework.
+			The problem now is to capture what requirements need to be in place to create LeapCV.
 			In chapter~\ref{chap:background} four steps were defined to achieve successful correspondence between images.
 			In summary these were:
 			\begin{enumerate}
@@ -600,7 +712,7 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 				\item Turn the disparity map into distances and produce a depth map.
 			\end{enumerate}
 			However, it is arguable to say that these steps are for quite a specific problem, and a framework should be more generic.
-			Therefore this framework should be able to carry out all of the operations above, without any dependency on the previous step.
+			Therefore LeapCV should be able to carry out all of the operations above, without any dependency on the previous step.
 			The application developer should be able to carry out manipulation on the images separately from the images that are getting processed through the algorithms in OpenCV.
 			This will allow for the development of an application that might show a before and after image for example, rather than only having access to an image post processing, that might have become non-understandable to a human.
 			
@@ -614,11 +726,11 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 		This section has been produced by following the methods outlined by \citeasnoun{book:uml} in ``\textit{Learning UML 2.0}''.
 			\subsection{Use Case Diagram}
 			
-			\begin{figure}[ht]
-			\begin{center}
-    				\includegraphics[width=\textwidth]{use_case_2}
+			\begin{figure}
+			\centering
+    				\includegraphics[width=\textwidth]{use_case_1}
     			\caption{UML use case diagram \protect {\label{fig:use_case_1}}}
-    			\end{center}
+
 			\end{figure}	
 			A use case diagram is used to capture pieces of functionality that a system will provide to the stakeholder and other users.
 			Figure~\ref{fig:use_case_1} is an example of a UML use case diagram.
@@ -640,23 +752,26 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 			
 			As this is a framework, user interface requirements do not need to be considered.
 			\begin{description}
-				\item[Automatic camera configuration.] The framework should abstract the leap motion configuration away from the application developer and should not require any explicit calibration.
-				\item[Default configuration.] The framework should have a default configuration for training and classifying three dimensional shapes.
+				\item[Automatic camera configuration.] LeapCV should abstract the LMC configuration away from the application developer and should not require any explicit calibration.
+				\item[Default configuration.] LeapCV should have a default configuration for training and classifying three dimensional shapes.
 			\end{description}
 				
 			
 		\section{Non-Functional Requirements}
 			\begin{description}
-				\item[Speed.] The framework needs to be able to process images and return a useful classification output in near real-time. 
+				\item[Speed.] LeapCV needs to be able to process images and return a useful classification output in near real-time. 
 				A minimum of 15 frames per second should be the target.
-				\item[Accuracy.] The framework should have equal to or greater than 90\% accuracy in its classification ability.
-				\item[Multi-platform.] The framework should be usable on all of the platforms that the leap motion is currently supported on.
-				\item[Java standards] The framework should conform to Java standards and have a well documented interface.
+				\item[Accuracy.] LeapCV should have equal to or greater than 90\% accuracy in its classification ability.
+				\item[Multi-platform.] LeapCV should be usable on all of the platforms that the LMC is currently supported on.
+				\item[Java standards] LeapCV should conform to Java standards and have a well documented interface.
 				A Javadoc should be produced.
-				\item[Semantics.] The framework should not stray too far from terminologies and semantics used within existing computer vision libraries, unless it is essential. Ensuring users with prior experience of computer vision can use it with ease.
-				\item[Extensibility.] As the project will be made open source, the framework needs to be designed with extensibility in mind.
+				\item[Semantics.] LeapCV should not stray too far from terminologies and semantics used within existing computer vision libraries, unless it is essential. Ensuring users with prior experience of computer vision can use it with ease.
+				\item[Extensibility.] As the project will be made open source, LeapCV needs to be designed with extensibility in mind.
 			\end{description}
 			
+		\section{Acceptance Criteria}
+			Acceptance criteria should be defined against the use cases, to provide a measure of completion.
+			Each use case has a set of acceptance criteria defined which can be found in appendix~\ref{app:acc_crit}.
 		\section{MoSCoW Prioritisation}
 			MoSCoW is a recognised method for prioritising requirements by their importance. \citeasnoun{book:moscow} defines the categories in order of highest to lowest importance as
 			\begin{description}
@@ -670,7 +785,7 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 			Table~\ref{tab:moscow_table} shows the user stories with their recognised priority.
 			\input{moscow_table}
 			\clearpage
-			The prioritisations have been worked out so that the fundamental elements of the framework will get created first.
+			The prioritisations have been worked out so that the fundamental elements of LeapCV will get created first.
 			Although the end product should be able to classify images, there is not yet a guarantee that it is possible to do so.
 			All of the previous requirements have to be implemented before any type of classification can be considered.
 		\section{Summary}
@@ -686,27 +801,31 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 	\section{Introduction}
 	This chapter covers the implementation stage of the project.
 	In chaper \ref{chap:introduction} the methodology of how this was going to be done was outlined.
+	In chapter~\ref{chap:background} research was carried out into computer vision techniques.
+	Some of this research will now be extrapolated into a functional framework.
 	The implementation has been planned in three iterations.
 	Where the first iteration is a throwaway prototype and the further two iterations will follow the evolutionary prototype method.
 	Each iteration will be further broken down into work items.
 	The work items are loosely based on the initial requirements defined in chapter \ref{chap:req}.
 	These might changed slightly based on the evaluation carried out in each iteration.
+	Implementation has been recorded through the use of blog entries.
+	After each iteration an entry was made and elements recorded.
 	\clearpage
 	\section{System Architecture}
-	\begin{figure}[ht]
-			\begin{center}
+	\begin{figure}
+			\centering
     			\includegraphics[width=\textwidth]{system_architecture_2}
     			\caption{High level system architecture \protect {\label{fig:system_arch_1}}}
-    		\end{center}
-			\end{figure}	
+
+	\end{figure}	
 			
-			Figure~\ref{fig:system_arch_1} outlines the intended architecture of the framework.
+			Figure~\ref{fig:system_arch_1} outlines the intended architecture of LeapCV.
 			\begin{description}
 			\item[Leap and OpenCV Facade] This will bring the two libraries, being OpenCV and the LeapSDK, together.
 			This is where most of the utility style functionality will sit.
 			\item[Extended Functionality] This is where the functionality of each library will be put to use.
 			Higher level functionality such as classification and object detection will sit here.
-			\item[Public Facing API] The framework will provide a public facing API that will ensure that the library is simple to use.
+			\item[Public Facing API] LeapCV will provide a public facing API that will ensure that the library is simple to use.
 			All of the complex functionality will be occurring in the private packages.
 			\end{description}
 			\clearpage
@@ -716,14 +835,14 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 		IntelliJ IDEA should be installed on the platform that is being developed on.
 		JUnit comes as a standard package with IntelliJ IDEA.
 		
-		The latest version of OpenCV should be downloaded from the website\footnote{\url{http://www.opencv.org}}.
+		Version 2.4.10 of OpenCV should be downloaded from the website\footnote{\url{http://www.opencv.org}}.
 		Instructions for installation are also available there.
 		It is important to ensure that OpenCV has been compiled with the Java bindings so the instructions have to be followed carefully.
 		Once installed the library should be imported to the project. %METHOD HERE 
 		Once imported, to ensure the native libraries get loaded when the project gets built it is important to include the line in listing \ref{lst:code_1}.
 		
 		\lstinputlisting[caption=Loading the OpenCV Library into the Project, label=lst:code_1]{main.java}		
-		The LeapSDK is available from the leap motion website\footnote{\url{http://developer.leapmotion.com}}.
+		The LeapSDK is available from the LMC website\footnote{\url{http://developer.leapmotion.com}}.
 		The methods for importing the LeapSDK into the project are also found here.
 	\section{Iterations}
 		The next few sections will talk in depth about the key work items that were completed to produce the prototype in each iteration.
@@ -738,49 +857,68 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 				It must be noted that these tests are specification dependant and will therefore vary machine to machine.
 				These tests will only be run on the basic specification MacBook Pro 13inch Version 8,1.
 				An example of a performance test written in JUnit can be seen as a listing in appendix~\ref{lst:code_8}.
-				\item \textbf{Unit tests} These will be used to test the program throughout development, any unit tests carried over into another iteration will also act as a form of regression test, though regression testing wont be explicitly carried out due to time constraints.
 				\item \textbf{Acceptance tests} These are previously defined tests, based on the use case analysis.
-				They will provide a measure as to how far the solution has gone to solving the initial problem.
+				They will provide a measure as to how far the solution has gone to meeting the requirements.
 			\end{itemize}
-		\item[Evaluation] will review how that iteration went and what work needs to be completed or changes made before moving into the next one. It will be broken down into ``what went well'', ``what went badly'' and ``lessons learned''.
+			Unit tests will be performed using JUnit and any significant failures will be highlighted throughout the discussion.
+		\item[Evaluation] will review how that iteration went and what work needs to be completed or changes made before moving into the next one. It will be broken down into:
+			\begin{itemize}
+				\item{What went well?}
+				\item{What problems were faced?}
+				\item{Lessons learned}	
+			\end{itemize}
 		\end{description}
-	\section{Prototype 1}\label{sec:p1}
+	\section{Iteration 1}\label{sec:p1}
 		\subsection{Design}
 		The first implementation will be based on the requirements that were discovered in chapter~\ref{chap:req}.
 		This iteration is a throwaway prototype, with the idea of exploring the functionality of the libraries, so as to elicit more requirements.
-		These will be discussed in the evaluation section later in prototype~\ref{sec:p1}.
-		The knowledge gained through this prototype will then be applied to the first of the evolutionary prototypes, prototype~\ref{sec:p2}.
+		These will be discussed in the evaluation section later in iteration~1.
+		The knowledge gained through this prototype will then be applied to the first of the evolutionary prototypes to be developed in iteration~2.
 		\subsection{Implementation}
-		\subsubsection{Stage 1 - Retrieve Images From the leap motion}
-		The first stage involves gaining an understanding of what type of images can be received from the leap motion.
+		\subsubsection{Stage 1 - Retrieve Images From the Leap Motion Controller}
+		The first stage involves gaining an understanding of what type of images can be received from the LMC.
 		The type \code{Image} in package \code{com.leapmotion.leap} has some useful publicly visible methods at its disposal.
 		\code{Image.data()} returns a \code{byte[]} where each individual \code{byte} is a pixel in the image.
 		Each \code{byte} holds an \code{8-bit} intensity value for the pixel, in integer form this is between 0(black) and 255(white).
 		The \code{byte[]} is of length \code{Image.width() * Image.height()}.
 		
 		The example in listing~\ref{lst:code_2} shows how the \code{Image} is converted into a \code{BufferedImage}.
-		Now that this is understood the first image can be retrieved from the leap motion.
+		Now that this is understood the first image can be retrieved from the LMC.
 		A \code{Controller} must be initialised, from this we can retrieve a \code{Frame}.
 		The \code{Frame} contains an \code{ImageList} which contains an \code{Image} for both the left and the right camera.
 		To ensure the images can be retrieved from the camera the \code{PolicyFlag.POLICY\_IMAGES} must be set on the \code{Controller} object.
 		
 		Listing~\ref{lst:code_3} is a simplified version of writing the images to two files.
 		It makes use of the converter defined in listing~\ref{lst:code_2}.
-		An example of one of these images is shown in figure~(INSERT FIGURE HERE). %FIGURE HERE
-		%\clearpage
+		An example of one of these images is shown in figure~\ref{fig:image_1}. %FIGURE HERE
+		\begin{figure}
+			\centering
+    				\includegraphics[width=\textwidth]{1}
+    				\caption{Stage 1 Camera Image - Distortion Present \protect {\label{fig:image_1}}}
+
+		\end{figure}	
+		The chessboard used in the examples is from the OpenCV documentation\footnote{\url{http://docs.opencv.org/_downloads/pattern.png}}.
+		This is used in an attempt to show the distortion of the camera lens.
 		\lstinputlisting[caption=Convert an \code{Image} into a \code{BufferedImage}, label=lst:code_2]{toBufferedImage.java}	
 		\lstinputlisting[caption=Write \code{ImageList} to a \code{File}, label=lst:code_3]{imageWrite.java}	
 		\subsubsection{Stage 2 - Distortion Removal}
-		Now that the \code{Images} can be successfully taken from the leap motion, the distortion must be removed.
+		Now that the \code{Images} can be successfully taken from the LMC, the distortion must be removed.
 		The LeapSDK provides the \code{Image.warp()} method for this, however the documentation states that it is not suitable for processing full images.
 		They suggest that using a shader program with OpenGL is faster.
 		As this would allow the process to run on a GPU.
 		However at this stage it is more interesting (and valuable to proving the hypothesis) to see whether a disparity map can be produced using OpenCV.
-		Therefore, for now, the slow method will suffice.
+		Therefore, for now, the slow method is used.
 		The listing as appendix~\ref{lst:code_4} shows the method by which this was done.
-		This method then results in an image as shown in figure~(INSERT FIGURE HERE).
+		This method then results in an image as shown in figure~\ref{fig:image_2}.
+		\begin{figure}
+			\centering
+    				\includegraphics[width=\textwidth]{2}
+    				\caption{Stage 2 Camera Image - Distortion Removed \protect {\label{fig:image_2}}}
+
+		\end{figure}	
 		Unfortunately it seems that during the process of distortion removal, some of the resolution of the \code{Image} has been lost.
 		We can see this from the black pixels that are left around the outside of the \code{BufferedImage} that has been given here.
+		This is still a 640$\times$240 resolution image as was seen in figure \ref{fig:image_1}.
 		
 		\subsubsection{Stage 3 - Further Removal of Distortion with OpenCV}
 		OpenCV provides functionality to resize and crop images.
@@ -802,28 +940,81 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 		\code{Imgproc} is the class that handles the majority of the image processing functionality within OpenCV.
 		The crop is performed by passing a region of interest to the method \code{submat()} provided by the \code{Mat} to be cropped, then storing the returned value in a new \code{Mat}.
 		The region of interest is a \code{Rect} object which is a rectangle that consists of a width, a height and a pair of coordinates, at which the top left of the rectangle should begin.
-		This is quite a generic process to carry out on images and can be viewed in appendix~(INSERT APPENDIX HERE).
-		The end result is an image that looks like that in figure~(INSERT FIGURE HERE).
+		The code for producing a cropped image can be found in listing~\ref{lst:crop}.
+		\lstinputlisting[caption=Convert \code{Image} type to \code{Mat} type, label=lst:crop]{cropImage.java}
+		The end result is an image that looks like that in figure~\ref{fig:image_3}.
+		\begin{figure}
+			\centering
+    				\includegraphics[scale=0.5]{3}
+    				\caption{Stage 3 Camera Image - Distortion Further Removed with OpenCV \protect {\label{fig:image_3}}}
+
+		\end{figure}	
 		
+		One is able to see the effect further by highlighting the chessboard corners in the image.
+		This is done using the \code{findChessboardCorners()} method in the \code{org.opencv.calib3d} package.
+		The results can be seen in figures~\ref{fig:image_4} and \ref{fig:image_5}.
+		The images show a curvature of the straight edges in figure~\ref{fig:image_4} and a straightening of the edges in figure~\ref{fig:image_5}.
+		The difference between the two appearing much like the effect shown in figure~\ref{fig:distortion} that was discussed in chapter~\ref{chap:background}.
+		\begin{figure}
+			\centering
+    				\includegraphics[width=\textwidth]{4}
+    				\caption{Camera Image - Distortion Present, with Highlighted Corners on a 9x6 Chessboard\protect {\label{fig:image_4}}}
+    			
+		\end{figure}	
+		\begin{figure}
+			\centering
+    				\includegraphics[scale=0.5]{5}
+    				\caption{Camera Image - Distortion Further Removed with Highlighted Corners on a 9x6 Chessboard\protect {\label{fig:image_5}}}
+    			
+		\end{figure}	
 		\subsubsection{Stage 4 - Stereo Correspondence}
+		Stereo correspondence was briefly discussed in chapter~\ref{chap:background}.
+		It is a technique used to match (find the correspondence) the pixels in a pair of images.
+		The result is a grey scale image that contains a corresponding depth value at each pixel.
+		A value of 255(white) means the area of the image is closer to the cameras, a value of 0(black) means the area is futher away.
+		An example of a disparity map can be seen in figure~\ref{fig:dispExample}.
+		\begin{figure}
+			\centering
+    				\includegraphics[width=\textwidth]{dispExample}
+    				\caption{Example Disparity (Bottom Left and Right) of Synthetic Stereo Pair (Top Left and Right)  \protect\cite{image:stereoPair} {\label{fig:dispExample}}}
+		\end{figure}	
 		OpenCV provides stereo correspondence functionality in the \code{org.opencv.calib3d} and the \code{org.opencv.contrib} packages.
 		Namely \code{StereoBM}, \code{StereoSGBM} and \code{StereoVar}.
-		The first two are variations of the stereo block matching method(TODO) and the later is the stereo variation method.
+		The first two are variations of the stereo block matching algorithms and the later is the stereo variation algorithm.
 		\code{StereoSGBM} seems to be generally accepted as better than \code{StereoBM} in most scenarios, therefore \code{StereoBM} will not be attempted here.
-		(INSERT CODE AND DESCRIPTIONS ON STEREO)
 		
+		StereoSGBM stands for semi-global block matching, an algorithm that was researched by \citeasnoun{journal:stereoSGBM}.
+		StereoVar stands for stereo variational methods, which is an algorithm produced by \citeasnoun{journal:stereoVar}. 
+		To achieve a basic disparity map is relatively simple, the difficulty is in the parameter tweaking.
+		Listing~\ref{lst:stereoSGBM} shows the code for producing a disparity map with StereoSGBM.
+		\lstinputlisting[caption=Initialisation of Distortion Data, label=lst:stereoSGBM]{computeDisparity.java}
+		It is the same for both methods, but the type of the \code{stereo} variable would be changed.
+		
+%		StereoSGBM stands for the semi-global block matching algorithm.
+%		An example disparity produced using this algorithm can be seen in figure~(INSERT IMAGE HERE).
 		\subsubsection{Stage 5 - Parameter Tweaking}
 		Through the exploration of the algorithms in stage 4, it became clear that it was quite difficult to know what parameters to set to get a good disparity map from the image.
 		Therefore as part of the prototyping methodology, a test bench graphical user interface (GUI) application will be made in JavaFX.
 		The GUI will not only be able to allow for parameter changing at run-time.
-		It will also give a good idea as to the performance that can be achieved with each of the stereo matching algorithms.
+		It will also give a good idea as to the performance that can be achieved with each of the stereo matching algorithms through a visual analysis of the output.
 		JavaFX is a GUI framework for Java.
 		It is shipped with Java 1.8 SDK and has been developed to take the place of the Java Swing framework.
 		For speed of development, SceneBuilder will be used.
 		SceneBuilder is a tool that allows for rapid development of GUIs.
 		It allows for the drag and drop of GUI elements such as sliders onto the page and generates the underlying code.
-		An example of the GUI that was quickly put together is in figure~(INSERT FIGURE HERE).
+		An example of the GUI that was quickly put together is in figure~\ref{fig:ui}.
+		\begin{figure}
+			\centering
+    				\includegraphics[width=\textheight, angle=90]{ui_design2}
+    				\caption{GUI Created in SceneBuilder 2.0 \protect {\label{fig:ui}}}
+		\end{figure}	
+		\begin{figure}
+			\centering
+    				\includegraphics[width=\textheight,angle=90]{first_test}
+    				\caption{GUI Being Used to Tweak Parameters \protect {\label{fig:ui}}}
+		\end{figure}	
 		The sliders visible are used to quickly change the stereo parameters.
+		The labels here correspond to the parameter values for the StereoSGBM method.
 		To allow for the processing to get done in real time, it was decided to make use of the \code{Listener} class within the LeapSDK.
 		Then implementing an \code{ObservableValue} which is included in the JavaFX framework.
 		The \code{ObservableValue} follows the observer design pattern.
@@ -832,7 +1023,7 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 		It is also important to allow the GUI thread to handle when to instantiate the \code{Listener}.
 		Using the \code{Platform.runLater()} method.
 		The \code{Listener} seems to lock the GUI thread if it is not done this way.
-		This is possibly due to the fact that by default the leap motion returns images at a very high frame rate.
+		This is possibly due to the fact that by default the LMC returns images at a very high frame rate.
 		This resulted in finding good parameters for the correspondence algorithms.
 		\subsection{Test}
 		As this prototype is intended to be thrown away, it must be noted that the testing of this prototype was not intended.
@@ -841,32 +1032,36 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 		However it needs to be considered that the slow method of distortion removal was implemented here.
 		\subsection{Evaluation}
 		\subsubsection{What went well?}
-		The first prototype allowed for a good exploration of the OpenCV library.
-		A vast amount of knowledge was gained as to how the library works.
-		This will be useful in the next iteration.
-		\subsubsection{What did not go so well?}
-		Using the \code{Listener} seemed to make the code a lot more complex to work with.
-		It seems more suited to applications that are heavily making use of the LeapSDK with its tracking functionality alone.
-		In this case it is believed it would be better to access the images, by explicitly requesting them from the leap motion.
-		This will make it a lot simpler for development as each image needs to be processed individually.
-		The \code{Listener} is intended for use when the camera is working at it highest frame rate.
-		However through the frame rate results we have here, we can see that it will never be working at full capacity with the methods intended to be used.
+		\begin{itemize}
+			\item The first prototype allowed for a good exploration of the OpenCV library.
+			\item A vast amount of knowledge was gained as to how the library works, all of which will be useful going into the next iteration.
+		\end{itemize}
+		
+		
+		\subsubsection{What problems were faced?}
+		\begin{itemize}
+			\item Using the \code{Listener} class to access the LMC frames made the code a lot more complex to work with.
+			\item The weighing up of priority in the optimisation of removing camera distortion. The slow method of removal was used in this iteration.
+			\item Due to the slow frame rate, it was very difficult to achieve optimum results in the disparity map.
+		\end{itemize}				
 		%After completion, there are a few requirements changes that will be considered.
 		\subsubsection{Lessons learned?}
-			In stage 2 of this iteration, it was suggested that the slow method was going to be used for distortion removal, as speed was not important at this stage.
-			Going into the next iteration, an attempt should be made at optimising the process.
-			This is due to the fact using the slow method did indeed have a large hit on the frame rate.
-	\section{Prototype 2}\label{sec:p2}
+			\begin{itemize}
+				\item The \code{Listener} class is designed for applications that do not have a ``natural framerate''. It is believed that it would be a better alternative to access the images explicitly through a method call. In turn making the system more stateful so that the application developer knows the exact stage of processing that an image is at.
+				\item After development was carried out on the distortion removal, it was in fact discovered that the \code{warp()} method of distortion removal was indeed very slow and had a detrimental effect on the frame rate. Going into the next iteration, an attempt should be made at optimising the process.
+				\item A higher frame rate should allow for further parameter tweaking in the next iteration.
+			\end{itemize}
+			
+	\section{Iteration 2}\label{sec:p2}
 		\subsection{Design}
 		\subsubsection{Class Diagram}
-		The class diagram shown in figure~\ref{fig:class_diagram_it_2} is a basic model of the system that is going to be built upon.
-		\begin{figure}[ht]
-		\begin{center}
-    			\includegraphics[width=\textwidth]{class_diagram_it_2}
+		The class diagram shown in figure~\ref{fig:class_diagram_it_2} is a basic model of LeapCV.
+		\begin{figure}
+		\centering
+    			\includegraphics[width=\textheight, angle=90]{class_diagram_it_2}
     			\caption{Class Diagram for Prototype 2 \protect {\label{fig:class_diagram_it_2}}}
-    		\end{center}
 		\end{figure}			
-		Each class was identified using the CRC process. (CITE)
+		Each class was identified using the CRC process \cite{web:crc}. 
 		CRC stands for Classes Responsibilities and Collaborations.
 		The cards contain three sections of information about a single class.
 		These are:
@@ -876,33 +1071,42 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 			\item \textbf{Collaborations:} The classes that this class also interacts with.
 		\end{itemize}
 		\input{crc_LeapCVController}
-		The CRC for each class can be found in appendix~\ref{app:crc_diagrams}.
-		The \code{Utilities} package will be where most of the extended functionality will sit.
+		The CRC for each class can be found in appendix~\ref{app:crc_it_1}.
+		The \code{Utilities} package will hold most of the extended functionality.
+		This functionality is not dependent on any particular class in the model.
+		It is assumed that any image of any size can be passed into the utilities and be processed.
+		The classes on the left hand side are a model of the LMC.
+		Aiming to abstract it in a simple way, so retrieving information is simple.
+		The LeapSDK does this in a way that is suited more toward tracking information, whereas here it is required to focus it more towards imaging.
+		The \code{LeapCVCamera} class and \code{LeapCVImage} class have been included to make it this way.
+		The model is stateful, as in, it holds one image at any one point in time, up until the application developer explicitly requests for the camera to move on to another valid frame.
+		Note that this was decided due to the results from the previous iteration.
+		Having a \code{Listener} deemed to make the library more complicated than intended.
 		\subsubsection{Requirements Changes}
-			Now that much more knowledge has been gained surrounding the OpenCV library, it has been decided a few changes will be made to the requirements of the framework.
-			To simplify the use of the framework, and keep the project within scope, it has been decided that the image manipulation functionality will be handled by the framework.
-			Meaning that the application developer can request either, the original image, or the undistorted image that the framework has defined.
+			Now that much more knowledge has been gained surrounding the OpenCV library, it has been decided a few changes will be made to the requirements of LeapCV.
+			To simplify the use of LeapCV, and keep the project within scope, it has been decided that the image manipulation functionality will be handled by LeapCV.
+			Meaning that the application developer can request either, the original image, or the undistorted image that LeapCV has defined.
 			This will avoid complications in having to handle differently sized images.
-			It will also keep the framework within a certain performance boundary.
-			Block matching algorithms work faster on lower resolution images; if an application developer resized an image to become larger than it was originally, then requested a disparity map, the framework performance will decrease.
+			It will also keep LeapCV within a performance boundary.
+			Block matching algorithms work faster on lower resolution images due to a linear complexity increase in correlation to the resolution; if an application developer resized an image to become larger than it was originally, then requested a disparity map,  the frame rate will decrease.
 			The new use case diagram reflecting these changes can be seen in figure~\ref{fig:use_case_2}.
 			
-			\begin{figure}[ht]
-			\begin{center}
+			\begin{figure}
+			\centering
     				\includegraphics[width=\textwidth]{use_case_2}
     			\caption{New UML use case diagram \protect {\label{fig:use_case_2}}}
-    			\end{center}
+
 			\end{figure}	
 		\subsection{Implementation}
-		\subsubsection{Stage 1 - The Basis of the Framework}
-			As the framework is designed to be extended upon by other application developers, it is useful to think about the way in which it will be deployed.
-			The framework should be IDE independent.
-			The application developers using it should be able to easily import the framework into their own project.
+		\subsubsection{Stage 1 - The Basis of LeapCV}
+			As LeapCV is designed to be extended upon by other application developers, it is useful to think about the way in which it will be deployed.
+			LeapCV should be IDE independent.
+			The application developers using it should be able to easily import LeapCV into their own project.
 			All they will need is the source code being developed here, and the OpenCV and LeapSDK dependencies to be satisfied.
-			To do this a Git repository will be made that holds the source for the framework.
+			To do this a Git repository will be made that holds the source for LeapCV.
 			The Git repository will have nothing but Java related files.
 			None of the files should be related to any individual IDE.
-			%The documentation below will then describe how the project can be imported.
+
 		\subsubsection{Stage 2 - Refactoring Based on New Design}
 			Now that the design has been created, it will be useful to create the templates for each class.
 			Also sometimes known as the skeleton classes.
@@ -913,47 +1117,73 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 		\subsubsection{Stage 3 - Distortion Removal Optimisation}
 			As highlighted at the end of the previous iteration, it was suggested that during this iteration the distortion removal process should be optimised.
 			The method that is currently used, calls the \code{warp()} method from the LeapSDK \code{Image} class.
-			This method is, through self admittance by leap motion, a non optimised way to remove image distortion.
+			This method is, through self admittance by Leap Motion, a non optimised way to remove image distortion.
 			They suggest that only a few image pixels should be used.
 			However, in this scenario it is required that the entire picture gets used, so that it can be further processed in OpenCV.
 			The \code{Image} class also has \code{distortion()} method.
-			This method contains the calibration map for the leap motion.
+			This method contains the calibration map for the LMC.
 			It was suggested by \citeasnoun{blog:leap} that these values can be used with the \code{remap()} function in OpenCV.
 			\citeasnoun{blog:leap} does state that there is no guarantee that this method is correct.
-			With this method, the distortion map is loaded at the initialisation of the leap motion.
-			This data is set in the factory, or when the leap motion is explicitly calibrated within its separate settings application.
-			Unless the leap motion is going through the calibration process, this distortion map does not change.
+			With this method, the distortion map is loaded at the initialisation of the LMC.
+			This data is set in the factory, or when the LMC is explicitly calibrated within its separate settings application.
+			Unless the LMC is going through the calibration process, this distortion map does not change.
 			Once the distortion map is loaded at initialisation, it can be passed with a \code{Mat}, to the \code{remap()} method.
 			The code provided by \citeasnoun{blog:leap} is written in the Python programming language, so analysis is required to port it over to Java.
 			The method provided by OpenCV is highly optimised with the library, and the processing time has been noticeably decreased.
-			Listing~\ref{lst:code_5} shows the method by which the distortion \code{Mat} has been initialised.
+			Listing~\ref{lst:code_10} shows the method by which the distortion \code{Mat} has been initialised.
 			The values that get returned are placed into the \code{LeapCVCamera} class.
 			This method is quite similar to the code in listing~\ref{lst:code_4}.
-			It still uses the \code{warp()} method however this slow method is only used once throughout the run time of the using the LeapCV framework.
+			It still uses the \code{warp()} method however this slow method is only used once throughout the run time of LeapCV.
 			Rather than every time a frame is loaded as in iteration 1.
-			\lstinputlisting[caption=Initialisation of Distortion Data, label=lst:code_5]{initialiseDistortionMats.java}
+			\lstinputlisting[caption=Initialisation of Distortion Data, label=lst:code_10]{initialiseDistortionMats.java}
 		\subsection{Test}
 			\subsubsection{Performance Tests}
 			\input{performance_test_1}
 			
-			\subsubsection{Unit Tests}
 			\subsubsection{Acceptance Tests}
-			\input{acc_test_template}
+			The acceptance tests have been checked against the acceptance criteria that were earlier defined in appendix~\ref{app:acc_crit}.
+			\input{acc_test_1}
 		\subsection{Evaluation}
 			\subsubsection{What went well?}
 			The optimisation of distortion removal was successful.
-			Refactoring made the framework a lot easier to use and develop.
-			Creating a Git repository was easily done and will allow for a simple release of the open source framework.
-			\subsubsection{What did not go so well?}
+			Refactoring made LeapCV a lot easier to use and develop.
+			Creating a Git repository was easily done and will allow for a simple release of LeapCV.
+			\subsubsection{What problems were faced?}
+			A memory leak was found in a performance test.
+			The means that a redesign will be required in the next iteration.
 			\subsubsection{Lessons learned?}
-	\section{Prototype 3}\label{sec:p3}
+			Whilst lots of implementation was completed in this stage, development was a lot slower than anticipated.
+			Mainly due to the manual process of having to do more parameter tweaking again.
+			Once performance testing was run, more parameter tweaking was required, of the values that were identified in the first iteration.
+			As hoped for this iteration, most of the image processing and stereo functionality was completed in this iteration.
+			Though due to the problems found in testing, it means some of the work will be carried over into the next iteration.
+			This might set back the implementation of the classification functionality.
+			It would have been useful to give the iterations slightly more slack time to cater for these problems.
+			In hindsight, it would have been good to have run these performance tests in the first prototype.
+	\section{Iteration 3}\label{sec:p3}
 		\subsection{Design}
 			\subsubsection{Class Diagram}
-			\begin{figure}[ht]
-		\begin{center}
-    			\includegraphics[width=\textwidth]{class_diagram_it_3}
-    			\caption{Class Diagram for Prototype 3 \protect {\label{fig:class_diagram_it_3}}}
-    		\end{center}
+				As a result of the testing and evaluation of the previous iteration, it was decided that a redesign was required to remove a memory issue found in the performance test \code{getDisparityStereoSGBM()}.
+				A decision was made to implement this following the factory design pattern as defined in \citeasnoun{book:head}.
+				All methods of stereo matching carry some similar methods.
+				They also all result in a disparity map.
+				The only thing that differs is the parameters that are passed in.
+				Therefore a creator, also known as a factory, will be made. 
+				This will creates a \code{LeapCVStereoMatcher} object.
+				This will abstract the underlying properties of the stereo matching algorithm away from higher level code, unless an explicit cast is made on the object to the type requested.
+				Doing this will reduce the memory footprint, as a matcher object will only need to be created once and not each time the method \code{getDisparitySGBM()} is called.
+				
+				Another change is to the \code{LeapCVStereoCalibrator} class.
+				This class has been changed to a utilities class and renamed to \code{LeapCVCalibrationUtils}.
+				This was decided due to the realisation that the calibration information should be stored with the camera.							
+				The additional CRC diagrams can be found in appendix~\ref{app:crc_it_2}.
+				The resulting design can be seen in figure~\ref{fig:class_diagram_it_3}.
+				
+			\begin{figure}
+		\centering
+    			\includegraphics[width=\textheight, angle=90]{class_diagram_it_3}
+    			\caption{Class Diagram for Iteration 3 \protect {\label{fig:class_diagram_it_3}}}
+			
 		\end{figure}			
 			\subsubsection{Requirements Changes}
 		\subsection{Implementation}
@@ -962,18 +1192,27 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 			By carrying out the calibration, it gives what in OpenCV is known as the \code{Q} matrix.
 			This is a 3x3 \code{Mat} that contains the distortion coefficients for the camera.
 			In iteration 1 it was discovered that the images could have the distortion removed by using the distortion values that were provided by the LeapSDK.
-			However the distortion coefficients are not given.
+			However the distortion coefficients are not given by the LeapSDK.
 			This was not realised until this iteration.
 			An attempt was made to extract the distortion coefficients from the camera by doing stereo calibration.
-			However it was an unsuccessful attempt.
-			The code for this attempts can be found in appendix~(INSERT APPENDIX HERE).
+			The distortion coefficients are the camera intrinsic parameters that were discussed in chapter~\ref{chap:background}.
+			By carrying out stereo calibration one would expect to see an output image like the one in figure~\ref{fig:image_2}.
+			However, from the attempts made the only calibrated image that could be produced was like the one in figure~\ref{fig:failed}.
+			\begin{figure}
+		\centering
+    			\includegraphics[width=\textwidth]{failed_attempt}
+    			\caption{Image Showing Failed Calibration (Bottom) of a Chessboard Image (Top) \protect {\label{fig:failed}}}
+			
+		\end{figure}	
+			This attempt was unsuccessful and had to be cut short due to the risk of not completing further requirements.
+			The code for this attempt can be found in appendix~\ref{lst:calibrate}.
 			Another thought is that the distortion coefficients can be calculated from the already obtained distortion map.
 			A method was outlined on the internet that might prove useful by \citeasnoun{url:distortion}.
 			It gives a mathematical example of how to recover the distortion coefficients from a pre calculated distortion map.
 			This method is quite advanced and it will not be feasible to complete in the time-scale of this project.
-			\citeasnoun{blog:leap} does provide some values obtained from calibration of the leap motion.
+			\citeasnoun{blog:leap} does provide some values obtained from calibration of the LMC.
 			However these values will vary slightly from camera to camera due to manufacturing precision as mentioned in chapter~\ref{chap:background}.
-			It is therefore unlikely that the values will be exact for the leap motion in use here.
+			It is therefore unlikely that the values will be exact for the LMC in use here.
 			Although for speed of development these values will be used as the \code{Q} matrix for this project.
 			In hope that it will provide some form of output in the next stage.
 		\subsubsection{Stage 2 - Three Dimensional Reprojection}
@@ -987,14 +1226,27 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 			\lstinputlisting[caption=Generate a Point Cloud from the Disparity Map, label=lst:code_6]{getPointCloud.java}	
 			It was found that the point clouds varied greatly in quality based on the algorithm that was used to generate the disparity map.
 			There was no way to test this here other than to visually inspect the output point clouds.
-			The point clouds were written to file using the method in listing~(LISTING HERE).
+			The point clouds were written to file using the method in listing~\ref{lst:code_9}.
+			\lstinputlisting[caption=Writing Generated Point Cloud to a File, label=lst:code_9]{savePointCloud.java}
 			They were then opened in a tool called ccViewer\footnote{\url{http://www.danielgm.net/cc/}}.
 			This tool allows for the visualisation of point clouds.
-			An example of a point cloud using the \code{StereoSGBM} method can be seen in figure~(INSERT FIGURE HERE).
-			And example of a point cloud using the \code{StereoVar} method can be seen in figure~(INSERT FIGURE HERE).
+			And example of the best point cloud produced using the \code{StereoVar} method can be seen in figure~\ref{fig:disp_3d}.
+			\begin{figure}
+			\centering
+    				\includegraphics[width=\textwidth]{disp_3d}
+    			\caption{Top Left: Undistorted Left Image, Top Right: Undistorted Right Image, Bottom Left: Disparity Map Using StereoVar, Bottom Right: Generated Point Cloud \protect {\label{fig:disp_3d}}}
+
+			\end{figure}	
 			The images show that the \code{StereoVar} Method gives a much clearer point cloud.
 			However when looked at multiple angles It shows that some of the depths are non realistic.
-			This might be due to the \code{Q} matrix mentioned earlier, not being the exact one for the leap motion used in this project.
+			This is shown in figure~\ref{fig:pc_3d}.
+			\begin{figure}
+			\centering
+    				\includegraphics[width=\textwidth]{pc_3d_angle}
+    			\caption{Point Cloud Showing Inaccurate Depths From Left Hand View \protect {\label{fig:pc_3d}}}
+
+			\end{figure}	
+			This might be due to the \code{Q} matrix mentioned earlier, not being the exact one for the LMC used in this project.
 			As time is running low and it is difficult to achieve a good point cloud without a good calibration method, a different approach will be made for object recognition.
 			Instead of making use of the disparity map functionality, an attempt will be made using methods of feature recognition for classification.
 		\subsubsection{Stage 3 - Feature Matching}
@@ -1002,26 +1254,43 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 			The three important classes here are \code{DescriptorExtractor}, \code{DescriptorMatcher} and the \code{FeatureDetector}.
 			Each of these classes follow the factory pattern.
 			Using the \code{create()} method on each class, one is able to request an object specific to the type of algorithm that will be used to detect, extract and match the features within the images.
-			An example of creating a SIFT feature extractor with a FLANN matcher can be seen in listing~\ref{lst:code_7}.
+			An example of creating a Scale Invariant Feature Transform (SIFT) feature extractor with a Fast Approximate Nearest Neighbour Search (FLANN) matcher can be seen in listing~\ref{lst:code_7}.
 			\lstinputlisting[caption=Creating Detector\, Extractor and Matcher from Factories, label=lst:code_7]{constructorLeapCVObjectDetector.java}
-			This constructor makes it easy to swap the algorithms used to find the optimal one for object detection with the leap motion.
+			This constructor makes it easy to swap the algorithms used to find the optimal one for object detection with the LMC.
 			All that needs to be changed is the flag that is passed into the \code{create()} method.
 			Each algorithm type gave very different results.
 			It will not be clear which one is the best type until a classifier has been implemented.
-			An example of the output produced by the method in listing~\ref{lst:code_7} can be seen in figure~(INSERT FIGURE HERE).
+			However the best visual result so far can be achieved using a Good Features To Track (GFTT) \code{FeatureDetector}, a Bruteforce \code{DescriptorMatcher} and a SIFT \code{DescriptionExctractor}.
+			An example of the output produced by these can be seen in figures~\ref{fig:match_l} and \ref{fig:match_r}.
+			\begin{figure}
+			\centering
+    				\includegraphics[width=\textwidth]{match_l}
+    			\caption{Matching Subsection of Mug in Original Left Camera Image \protect {\label{fig:match_l}}}
+
+			\end{figure}	
+			\begin{figure}
+			\centering
+    				\includegraphics[width=\textwidth]{match_r}
+    			\caption{Matching Subsection of Mug to Right Camera Image \protect {\label{fig:match_r}}}
+
+			\end{figure}	
 		\subsection{Test}
 			\subsubsection{Performance Tests}
-			\subsubsection{Unit Tests}
+			\input{performance_test_2}
 			\subsubsection{Acceptance Tests}
-			\input{acc_test_template}
+			The acceptance tests have been checked against the acceptance criteria that were earlier defined in appendix~\ref{app:acc_crit}.
+			\input{acc_test_2}
 		\subsection{Evaluation}
 			\subsubsection{What went well?}
 			Managed to create a point cloud, building upon successful functionality created in prototype 2.
 			Managed to get features matched between images.
-			\subsubsection{What did not go so well?}
-			The point cloud was not of high enough quality for classifying; it was noisy and unclear.
+			\subsubsection{What problems were faced??}
+			The point cloud was not of high enough quality for classifying; it was noisy and the depths in the image were inaccurate.
 			Time was lost looking up other options of object detection.
 			\subsubsection{Lessons learned?}
+			Calibration of the LMC was a difficult process, however it seems that OpenCV does not have to capability to use previously calibrated distortion values.
+			This should be explored further.
+		
 	\section{Summary}
 	This chapter has logged the development process of the project.
 	
@@ -1029,6 +1298,40 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 	It shows how the design has evolved over each iteration through an evaluation of the requirements.
 	Moving into chapter~\ref{chap:eval}, the project as a whole will be evaluated.
 	Looking at how far the project has gone in solving the original problem.
+
+	\chapter{Unachieved Requirements}
+		\section{Introduction}
+		This section will briefly highlight the requirements that were not achieved during the three planned iterations.
+		It will discuss  what benefit they would have brought to LeapCV, stating what effect they have had by not being completed.
+		
+		\section{List of Unachieved Requirements}
+			Due to the complexity of some of the problems that were faced in the iterations, and the time consuming nature of achieving good image results from the LMC, each of the iterations over ran the planned time box.
+			It was hoped that throughout iteration 3, some time would be left to achieve some results with object classification.
+			Unfortunately this was not a feasible option.
+			The following table~\ref{tab:incomplete} shows use cases that were not achieved during the iterations:
+			\input{incompleteAccTest}
+			The test reference column corresponds to the acceptance criteria table in appendix~\ref{app:acc_crit}.
+			
+		\section{Effect on the Resulting Framework}
+			All of the unachieved requirements relate to the classification functionality of LeapCV.
+			This this was due to get explored in iteration 3.
+			Due to problems that were faced in iteration three, there was no extra time to explore this.
+			LeapCV in its current state has resulted in being a stepping stone toward this final goal.
+			It has identified that the leap motion can in fact be used for at least some elements of computer vision, although some of the results will need to be verified in a more objective way.
+			The use cases that have been implemented are most certainly useful toward achieving the unachieved requirements in the future.
+			
+		\section{What it Should Have Achieved?}
+			The classification functionality was going to enable LeapCV to be used for detecting objects, other than hands, within the images produced by the LMC.
+			With the idea that this might then enable the LMC to be considered as a viable computer vision option for new projects.
+			The idea was to allow the application developer the ability to train LeapCV to identify a set of objects that they defined themselves. This would have involved developing a database that would hold classification data.
+			As well as making use of classifiers that were defined in chapter~\ref{chap:background}.
+			OpenCV has some of this functionality built in therefore it is only time that is needed to explore this further and integrate it with what has already been developed.
+			This functionality would have been built upon the basic object detection that has already been developed in iteration 3.
+		
+		\section{Summary}
+			It was unfortunate that some of the development was a lot more difficult than originally envisaged.
+			However hopefully by making this project available open source the functionality will be included in the future.
+		
 
 	%----------------------------------------- Chapter -----------------------------------------%
 	
@@ -1038,7 +1341,142 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 	It will highlight which areas of work might have benefited from being done differently.
 	It will also discuss how far the implementation has gone to fulfilling the original requirements.
 	
-	(COPY AIM AND OBJECTIVES HERE)
+	To do this each aim and objective have its status reviewed.
+	An evaluation of the overall system will then take place.
+	Followed by an evaluation of the technologies, techniques and tools that have been used throughout the project.
+
+	\section{Reflection on Aim and Objectives}
+	\subsection{Aim}
+		\subsubsection{To develop an open source Computer Vision framework usable by the Leap Motion Controller community.}
+	\subsection{Objectives} 
+		\subsubsection{Research stereoscopic image processing methods and object classification.}
+		This objective was put in place to ensure that methods were researched before development of LeapCV was started.
+		The LMC is a stereoscopic camera, and therefore the research was intended to be applied in the solution.
+		Researching this allowed the discovery of methods for generating the disparity maps that were shown in the implementation.
+		Although reflecting back, some of the information was a little out of scope, it allowed a broader understanding of cameras on the whole, making the use of the OpenCV library much less daunting.
+		Although the classification element of the implementation was not completed, some research was done, which might help anyone that would wish to continue this project in the future.
+		This objective was met as far as this project was concerned, but research should continue for future work.
+		\subsubsection{Design and develop a framework that allows the Leap Motion Controller to be used for computer vision.}
+		The framework that has been developed in this project is a decent attempt at discovering whether the LMC is suitable to be used for computer vision.
+		The end result here is very much a prototype and would need to be much more refined to be used successfully in a stable application.
+		The ability to carry out computer vision functionality has been tested through the form of unit tests, and visual analysis of outputs from LeapCV.
+		The results were then fed back into trying to improve the outputs throughout implementation.
+		This was very much an exploratory prototyping project, as such, it is almost certain that the current implementation can be improved upon.
+		This objective has been met as far as the description goes, however, LeapCV is most certainly not complete.
+		\subsubsection{Enable the Leap Motion Controller to recognise simple objects.}
+		Object recognition was achieved in the third iteration.
+		However this it is only very basic.
+		The recognition achieved does not actually classify the object that it finds.
+		It only goes so far as to detect if features exist in two compared images.
+		\subsubsection{Evaluate the accuracy of object recognition.}
+		As no classification was implemented, the accuracy of the object recognition was not able to be measured with ease autonomously.
+		Therefore this objective was not achieved.
+		\subsubsection{Release an open source framework.}
+		By using the open source focussed version control system through GitHub\footnote{url{http://www.github.com}} the project is able to be released to the open source community with the click of a button.
+		By making use of the OpenCV library, which is held under the BSD license, allows for an extremely flexible open source project with no need to feed back to the original source.
+		This project will also be released under the BSD licence.
+		\subsubsection{Produce a report that communicates my findings}
+		This report has been produced throughout the life of this project.
+		Notes were collected using a basic blog throughout implementation.
+		This was then written into the format that you see in chapter~\ref{chap:des&imp}.
+		The \LaTeX\ tool was used along with a version control system, which allowed the report to be evolved modularly throughout the project.
+		The fact that this report is being read, shows this objective was successfully completed.
+	
+	\section{Evaluation of the Original Hypothesis}
+	The original hypothesis was as follows:
+	\begin{quote}
+	``It is possible to use the LMC in the field of computer vision, so that application developers can exploit the technology in different ways as to what was originally intended.	
+				
+	This ability can then be structured into a framework, so that the effort application developers have to put in to use the LMC as a solution, is low, making it an option to consider in new projects.''
+	\end{quote}
+	
+	Through the implementation of this project, it has been shown that the LMC has produced images that are able to be processed in a way that can be used in computer vision applications.
+	This has then been structured into a framework that requires a minimal understanding of computer vision, to obtain some basic results.
+	Therefore it is fair to say that this hypothesis is true.
+	
+	\section{Reflection on Research Approach}
+		The initial literature survey was an important part of this project as it was the main stage where the author could not only find out relevant material to apply to the project.
+		It also allowed the author to learn about computer vision and cameras in general.
+		Without this taking place it would not have been possible for the development of LeapCV to take place.
+		
+		The research process used was guided by the methods outlined by \citeasnoun{book:dawson}.
+		One of the key notes taken from this was to know when to stop.
+		Computer vision is such a massive field that one can get carried away with it.
+		Therefore it was useful to define an initial scope with a good foundation of knowledge and then gather more knowledge as it was needed throughout requirements analysis and implementation.
+		Gradually moving toward a narrower depths of focus as time went on.
+		This process has improved the authors ability to evaluate material quickly, as well as make use of the multiple different types of knowledge sources available.
+	\section{Reflection on Development Methodology}
+		The development methodology followed throughout this project was an iterative approach.
+		Where the first iteration was an initial throwaway prototype and the later iterations evolutionary prototypes.
+		This choice was made due to the uncertainty in the projects outcome.
+		Therefore leaving a lot of room to adjust requirements throughout the iterations as the author learned more about the libraries being used.
+		
+		It is questionable as to whether this approach is what caused there to be unachieved requirements at the end.
+		The uncertainty at the beginning meant that there was always a possibility that all of the goals would be completed in time.
+		However the prototyping approach meant that changes could be made throughout implementation based on the outcomes of a particular iteration.
+		
+		In hindsight, whilst the first throwaway prototype was important to learn about the basics of the OpenCV library.
+		It is believed that a test driven approach might have been slightly better suited from then on.
+		It was noted that throughout iteration 2 and 3, a lot of manual visual analysis was required on the images to ensure parameters were correct.
+		This almost comes across as a bit or a paradox.
+		Whilst the computer can generate the image, it still does not know of its wider context and whether it is right or wrong.
+		Manual visual analysis is still needed.
+		Raising the question as to whether a test driven approach could be used.
+		If it could then it would most likely require a lot of test data and models of what should be expected as a perfect output from the LeapCV framework.
+		
+		The MoSCoW prioritisation method did work well with this project.
+		There was a clear breakdown in the order of work based on the research that had been done on stereoscopy in chapter~\ref{chap:background}.
+		It allowed the project to be left in a position that could easily be picked up and carried on in future.
+		
+	\section{Reflection on Tools Used}
+		Some of the tools used throughout development have already been discussed in other areas of this document, however this section is designed to review their usage.
+		Without many of the tools listed below LeapCV will not have been successful.
+		\subsection{Hardware - Leap Motion Controller}
+			The LMC was described in the introduction, however now that it has been developed with it is useful to talk about it from a hands on perspective.
+			
+			The LMC has a large online community and is a well documented and supported platform to develop with.
+			There are frequent updates made available to the community.
+			The LeapSDK is extensive and provides good opportunity to develop with the device.
+			However, it was discovered only during implementation that the images that are provided by the LMC are only a low $640\times240$ resolution.
+			This is quite low in comparison to other cameras available on the market.
+			The images are only given in an infra red gray scale format, therefore no colour information can be used for computer vision.
+			Although generally this is not a problem as a lot of computer vision is done using grey scale images.
+			It is also not possible to adjust some of the camera parameters from a code level.
+			For example to allow image access, you have to use the LMC driver user interface to turn it on.
+			Setting set the brightness of the infra red LED's as also a small issue.
+			On occasion, especially in very close up images, the LED's were too bright.
+			This resulted in over exposed images.
+			It is hoped that some of this functionality might get implemented in a future release of the LeapSDK and LMC drivers.
+			Overall it was a robust device to use and was not difficult to get started with.
+		\subsection{Library - OpenCV}
+			OpenCV is an extensive library for computer vision.
+			It is large and complex and required a fairly good amount of prior knowledge to feel comfortable with understanding some of the terminologies used within the library.
+			One pitfall of using OpenCV was that most of the documentation and tutorials are written in C++ or Python.
+			This is due to the library being written in C++ and seemingly having much better Python support.
+			The Java implementation is documented as an Android library officially, and through its usage feels like a bit of an afterthought.
+			While there are many similarities between the two languages, it did sometimes make it quite difficult to translate between the two when looking at examples in the API.
+			It was also very difficult to debug.
+			When used with Java, OpenCV is what is known as a Java Native Interface (JNI) library.
+			The error messages are all given in the for of C++ error messages and it was found that some of them didn't use the same terminology as the JNI.
+			Unfortunately this occasionally made development very slow.
+			
+			Throughout development it was also found that elements of the JNI version of OpenCV were not actually interfaced from the C++ version.
+			An example being the \code{Highgui.imshow()} functionality that the C++ version has.
+			This allows for an image to be displayed on screen with a single function call.
+			The JNI version does not have this functionality, which required the development of a method to display the images on the screen during prototyping, adding unforeseen time on to the projects development.
+		\subsection{Language - Java}
+			The decision to use the Java programming language was primarily due to the authors proficiency in programming with it.
+			However, if the project was to be developed again from the ground up it would be preferable to program in either the Python or the C++ programming language.
+			Both of these languages seem to have much more support from the OpenCV library, as well as the LeapSDK.
+			Again adding time onto development, by having to translate examples from either C++ or Python into the Java language.
+			It is believed that the initial time spent in learning C++ or Python to enough of an extent to complete this project, would have avoided these increases in time spend on development, throughout implementation.
+			
+			A positive note is that Java has an excellent UI framework called JavaFX in version 1.8 of its SDK.
+			JavaFX is a young and still growing framework that has made GUI development extremely easy when compared to the Java Swing framework.
+			It follows standards of the Model-View-Controller design pattern allowing the author to understand an applications life cycle at run-time with ease.
+	\section{Reflection on Implementation}
+	\section{Wider Significance}
+	\section{Future Work}
 	
 	\section{Summary}
 	%----------------------------------------- Chapter -----------------------------------------%
@@ -1062,14 +1500,20 @@ texcount -merge -sum -1 -opt=TCOpt.txt report.tex
 			%\input{reset_training_data_use_case}
 			%\input{view_current_classifications_use_case}
 			\input{train_classifier_use_case}
-	\chapter{CRC Diagrams} \label{app:crc_diagrams}
+	\chapter{Acceptance Criteria} \label{app:acc_crit}
+			\input{acceptance_criteria}
+	\chapter{CRCs for Iteration 1} \label{app:crc_it_1}
 			\input{crc_LeapCVCamera}
 			\input{crc_LeapCVImage}
 			\input{crc_leapCVStereoUtils}
 			\input{crc_leapCVImageUtils}
+			\input{crc_LeapCVStereoCalibrator}
+	\chapter{CRCs for Iteration 2} \label{app:crc_it_2}
+			\input{crc_LeapCVCalibrationUtils}
 	\chapter{Implementation Code Snippets}
 			\lstinputlisting[caption=Slow Method of \code{Image} Distortion Removal, label=lst:code_4]{toUndistortedImage.java}
 			\lstinputlisting[caption=Example JUnit Performance Test Case, label=lst:code_8]{exampleTestCase.java}
+			\lstinputlisting[caption=Failed Calibration Attempt, label=lst:calibrate]{calibrateCameras.java}
 	\end{appendices}
 	
 \end{document}
