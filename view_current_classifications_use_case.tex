@@ -1,0 +1,17 @@
+\begin{table}[h]
+\begin{tabular}{|p{1.5in}|p{3.4in}|}
+\hline
+\varusecase         & \texttt{ViewCurrentClassifications} \\ \hline
+\vardescription     & The user should be able to view all of the previous classifications that have been made by the framework. \\ \hline
+\varactor           & User \\ \hline
+\varentry           & The leap motion controller must hold existing classification labels of previous classifications.\\ \hline
+\varflow            & \begin{enumerate}
+                        \item User requests to view all existing classification labels.
+                        \item Framework attempts to retrieve classification labels.
+                        \item If successful the framework will return a list of all current classifications available.                        
+                      \end{enumerate} \\ \hline
+\varaltflow         & If there is no classification history then the user will be notified.\\ \hline
+\varexit            & User receives a list of all existing classifications that the framework holds. \\ \hline
+\end{tabular}
+\caption{Documented \texttt{ViewCurrentClassifications} Use Case \protect {\label{tab:use_classify_object}}}
+\end{table}

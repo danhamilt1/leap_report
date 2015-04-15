@@ -1,8 +1,5 @@
 /**
      * Initialise the distortion matrices for use with OpenCV {@link Imgproc.remap} method.
-     *
-     * @param image
-     * @return {@code Map<String,Mat>} of X and Y matrix.
      */
     public static Map<String, Mat> initDistortionMat(Image image) {
 

@@ -26,6 +26,6 @@ getDisparityStereoSGBM    & 15 FPS                 & 42 FPS              & Yes  
 	This should be highlighted in the documentation.
 	\item[getDisparityStereoSGBM] It was noted that after 10 consecutive runs of this process, the frame rate dropped dramatically.
 	It was discovered this was due to a memory leak.
-	Each time the method \code{getDisparityStereoSGBM()} gets called, a new StereoSGBM object is instantiated within the method scope. From the frame rate measurement we can assume that this happens 42 times per second and is therefore processor intensive. This was not leaving enough time or resource for the Java garbage collector to free the used memory. Although the test has not failed, this needs to be optimised as it causes the machine to become unresponsive.
+	Each time the method \code{getDisparityStereoSGBM()} was called, a new StereoSGBM object was instantiated within the method scope. From the frame rate measurement we can assume that this happens 42 times per second and is therefore processor intensive. This was not leaving enough time or resource for the Java garbage collector to free the used memory. Although the test did not fail, this needs to be optimised as it causes the machine to become unresponsive.
 	
 \end{description}
